@@ -21,13 +21,15 @@ public class skeltal : MonoBehaviour {
         if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
             playingAnimation = false;
 
-        if (Input.GetKey("w") && !playingAnimation)
+        if (Input.GetKey("w"))
         {
             GetComponent<Animator>().Play("Run");
             Vector3 mover = transform.forward;
             mover = new Vector3(mover.x, mover.y);
             GetComponent<Transform>().Translate(0, 0, speed * Time.deltaTime);
             keyPressed = true;
+
+            playingAnimation = false;
         }
 
         if (Input.GetKey("space") && !playingAnimation)
