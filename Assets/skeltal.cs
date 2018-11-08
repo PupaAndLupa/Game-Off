@@ -5,6 +5,7 @@ using UnityEngine;
 public class skeltal : MonoBehaviour {
 
     private bool keyPressed;
+    private bool playingAnimation = false;
 
     private int speed = 1;
 
@@ -16,7 +17,11 @@ public class skeltal : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         keyPressed = false;
-        if (Input.GetKey("w"))
+
+        if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+            playingAnimation = false;
+
+        if (Input.GetKey("w") && !playingAnimation)
         {
             GetComponent<Animator>().Play("Run");
             Vector3 mover = transform.forward;
@@ -25,7 +30,13 @@ public class skeltal : MonoBehaviour {
             keyPressed = true;
         }
 
-        if (!keyPressed)
+        if (Input.GetKey("space") && !playingAnimation)
+        {
+            GetComponent<Animator>().Play("Attack");
+            playingAnimation = true;
+        }
+
+        if (!keyPressed && !playingAnimation)
             GetComponent<Animator>().Play("Stand");
 
             
