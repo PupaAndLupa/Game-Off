@@ -6,41 +6,33 @@ public class skeltal : MonoBehaviour {
 
     private bool keyPressed;
     private bool playingAnimation = false;
+    private Animator animator;
 
     private int speed = 1;
 
 	// Use this for initialization
 	void Start () {
-		
+        animator = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        keyPressed = false;
+        animator.SetBool("isMoving", false);
+        animator.SetBool("isAttacking", false);
 
-        if (GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
-            playingAnimation = false;
-
-        if (Input.GetKey("w"))
+        if (Input.GetKey("w") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
         {
-            GetComponent<Animator>().Play("Run");
+            animator.SetBool("isMoving", true);
             Vector3 mover = transform.forward;
             mover = new Vector3(mover.x, mover.y);
             GetComponent<Transform>().Translate(0, 0, speed * Time.deltaTime);
             keyPressed = true;
-
-            playingAnimation = false;
         }
 
-        if (Input.GetKey("space") && !playingAnimation)
+        if (Input.GetKey("space") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
         {
-            GetComponent<Animator>().Play("Attack");
-            playingAnimation = true;
+            animator.SetBool("isAttacking", true);
         }
-
-        if (!keyPressed && !playingAnimation)
-            GetComponent<Animator>().Play("Stand");
-
-            
+        
 	}
 }
