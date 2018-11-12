@@ -20,19 +20,33 @@ public class skeltal : MonoBehaviour {
         animator.SetBool("isMoving", false);
         animator.SetBool("isAttacking", false);
 
-        if (Input.GetKey("w") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
+        if (Input.GetKey("up") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
         {
             animator.SetBool("isMoving", true);
-            Vector3 mover = transform.forward;
-            mover = new Vector3(mover.x, mover.y);
             GetComponent<Transform>().Translate(0, 0, speed * Time.deltaTime);
-            keyPressed = true;
+        }
+
+        if (Input.GetKey("left") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
+        {
+            animator.SetBool("isMoving", true);
+            GetComponent<Transform>().Translate(-speed * Time.deltaTime, 0, 0);
+        }
+
+        if (Input.GetKey("right") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
+        {
+            animator.SetBool("isMoving", true);
+            GetComponent<Transform>().Translate(speed * Time.deltaTime, 0, 0);
+        }
+
+        if (Input.GetKey("down") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
+        {
+            animator.SetBool("isMoving", true);
+            GetComponent<Transform>().Translate(0, 0, -speed * Time.deltaTime);
         }
 
         if (Input.GetKey("space") && !animator.GetCurrentAnimatorStateInfo(0).IsTag("Unstoppable"))
         {
             animator.SetBool("isAttacking", true);
         }
-        
-	}
+    }
 }

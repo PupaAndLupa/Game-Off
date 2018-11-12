@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class FPSCamera : MonoBehaviour {
 
-    public GameObject parent;
-    private Vector3 offset;
+    private float speed = 1f;
 
 	// Use this for initialization
 	void Start () {
-        offset = transform.position - parent.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        transform.position = parent.transform.position + offset;
+        if (Input.GetKey("w"))
+            transform.Translate(0, 0, speed * Time.deltaTime);
+
+        if (Input.GetKey("s"))
+            transform.Translate(0, 0, -speed * Time.deltaTime);
+
+        if (Input.GetKey("a"))
+            transform.Translate(-speed * Time.deltaTime, 0, 0);
+
+        if (Input.GetKey("d"))
+            transform.Translate(speed * Time.deltaTime, 0, 0);
+
+
+        transform.Rotate(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
 	}
 }
