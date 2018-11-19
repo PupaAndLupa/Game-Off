@@ -5,7 +5,6 @@ using UnityEngine;
 public class skeltal : MonoBehaviour {
 
     private bool keyPressed;
-    private bool playingAnimation = false;
     private Animator animator;
 
     private int speed = 1;

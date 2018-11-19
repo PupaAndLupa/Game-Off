@@ -21,6 +21,7 @@ public class CameraController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Cursor.lockState = CursorLockMode.Locked;
+        transform.parent.Find("Main Camera").transform.Find("Crosshair").GetComponent<CrosshairScript>().Enable();
         offset = cam.transform.position - transform.position;
 	}
 	
@@ -39,6 +40,8 @@ public class CameraController : MonoBehaviour {
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+
+            transform.parent.Find("Main Camera").transform.Find("Crosshair").GetComponent<CrosshairScript>().Disable();
         }
 
         cam.transform.position = transform.position - offset;
