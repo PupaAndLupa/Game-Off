@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour {
 
-    public Vector2 direction;
+    public Vector3 direction;
     private float speed = 10f;
 
 	// Use this for initialization
@@ -14,6 +14,7 @@ public class BulletController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.Translate(direction.normalized * speed * Time.deltaTime);
+        //transform.Translate(direction * speed * Time.deltaTime);
+        transform.position = transform.position + direction * speed * Time.deltaTime;
 	}
 }

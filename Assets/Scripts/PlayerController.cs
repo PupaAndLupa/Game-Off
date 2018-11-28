@@ -51,7 +51,11 @@ public class PlayerController : MonoBehaviour
             GameObject bullet = GameObject.Find("Bullet");
 
             GameObject clone = Instantiate(bullet, transform.position, transform.rotation, transform.parent);
-            clone.GetComponent<BulletController>().direction = Input.mousePosition - transform.position;
+
+            Vector3 mPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mPos.z = 0f;
+
+            clone.GetComponent<BulletController>().direction = (mPos - transform.position).normalized;
         }
     }
 }
