@@ -154,13 +154,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a8e9b304683ac43b3b80f24a5a0917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cols: 32
-  Rows: 32
-  ChanceRoom: 75
+  Cols: 128
+  Rows: 128
+  ChanceRoom: 100
   WallsAmount:
     Min: 256
     Max: 512
-  roomSize: {x: 8, y: 6}
+  roomSize: {x: 64, y: 48}
   Floor:
     sprites:
     - {fileID: 1022696056018328, guid: 691bed111ec4cea49a6760d75367bd79, type: 2}
