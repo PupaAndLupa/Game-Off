@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public BoardManager BoardManager;
+    public GameObject playerPrefab;
 
     public GameObject PausePanel;
 
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour {
     void InitGame()
     {
         BoardManager.SetupScene();
+        Instantiate(playerPrefab, BoardManager.StartPosition, Quaternion.identity);
     }
 
 	void Update ()
