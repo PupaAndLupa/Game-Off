@@ -54,15 +54,14 @@ public class BoardManager : MonoBehaviour
     // define the %chance to generate either a room or a corridor on the map
     // BTW, rooms are 1st priority so actually it's enough to just define the chance
     // of generating a room
-    public int ChanceRoom = 75;
+    public int ChanceRoom = 100;
     public Amount WallsAmount = new Amount(16, 32);
-    public Vector2Int roomSize = new Vector2Int(8, 6);
+    public Vector2Int roomSize = new Vector2Int(15, 12);
 
     public SpritePool Floor;
     public SpritePool Walls;
 
     private Transform boardHolder;
-    private List<Vector3> gridPositions = new List<Vector3>();
 
     public int Corridors
     {
@@ -530,30 +529,11 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    void Init()
+    public void SetupScene()
     {
         Initialize();
         CreateDungeon(Cols, Rows, numberOfFeatures);
         ShowDungeon();
-    }
-
-    void LayoutSprites(SpritePool sprites, Amount amount)
-    {
-        for (var i = 0; i < Random.Range(amount.Min, amount.Max + 1); ++i)
-        {
-            int j = Random.Range(0, gridPositions.Count);
-            Vector3 randomPos = gridPositions[j];
-            gridPositions.RemoveAt(j);
-
-            GameObject sprite = sprites.GetRandomSprite();
-            Instantiate(sprite, randomPos, Quaternion.identity);
-        }
-    }
-
-    public void SetupScene()
-    {
-        Init();
-        LayoutSprites(Walls, WallsAmount);
     }
 
     public class PointI
