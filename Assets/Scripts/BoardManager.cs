@@ -57,6 +57,7 @@ public class BoardManager : MonoBehaviour
     public int ChanceRoom = 100;
     public Amount WallsAmount = new Amount(16, 32);
     public Vector2Int roomSize = new Vector2Int(15, 12);
+    public int outerWallsThickness = 1;
 
     public SpritePool Floor;
     public SpritePool Walls;
@@ -64,6 +65,12 @@ public class BoardManager : MonoBehaviour
     private Transform boardHolder;
 
     public int Corridors
+    {
+        get;
+        private set;
+    }
+
+    public Vector2 StartPosition
     {
         get;
         private set;
@@ -420,8 +427,8 @@ public class BoardManager : MonoBehaviour
             // 1000 chances to find a suitable object (room or corridor)..
             for (int testing = 0; testing < 1000; testing++)
             {
-                newx = Random.Range(1, this._xsize - 1);
-                newy = Random.Range(1, this._ysize - 1);
+                newx = Random.Range(outerWallsThickness, this._xsize - outerWallsThickness);
+                newy = Random.Range(outerWallsThickness, this._ysize - outerWallsThickness);
 
                 if (GetCellType(newx, newy) == Tile.Wall || GetCellType(newx, newy) == Tile.Corridor)
                 {
@@ -490,6 +497,10 @@ public class BoardManager : MonoBehaviour
                     roomSizeY = Random.Range(4, roomSize.y);
                     if (this.MakeRoom(newx + xmod, newy + ymod, roomSizeX, roomSizeY, validTile.Value))
                     {
+                        if (currentFeatures == 1)
+                        {
+                            StartPosition = new Vector2(newx + xmod, newy + ymod);
+                        }
                         currentFeatures++; // add to our quota
 
                         // then we mark the wall opening with a door
@@ -522,7 +533,7 @@ public class BoardManager : MonoBehaviour
             for (int x = 0; x < this._xsize; x++)
             {
                 // ie, making the borders of unwalkable walls
-                if (y == 0 || y == this._ysize - 1 || x == 0 || x == this._xsize - 1)
+                if (y < outerWallsThickness || y > this._ysize - outerWallsThickness || x < outerWallsThickness || x > this._xsize - outerWallsThickness)
                 {
                     this.SetCell(x, y, Tile.Wall);
                 }
