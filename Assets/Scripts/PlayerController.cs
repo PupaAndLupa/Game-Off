@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float speed = 5f;
+    private float speed = 500f;
 
     private GameObject playerCamera;
 
@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
 	void Start ()
     {
         playerCamera = transform.Find("Camera").gameObject;
-        playerCamera.GetComponent<Camera>().enabled = false;
 	}
 	
 	void Update ()
@@ -21,6 +20,7 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
         HandleRotation();
         HandleControls();
+        HandleCamera();
     }
 
     void HandleMovement()
@@ -44,7 +44,8 @@ public class PlayerController : MonoBehaviour
         }
 
         movement *= speed * Time.deltaTime;
-        transform.position += new Vector3(movement.x, movement.y);
+        /*transform.position += new Vector3(movement.x, movement.y);*/
+        GetComponent<Rigidbody2D>().velocity = movement;
     }
 
     void HandleRotation()
@@ -52,30 +53,24 @@ public class PlayerController : MonoBehaviour
         Vector3 mousePosition = Input.mousePosition;
         Vector3 position = playerCamera.GetComponent<Camera>().WorldToScreenPoint(transform.position);
         float angle = Mathf.Atan2(mousePosition.y - position.y, mousePosition.x - position.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle - 90);
-        playerCamera.transform.rotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, angle - 90);  
     }
 
     void HandleControls()
     {
-        if (Input.GetKeyDown("space"))
-        {
-            GameObject.Find("UI Main Menu").transform.Find("Main Camera").GetComponent<Camera>().enabled = !GameObject.Find("UI Main Menu").transform.Find("Main Camera").GetComponent<Camera>().enabled;
-            GameObject.Find("Canvas").GetComponent<Canvas>().enabled = !GameObject.Find("Canvas").GetComponent<Canvas>().enabled;
-            playerCamera.GetComponent<Camera>().enabled = !playerCamera.GetComponent<Camera>().enabled;
-        }
-
         if (Input.GetMouseButtonDown(0))
         {
-            //GameObject bullet = GameObject.Find("Bullet");
-
-            GameObject clone = Instantiate(bullet, transform.position, transform.rotation, transform.parent);
-            
+            GameObject clone = Instantiate(bullet, transform.position + transform.forward * 2, transform.rotation, transform.parent);   
 
             Vector3 mousePosition = playerCamera.GetComponent<Camera>().ScreenToWorldPoint(Input.mousePosition);
             mousePosition.z = 0f;
 
             clone.GetComponent<BulletController>().direction = (mousePosition - transform.position).normalized;
         }
+    }
+
+    void HandleCamera()
+    {
+        playerCamera.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 }

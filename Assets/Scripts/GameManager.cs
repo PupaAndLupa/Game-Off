@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour {
 
     public BoardManager BoardManager;
+    public GameObject playerPrefab;
 
 	void Start () {
         BoardManager = GetComponent<BoardManager>();
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour {
     void InitGame()
     {
         BoardManager.SetupScene();
+        Instantiate(playerPrefab, BoardManager.GetCenter(), Quaternion.identity);
     }
 
 	void Update () {

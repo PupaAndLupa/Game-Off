@@ -15,7 +15,7 @@ public class BulletController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.position = transform.position + direction * speed * Time.deltaTime;
+        GetComponent<Rigidbody2D>().velocity = direction * speed * Time.deltaTime;
 
         if (Time.time - createTime > 2)
         {
