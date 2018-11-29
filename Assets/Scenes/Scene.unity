@@ -552,7 +552,7 @@ MonoBehaviour:
     Min: 256
     Max: 512
   roomSize: {x: 64, y: 48}
-  outerWallsThickness: 1
+  outerWallsThickness: 5
   Floor:
     sprites:
     - {fileID: 1022696056018328, guid: 691bed111ec4cea49a6760d75367bd79, type: 2}

@@ -376,6 +376,23 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    Vector2Int DirectionToXY(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.North:
+                return new Vector2Int(0, -1);
+            case Direction.East:
+                return new Vector2Int(1, 0);
+            case Direction.South:
+                return new Vector2Int(0, 1);
+            case Direction.West:
+                return new Vector2Int(-1, 0);
+            default:
+                throw new InvalidOperationException();
+        }
+    }
+
     //and here's the one generating the whole map
     public bool CreateDungeon(int inx, int iny, int inobj)
     {
@@ -403,7 +420,10 @@ public class BoardManager : MonoBehaviour
         // start with making a room in the middle, which we can start building upon
         int roomSizeX = Random.Range(4, roomSize.x);
         int roomSizeY = Random.Range(4, roomSize.y);
-        this.MakeRoom(this._xsize / 2, this._ysize / 2, roomSizeX, roomSizeY, RandomDirection()); // getrand saken f????r att slumpa fram riktning p?? rummet
+        Direction randomDirection = RandomDirection();
+        this.MakeRoom(this._xsize / 2, this._ysize / 2, roomSizeX, roomSizeY, randomDirection); // getrand saken f????r att slumpa fram riktning p?? rummet
+        Vector2Int directionModifier = DirectionToXY(randomDirection);
+        StartPosition = new Vector2(this._xsize / 2 + directionModifier.x, this._ysize / 2 + directionModifier.y);
 
         // keep count of the number of "objects" we've made
         int currentFeatures = 1; // +1 for the first room we just made
@@ -442,27 +462,9 @@ public class BoardManager : MonoBehaviour
                         continue;
                     }
                     validTile = canReach.Item2;
-                    switch (canReach.Item2)
-                    {
-                        case Direction.North:
-                            xmod = 0;
-                            ymod = -1;
-                            break;
-                        case Direction.East:
-                            xmod = 1;
-                            ymod = 0;
-                            break;
-                        case Direction.South:
-                            xmod = 0;
-                            ymod = 1;
-                            break;
-                        case Direction.West:
-                            xmod = -1;
-                            ymod = 0;
-                            break;
-                        default:
-                            throw new InvalidOperationException();
-                    }
+                    directionModifier = DirectionToXY(canReach.Item2);
+                    xmod = directionModifier.x;
+                    ymod = directionModifier.y;
 
 
                     // check that we haven't got another door nearby, so we won't get alot of openings besides
@@ -497,10 +499,6 @@ public class BoardManager : MonoBehaviour
                     roomSizeY = Random.Range(4, roomSize.y);
                     if (this.MakeRoom(newx + xmod, newy + ymod, roomSizeX, roomSizeY, validTile.Value))
                     {
-                        if (currentFeatures == 1)
-                        {
-                            StartPosition = new Vector2(newx + xmod, newy + ymod);
-                        }
                         currentFeatures++; // add to our quota
 
                         // then we mark the wall opening with a door
