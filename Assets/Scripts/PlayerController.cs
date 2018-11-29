@@ -17,10 +17,14 @@ public class PlayerController : MonoBehaviour
 	
 	void Update ()
     {
-        HandleMovement();
-        HandleRotation();
         HandleControls();
         HandleCamera();
+    }
+
+    private void FixedUpdate()
+    {
+        HandleMovement();
+        HandleRotation();
     }
 
     void HandleMovement()
@@ -66,6 +70,9 @@ public class PlayerController : MonoBehaviour
             mousePosition.z = 0f;
 
             clone.GetComponent<BulletController>().direction = (mousePosition - transform.position).normalized;
+
+
+            clone.transform.position += (mousePosition - transform.position).normalized * (GetComponent<CircleCollider2D>().radius + 0.1f);
         }
     }
 
