@@ -6,10 +6,13 @@ TagManager:
   tags:
   - MainMenuPanel
   - SettingsPanel
+<<<<<<< HEAD
   - PauseMenuPanel
+=======
   - Projectile
   - Actor
   - Wall
+>>>>>>> 41aaddb3d999fbe9d93cea73920e7b3a3795413b
   layers:
   - Default
   - TransparentFX

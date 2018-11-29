@@ -84,6 +84,11 @@ public class BoardManager : MonoBehaviour
     int _objects;
     public int numberOfFeatures = 50;
 
+    public Vector3 GetCenter()
+    {
+        return new Vector3(_xsize / 2, _ysize / 2);
+    }
+
     public static bool IsWall(int x, int y, int xlen, int ylen, int xt, int yt, Direction d)
     {
         Func<int, int, int> a = GetFeatureLowerBound;
