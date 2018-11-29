@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainMenuPanel
   - SettingsPanel
+  - PauseMenuPanel
   layers:
   - Default
   - TransparentFX
