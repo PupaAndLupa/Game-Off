@@ -70,6 +70,12 @@ public class BoardManager : MonoBehaviour
         private set;
     }
 
+    public Vector2 StartPosition
+    {
+        get;
+        private set;
+    }
+
     public enum Direction { North, East, South, West };
     public enum Tile { Unused, Wall, Floor, Corridor };
 
@@ -486,6 +492,10 @@ public class BoardManager : MonoBehaviour
                     roomSizeY = Random.Range(4, roomSize.y);
                     if (this.MakeRoom(newx + xmod, newy + ymod, roomSizeX, roomSizeY, validTile.Value))
                     {
+                        if (currentFeatures == 1)
+                        {
+                            StartPosition = new Vector2(newx + xmod, newy + ymod);
+                        }
                         currentFeatures++; // add to our quota
 
                         // then we mark the wall opening with a door
