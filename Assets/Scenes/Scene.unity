@@ -177,7 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e7c3b54e813e1f4eae36861ae9eb03a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 1071404096386048, guid: 58a5079f7c7597b4ebafcfbeefd00fe0,
+  PlayerPrefab: {fileID: 1293979414604022, guid: c5913f623d135ab47ba37058a5f74da0,
     type: 2}
   PauseMenuPrefab: {fileID: 957321566}
 --- !u!1001 &957321565
