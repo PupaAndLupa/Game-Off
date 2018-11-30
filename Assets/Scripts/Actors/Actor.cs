@@ -25,5 +25,6 @@ public class Actor : MonoBehaviour
     }
 
     public Movement Movement;
+    public GameObject Weapon;
     public ActorStats Stats = new ActorStats(100, 500f, 1f);
 }

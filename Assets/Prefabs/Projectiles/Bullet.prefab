@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Movement: {fileID: 114143677027118616}
   Stats:
-    Movespeed: 1000
+    Movespeed: 700
 --- !u!212 &212057080135491384
 SpriteRenderer:
   m_ObjectHideFlags: 1

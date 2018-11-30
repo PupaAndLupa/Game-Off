@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Bulllet : Projectile {
 
-	// Use this for initialization
 	void Start () {
         Destroy(gameObject, 2f);
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		
 	}
@@ -21,7 +19,10 @@ public class Bulllet : Projectile {
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag != "projectile")
+        if (collision.gameObject.tag != "projectile" )
+        {
+            Debug.Log(collision.gameObject.tag);
             Destroy(gameObject);
+        }
     }
 }
