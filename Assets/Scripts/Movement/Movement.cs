@@ -24,9 +24,18 @@ public class Movement : MonoBehaviour
         Enabled = false;
     }
 
-    public virtual void Move(float movespeed) {}
+    public virtual void Move(float movespeed)
+    {
+        GetComponent<Rigidbody2D>().velocity = Direction * movespeed * Time.deltaTime;
+    }
+
     public virtual void Rotate() {}
     public virtual void LookTowards() {} 
+    public virtual void SetDirection(Vector3 direction)
+    {
+        Direction = direction.normalized;
+    }
 
     protected bool Enabled;
+    protected Vector3 Direction;
 }

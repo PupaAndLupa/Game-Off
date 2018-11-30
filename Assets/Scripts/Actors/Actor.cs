@@ -9,7 +9,7 @@ public class Actor : MonoBehaviour
     public class ActorStats
     {
         public int MaxHealth;
-        private int CurrentHealth;
+        public int CurrentHealth { get; set; }
 
         public float Movespeed;
         public float DamageModifier;
@@ -24,6 +24,6 @@ public class Actor : MonoBehaviour
         }
     }
 
-    public Movement movement;
+    public Movement Movement;
     public ActorStats Stats = new ActorStats(100, 500f, 1f);
 }

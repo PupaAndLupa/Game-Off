@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour {
-
-    public Vector3 direction;
-    private float speed = 1000f;
+public class Bulllet : Projectile {
 
 	// Use this for initialization
 	void Start () {
@@ -14,12 +11,12 @@ public class BulletController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
+		
 	}
 
     private void FixedUpdate()
     {
-        GetComponent<Rigidbody2D>().velocity = direction * speed * Time.deltaTime;
+        Movement.Move(Stats.Movespeed);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -8,29 +8,29 @@ public class PlayerMovement : Movement
 
     public override void Move(float movespeed)
     {
-        Vector2 axis = new Vector2(0f, 0f);
+        Direction = new Vector3(0, 0);
 
         if (Input.GetKey(KeyCode.W))
         {
-            axis.y++;
+            Direction.y++;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            axis.y--;
+            Direction.y--;
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            axis.x--;
+            Direction.x--;
         }
 
         if (Input.GetKey(KeyCode.D))
         {
-            axis.x++;
+            Direction.x++;
         }
 
-        GetComponent<Rigidbody2D>().velocity = axis * movespeed * Time.deltaTime;
+        GetComponent<Rigidbody2D>().velocity = Direction * movespeed * Time.deltaTime;
     }
 
     public override void Rotate()

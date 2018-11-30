@@ -208,11 +208,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1764fb38a9fd3848b7acb0ece1d1c59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement: {fileID: 114276030614659526}
+  Movement: {fileID: 114276030614659526}
   Stats:
     MaxHealth: 100
-    Movespeed: 500
+    Movespeed: 300
     DamageModifier: 1
+  test: {fileID: 1260570442151024, guid: 698833c5314e01c4c991347c3156d850, type: 2}
 --- !u!212 &212226095034702322
 SpriteRenderer:
   m_ObjectHideFlags: 1
