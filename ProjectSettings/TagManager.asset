@@ -11,6 +11,7 @@ TagManager:
   - Actor
   - Wall
   - MainMenu
+  - Weapon
   layers:
   - Default
   - TransparentFX
