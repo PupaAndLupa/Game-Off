@@ -289,6 +289,16 @@ Prefab:
       propertyPath: m_AnchoredPosition.x
       value: 0.000061035156
       objectReference: {fileID: 0}
+    - target: {fileID: 114078165490214400, guid: 3c7818201f48a2a4c90b6d86f92d85be,
+        type: 2}
+      propertyPath: PausePanel
+      value: 
+      objectReference: {fileID: 957321566}
+    - target: {fileID: 114078165490214400, guid: 3c7818201f48a2a4c90b6d86f92d85be,
+        type: 2}
+      propertyPath: PauseMenu
+      value: 
+      objectReference: {fileID: 957321566}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c7818201f48a2a4c90b6d86f92d85be, type: 2}
   m_IsPrefabAsset: 0
