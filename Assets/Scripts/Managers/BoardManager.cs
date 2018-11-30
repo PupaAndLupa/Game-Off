@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics;
 using Random = UnityEngine.Random;
 using UnityEngine;
 
@@ -48,21 +47,13 @@ public class BoardManager : MonoBehaviour
 
     public int Cols = 64;
     public int Rows = 64;
-    // size of the map
-    int _xsize;
-    int _ysize;
-    // define the %chance to generate either a room or a corridor on the map
-    // BTW, rooms are 1st priority so actually it's enough to just define the chance
-    // of generating a room
     public int ChanceRoom = 100;
-    public Amount WallsAmount = new Amount(16, 32);
+    public Amount WallsAmount = new Amount(30, 70);
     public Vector2Int roomSize = new Vector2Int(15, 12);
     public int outerWallsThickness = 1;
 
     public SpritePool Floor;
     public SpritePool Walls;
-
-    private Transform boardHolder;
 
     public int Corridors
     {
@@ -76,24 +67,21 @@ public class BoardManager : MonoBehaviour
         private set;
     }
 
-    public enum Direction { North, East, South, West };
-    public enum Tile { Unused, Wall, Floor, Corridor };
+    private enum Direction { North, East, South, West };
+    private enum Tile { Unused, Wall, Floor, Corridor };
 
-    Tile[] _dungeonMap = { };
+    private int objects;
+    private Tile[] dungeonMap = { };
+    private Transform boardHolder;
 
-    int _objects;
-    public int numberOfFeatures = 50;
+    private int availableHorizontalSpace;
+    private int availableVerticalSpace;
 
-    public Vector3 GetCenter()
-    {
-        return new Vector3(_xsize / 2, _ysize / 2);
-    }
-
-    public static bool IsWall(int x, int y, int xlen, int ylen, int xt, int yt, Direction d)
+    private static bool IsWall(int x, int y, int xlen, int ylen, int xt, int yt, Direction d)
     {
         Func<int, int, int> a = GetFeatureLowerBound;
-
         Func<int, int, int> b = IsFeatureWallBound;
+
         switch (d)
         {
             case Direction.North:
@@ -124,10 +112,8 @@ public class BoardManager : MonoBehaviour
         return c + (len + 1) / 2;
     }
 
-    public static IEnumerable<PointI> GetRoomPoints(int x, int y, int xlen, int ylen, Direction d)
+    private static IEnumerable<PointI> GetRoomPoints(int x, int y, int xlen, int ylen, Direction d)
     {
-        // north and south share the same x strategy
-        // east and west share the same y strategy
         Func<int, int, int> a = GetFeatureLowerBound;
         Func<int, int, int> b = GetFeatureUpperBound;
 
@@ -150,11 +136,11 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public Tile GetCellType(int x, int y)
+    private Tile GetCellType(int x, int y)
     {
         try
         {
-            return this._dungeonMap[x + this._xsize * y];
+            return dungeonMap[x + availableHorizontalSpace * y];
         }
         catch (IndexOutOfRangeException)
         {
@@ -164,12 +150,11 @@ public class BoardManager : MonoBehaviour
 
     void SetCell(int x, int y, Tile celltype)
     {
-        this._dungeonMap[x + this._xsize * y] = celltype;
+        dungeonMap[x + availableHorizontalSpace * y] = celltype;
     }
 
-    public bool MakeCorridor(int x, int y, int length, Direction direction)
+    private bool MakeCorridor(int x, int y, int length, Direction direction)
     {
-        // define the dimensions of the corridor (er.. only the width and height..)
         int len = Random.Range(0, length);
         const Tile Floor = Tile.Corridor;
 
@@ -179,90 +164,81 @@ public class BoardManager : MonoBehaviour
         switch (direction)
         {
             case Direction.North:
-                // north
-                // check if there's enough space for the corridor
-                // start with checking it's not out of the boundaries
-                if (x < 0 || x > this._xsize) return false;
+                if (x < 0 || x > availableHorizontalSpace) return false;
                 xtemp = x;
 
-                // same thing here, to make sure it's not out of the boundaries
                 for (ytemp = y; ytemp > (y - len); ytemp--)
                 {
-                    if (ytemp < 0 || ytemp > this._ysize) return false; // oh boho, it was!
+                    if (ytemp < 0 || ytemp > availableVerticalSpace) return false;
                     if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
                 }
 
-                // if we're still here, let's start building
                 Corridors++;
                 for (ytemp = y; ytemp > (y - len); ytemp--)
                 {
-                    this.SetCell(xtemp, ytemp, Floor);
+                    SetCell(xtemp, ytemp, Floor);
                 }
 
                 break;
 
             case Direction.East:
-                // east
-                if (y < 0 || y > this._ysize) return false;
+                if (y < 0 || y > availableVerticalSpace) return false;
                 ytemp = y;
 
                 for (xtemp = x; xtemp < (x + len); xtemp++)
                 {
-                    if (xtemp < 0 || xtemp > this._xsize) return false;
+                    if (xtemp < 0 || xtemp > availableHorizontalSpace) return false;
                     if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
                 }
 
                 Corridors++;
                 for (xtemp = x; xtemp < (x + len); xtemp++)
                 {
-                    this.SetCell(xtemp, ytemp, Floor);
+                    SetCell(xtemp, ytemp, Floor);
                 }
 
                 break;
 
             case Direction.South:
-                // south
-                if (x < 0 || x > this._xsize) return false;
+                if (x < 0 || x > availableHorizontalSpace) return false;
                 xtemp = x;
 
                 for (ytemp = y; ytemp < (y + len); ytemp++)
                 {
-                    if (ytemp < 0 || ytemp > this._ysize) return false;
+                    if (ytemp < 0 || ytemp > availableVerticalSpace) return false;
                     if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
                 }
 
                 Corridors++;
                 for (ytemp = y; ytemp < (y + len); ytemp++)
                 {
-                    this.SetCell(xtemp, ytemp, Floor);
+                    SetCell(xtemp, ytemp, Floor);
                 }
 
                 break;
             case Direction.West:
-                // west
-                if (ytemp < 0 || ytemp > this._ysize) return false;
+                if (ytemp < 0 || ytemp > availableVerticalSpace) return false;
                 ytemp = y;
 
                 for (xtemp = x; xtemp > (x - len); xtemp--)
                 {
-                    if (xtemp < 0 || xtemp > this._xsize) return false;
+                    if (xtemp < 0 || xtemp > availableHorizontalSpace) return false;
                     if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
                 }
 
                 Corridors++;
                 for (xtemp = x; xtemp > (x - len); xtemp--)
                 {
-                    this.SetCell(xtemp, ytemp, Floor);
+                    SetCell(xtemp, ytemp, Floor);
                 }
 
                 break;
         }
 
-        // woot, we're still here! let's tell the other guys we're done!!
         return true;
     }
 
-    public IEnumerable<Tuple> GetSurroundingPoints(PointI v)
+    private IEnumerable<Tuple> GetSurroundingPoints(PointI v)
     {
         var points = new[]
                          {
@@ -275,11 +251,11 @@ public class BoardManager : MonoBehaviour
         return points.Where(p => InBounds(p.Item1));
     }
 
-    public IEnumerable<TupleWithTile> GetSurroundings(PointI v)
+    private IEnumerable<TupleWithTile> GetSurroundings(PointI v)
     {
         return
-            this.GetSurroundingPoints(v)
-                .Select(r => new TupleWithTile(r.Item1, r.Item2, this.GetCellType(r.Item1.X, r.Item1.Y)));
+            GetSurroundingPoints(v)
+                .Select(r => new TupleWithTile(r.Item1, r.Item2, GetCellType(r.Item1.X, r.Item1.Y)));
     }
 
     public bool InBounds(int x, int y)
@@ -292,38 +268,32 @@ public class BoardManager : MonoBehaviour
         return this.InBounds(v.X, v.Y);
     }
 
-    public bool MakeRoom(int x, int y, int xlength, int ylength, Direction direction)
+    private bool MakeRoom(int x, int y, int xlength, int ylength, Direction direction)
     {
-        // define the dimensions of the room, it should be at least 4x4 tiles (2x2 for walking on, the rest is walls)
         int xlen = Random.Range(4, xlength);
         int ylen = Random.Range(4, ylength);
 
-        // the tile type it's going to be filled with
         const Tile Floor = Tile.Floor;
-
         const Tile Wall = Tile.Wall;
-        // choose the way it's pointing at
-
+        
         var points = GetRoomPoints(x, y, xlen, ylen, direction).ToArray();
 
-        // Check if there's enough space left for it
         if (
             points.Any(
                 s =>
-                s.Y < 0 || s.Y > this._ysize || s.X < 0 || s.X > this._xsize || this.GetCellType(s.X, s.Y) != Tile.Unused)) return false;
+                s.Y < 0 || s.Y > availableVerticalSpace || s.X < 0 || s.X > availableHorizontalSpace || GetCellType(s.X, s.Y) != Tile.Unused)) return false;
 
         foreach (var p in points)
         {
-            this.SetCell(p.X, p.Y, IsWall(x, y, xlen, ylen, p.X, p.Y, direction) ? Wall : Floor);
+            SetCell(p.X, p.Y, IsWall(x, y, xlen, ylen, p.X, p.Y, direction) ? Wall : Floor);
         }
 
-        // yay, all done
         return true;
     }
 
-    public Tile[] GetDungeon()
+    private Tile[] GetDungeon()
     {
-        return this._dungeonMap;
+        return dungeonMap;
     }
 
     public GameObject GetCellTile(int x, int y)
@@ -343,14 +313,13 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    //used to print the map on the screen
     public void ShowDungeon()
     {
         boardHolder = new GameObject("Board").transform;
 
-        for (int y = 0; y < this._ysize; y++)
+        for (int y = 0; y < availableVerticalSpace; y++)
         {
-            for (int x = 0; x < this._xsize; x++)
+            for (int x = 0; x < availableHorizontalSpace; x++)
             {
                 GameObject instance = Instantiate(GetCellTile(x, y), new Vector3(x, y, 0.0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
@@ -358,7 +327,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public Direction RandomDirection()
+    private Direction RandomDirection()
     {
         int dir = Random.Range(0, 4);
         switch (dir)
@@ -393,68 +362,53 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    //and here's the one generating the whole map
     public bool CreateDungeon(int inx, int iny, int inobj)
     {
-        this._objects = inobj < 1 ? 10 : inobj;
+        objects = inobj < 1 ? 10 : inobj;
 
-        // adjust the size of the map, if it's smaller or bigger than the limits
-        if (inx < 3) this._xsize = 3;
-        else if (inx > Cols) this._xsize = Cols;
-        else this._xsize = inx;
+        if (inx < 3) availableHorizontalSpace = 3;
+        else if (inx > Cols) availableHorizontalSpace = Cols;
+        else availableHorizontalSpace = inx;
 
-        if (iny < 3) this._ysize = 3;
-        else if (iny > Rows) this._ysize = Rows;
-        else this._ysize = iny;
+        if (iny < 3) availableVerticalSpace = 3;
+        else if (iny > Rows) availableVerticalSpace = Rows;
+        else availableVerticalSpace = iny;
 
-        // redefine the map var, so it's adjusted to our new map size
-        this._dungeonMap = new Tile[this._xsize * this._ysize];
+        dungeonMap = new Tile[availableHorizontalSpace * availableVerticalSpace];
 
-        // start with making the "standard stuff" on the map
-        this.Initialize();
+        Initialize();
 
-        /*******************************************************************************
-        And now the code of the random-map-generation-algorithm begins!
-        *******************************************************************************/
-
-        // start with making a room in the middle, which we can start building upon
         int roomSizeX = Random.Range(4, roomSize.x);
         int roomSizeY = Random.Range(4, roomSize.y);
         Direction randomDirection = RandomDirection();
-        this.MakeRoom(this._xsize / 2, this._ysize / 2, roomSizeX, roomSizeY, randomDirection); // getrand saken f????r att slumpa fram riktning p?? rummet
+        MakeRoom(availableHorizontalSpace / 2, availableVerticalSpace / 2, roomSizeX, roomSizeY, randomDirection); // getrand saken f????r att slumpa fram riktning p?? rummet
         Vector2Int directionModifier = DirectionToXY(randomDirection);
-        StartPosition = new Vector2(this._xsize / 2 + directionModifier.x, this._ysize / 2 + directionModifier.y);
+        StartPosition = new Vector2(availableHorizontalSpace / 2 + directionModifier.x, availableVerticalSpace / 2 + directionModifier.y);
 
-        // keep count of the number of "objects" we've made
-        int currentFeatures = 1; // +1 for the first room we just made
+        int currentFeatures = 1;
 
-        // then we sart the main loop
         for (int countingTries = 0; countingTries < 1000; countingTries++)
         {
-            // check if we've reached our quota
-            if (currentFeatures == this._objects)
+            if (currentFeatures == objects)
             {
                 break;
             }
 
-            // start with a random wall
             int newx = 0;
             int xmod = 0;
             int newy = 0;
             int ymod = 0;
             Direction? validTile = null;
 
-            // 1000 chances to find a suitable object (room or corridor)..
             for (int testing = 0; testing < 1000; testing++)
             {
-                newx = Random.Range(outerWallsThickness, this._xsize - outerWallsThickness);
-                newy = Random.Range(outerWallsThickness, this._ysize - outerWallsThickness);
+                newx = Random.Range(outerWallsThickness, availableHorizontalSpace - outerWallsThickness);
+                newy = Random.Range(outerWallsThickness, availableVerticalSpace - outerWallsThickness);
 
                 if (GetCellType(newx, newy) == Tile.Wall || GetCellType(newx, newy) == Tile.Corridor)
                 {
-                    var surroundings = this.GetSurroundings(new PointI() { X = newx, Y = newy });
+                    var surroundings = GetSurroundings(new PointI() { X = newx, Y = newy });
 
-                    // check if we can reach the place
                     var canReach =
                         surroundings.FirstOrDefault(s => s.Item3 == Tile.Corridor || s.Item3 == Tile.Floor);
                     if (canReach == null)
@@ -466,56 +420,45 @@ public class BoardManager : MonoBehaviour
                     xmod = directionModifier.x;
                     ymod = directionModifier.y;
 
-
-                    // check that we haven't got another door nearby, so we won't get alot of openings besides
-                    // each other
-
-                    if (GetCellType(newx, newy + 1) == Tile.Corridor) // north
+                    if (GetCellType(newx, newy + 1) == Tile.Corridor)
                     {
                         validTile = null;
-
                     }
 
-                    else if (GetCellType(newx - 1, newy) == Tile.Corridor) // east
+                    else if (GetCellType(newx - 1, newy) == Tile.Corridor)
                         validTile = null;
-                    else if (GetCellType(newx, newy - 1) == Tile.Corridor) // south
+                    else if (GetCellType(newx, newy - 1) == Tile.Corridor)
                         validTile = null;
-                    else if (GetCellType(newx + 1, newy) == Tile.Corridor) // west
+                    else if (GetCellType(newx + 1, newy) == Tile.Corridor)
                         validTile = null;
 
 
-                    // if we can, jump out of the loop and continue with the rest
                     if (validTile.HasValue) break;
                 }
             }
 
             if (validTile.HasValue)
             {
-                // choose what to build now at our newly found place, and at what direction
                 int feature = Random.Range(0, 100);
                 if (feature <= ChanceRoom)
-                { // a new room
+                {
                     roomSizeX = Random.Range(4, roomSize.x);
                     roomSizeY = Random.Range(4, roomSize.y);
-                    if (this.MakeRoom(newx + xmod, newy + ymod, roomSizeX, roomSizeY, validTile.Value))
+                    if (MakeRoom(newx + xmod, newy + ymod, roomSizeX, roomSizeY, validTile.Value))
                     {
-                        currentFeatures++; // add to our quota
+                        currentFeatures++;
 
-                        // then we mark the wall opening with a door
-                        this.SetCell(newx, newy, Tile.Corridor);
-
-                        // clean up infront of the door so we can reach it
-                        this.SetCell(newx + xmod, newy + ymod, Tile.Floor);
+                        SetCell(newx, newy, Tile.Corridor);
+                        SetCell(newx + xmod, newy + ymod, Tile.Floor);
                     }
                 }
                 else if (feature >= ChanceRoom)
-                { // new corridor
-                    if (this.MakeCorridor(newx + xmod, newy + ymod, 6, validTile.Value))
+                {
+                    if (MakeCorridor(newx + xmod, newy + ymod, 6, validTile.Value))
                     {
-                        // same thing here, add to the quota and a door
                         currentFeatures++;
 
-                        this.SetCell(newx, newy, Tile.Corridor);
+                        SetCell(newx, newy, Tile.Corridor);
                     }
                 }
             }
@@ -526,18 +469,17 @@ public class BoardManager : MonoBehaviour
 
     void Initialize()
     {
-        for (int y = 0; y < this._ysize; y++)
+        for (int y = 0; y < availableVerticalSpace; y++)
         {
-            for (int x = 0; x < this._xsize; x++)
+            for (int x = 0; x < availableHorizontalSpace; x++)
             {
-                // ie, making the borders of unwalkable walls
-                if (y < outerWallsThickness || y > this._ysize - outerWallsThickness || x < outerWallsThickness || x > this._xsize - outerWallsThickness)
+                if (y < outerWallsThickness || y > availableVerticalSpace - outerWallsThickness || x < outerWallsThickness || x > availableHorizontalSpace - outerWallsThickness)
                 {
-                    this.SetCell(x, y, Tile.Wall);
+                    SetCell(x, y, Tile.Wall);
                 }
                 else
-                {                        // and fill the rest with dirt
-                    this.SetCell(x, y, Tile.Unused);
+                {
+                    SetCell(x, y, Tile.Unused);
                 }
             }
         }
@@ -546,7 +488,7 @@ public class BoardManager : MonoBehaviour
     public void SetupScene()
     {
         Initialize();
-        CreateDungeon(Cols, Rows, numberOfFeatures);
+        CreateDungeon(Cols, Rows, Random.Range(WallsAmount.Min, WallsAmount.Max));
         ShowDungeon();
     }
 
@@ -556,29 +498,29 @@ public class BoardManager : MonoBehaviour
         public int Y { get; internal set; }
     }
 
-    public class Tuple
+    private class Tuple
     {
         public PointI Item1;
         public Direction Item2;
 
-        public Tuple(PointI pointI, BoardManager.Direction direction)
+        public Tuple(PointI pointI, Direction direction)
         {
-            this.Item1 = pointI;
-            this.Item2 = direction;
+            Item1 = pointI;
+            Item2 = direction;
         }
     }
 
-    public class TupleWithTile
+    private class TupleWithTile
     {
         public PointI Item1;
         public Direction Item2;
         public Tile Item3;
 
-        public TupleWithTile(PointI pointI, BoardManager.Direction direction, Tile tile)
+        public TupleWithTile(PointI pointI, Direction direction, Tile tile)
         {
-            this.Item1 = pointI;
-            this.Item2 = direction;
-            this.Item3 = tile;
+            Item1 = pointI;
+            Item2 = direction;
+            Item3 = tile;
         }
     }
 }
