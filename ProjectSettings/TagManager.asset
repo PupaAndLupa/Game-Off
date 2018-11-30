@@ -10,6 +10,7 @@ TagManager:
   - Projectile
   - Actor
   - Wall
+  - MainMenu
   layers:
   - Default
   - TransparentFX
