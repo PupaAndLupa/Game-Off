@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour {
                 case GameStates.Playing:
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        CurrentState = GameStates.Pause;
                         DisableCamera();
                         DisableMovement();
                         PauseGame();
@@ -52,7 +51,6 @@ public class GameManager : MonoBehaviour {
                 case GameStates.Pause:
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        CurrentState = GameStates.Playing;
                         EnableCamera();
                         EnableMovement();
                         ContinueGame();
@@ -106,18 +104,20 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    private void PauseGame()
+    public void PauseGame()
     {
         Time.timeScale = 0;
+        CurrentState = GameStates.Pause;
         if (PauseMenu != null)
         {
             PauseMenu.SetActive(true);
         }
     }
 
-    private void ContinueGame()
+    public void ContinueGame()
     {
         Time.timeScale = 1;
+        CurrentState = GameStates.Playing;
         if (PauseMenu != null)
         {
             PauseMenu.SetActive(false);
