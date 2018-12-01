@@ -16,9 +16,6 @@ public class GameManager : MonoBehaviour {
     [Tooltip("Initialized on runtime")]
     public AudioManager AudioManager;
 
-    [Tooltip("Initialized on runtime")]
-    public ProjectileManager ProjectileManager;
-
     public GameObject Player { get; set; }
     public GameObject PauseMenu { get; set; }
     public GameStates CurrentState { get; set; }
@@ -28,7 +25,6 @@ public class GameManager : MonoBehaviour {
         CurrentState = GameStates.MainMenu;
         BoardManager = FindObjectOfType<BoardManager>();
         AudioManager = FindObjectOfType<AudioManager>();
-        ProjectileManager = FindObjectOfType<ProjectileManager>();
         StartCoroutine(HandleInput());
     }
 

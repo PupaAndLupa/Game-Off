@@ -70,8 +70,8 @@ GameObject:
   - component: {fileID: 4805559047340186}
   - component: {fileID: 114276030614659526}
   - component: {fileID: 50166629451313838}
-  - component: {fileID: 58344763142372818}
   - component: {fileID: 114443426797917578}
+  - component: {fileID: 61433495416954422}
   m_Layer: 0
   m_Name: Player
   m_TagString: Actor
@@ -86,7 +86,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1164278183695334}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.38, z: 0}
+  m_LocalPosition: {x: 0, y: 0.77, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4805559047340186}
@@ -126,7 +126,7 @@ Transform:
   m_GameObject: {fileID: 1293979414604022}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4592639851059026}
   - {fileID: 4115189269347814}
@@ -158,7 +158,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 2
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -193,9 +193,9 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
---- !u!58 &58344763142372818
-CircleCollider2D:
+  m_Constraints: 4
+--- !u!61 &61433495416954422
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -206,9 +206,19 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.030840635}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.2432708
+  m_Size: {x: 0.6299107, y: 0.9383187}
+  m_EdgeRadius: 0
 --- !u!81 &81054168077710168
 AudioListener:
   m_ObjectHideFlags: 1
@@ -293,7 +303,7 @@ SpriteRenderer:
   m_SortingLayerID: -1630674519
   m_SortingLayer: 3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 71f17731142ff2f49ae06f29f075c3de, type: 3}
+  m_Sprite: {fileID: 21300042, guid: 220dbc1c8b8d4024b812be950958fef5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
