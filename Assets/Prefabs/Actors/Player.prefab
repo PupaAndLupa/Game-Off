@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2bc3ee6ed2372445877f904720fe0f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WalkingSound: {fileID: 8300000, guid: 956b5b783c3b80549b41f8243ec8ac5a, type: 3}
   WeaponPrefab: {fileID: 1164278183695334}
   Stats:
     MaxHealth: 100

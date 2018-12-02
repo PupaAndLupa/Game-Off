@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224747335142399296}
   - component: {fileID: 114164870410470226}
+  - component: {fileID: 114872071348502472}
   m_Layer: 5
   m_Name: Master Volume Slider
   m_TagString: Untagged
@@ -188,6 +189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224384891261434208}
   - component: {fileID: 114746552876745880}
+  - component: {fileID: 114217186974942724}
   m_Layer: 5
   m_Name: Music Volume Slider
   m_TagString: Untagged
@@ -492,6 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224354024783320892}
   - component: {fileID: 114384969313946868}
+  - component: {fileID: 114782555581717860}
   m_Layer: 5
   m_Name: SFX Volume Slider
   m_TagString: Untagged
@@ -859,7 +862,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Current: {fileID: 1805294024369888}
-  ToSwitch: {fileID: 0}
+  ToSwitch: {fileID: 1298435494852296}
 --- !u!114 &114054351165650456
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1017,7 +1020,18 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114872071348502472}
+        m_MethodName: OnChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114183671027009168
@@ -1113,6 +1127,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114217186974942724
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1325582768133778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09061c0504057e2478ab27f2e9456bd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Slider: {fileID: 114746552876745880}
 --- !u!114 &114217249182031038
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1347,7 +1373,18 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114782555581717860}
+        m_MethodName: OnChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114404592797765338
@@ -1883,10 +1920,21 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114217186974942724}
+        m_MethodName: OnChange
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114779775211256178
@@ -1900,6 +1948,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9520bbf4ed4df344b105ddcdd7891f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114782555581717860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1821405851976434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14df61da3c50a8d4b95497216268d6a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Slider: {fileID: 114384969313946868}
+--- !u!114 &114872071348502472
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1234287826181034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52b86cdb06a5dac4ba7fe11b04facc67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Slider: {fileID: 114164870410470226}
 --- !u!114 &114884658625135054
 MonoBehaviour:
   m_ObjectHideFlags: 1

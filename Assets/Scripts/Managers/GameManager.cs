@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
     public BoardManager BoardManager;
 
     [Tooltip("Initialized on runtime")]
-    public AudioManager AudioManager;
+    public SoundManager SoundManager;
 
     public GameObject PauseMenu { get; set; }
     public GameObject PlayerPrefab { get; set; }
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
     {
         CurrentState = GameStates.MainMenu;
         BoardManager = FindObjectOfType<BoardManager>();
-        AudioManager = FindObjectOfType<AudioManager>();
+        SoundManager = FindObjectOfType<SoundManager>();
         StartCoroutine(HandleInput());
     }
 
@@ -65,6 +65,14 @@ public class GameManager : MonoBehaviour {
                         if (Input.GetKey(KeyCode.D))
                         {
                             ++direction.x;
+                        }
+
+                        if (direction != Vector2.zero)
+                        {
+                            if (!SoundManager.Instance.FxSource.isPlaying)
+                            {
+                                SoundManager.Instance.PlayOnce(Player.WalkingSound);
+                            }
                         }
 
                         Player.Move(direction);

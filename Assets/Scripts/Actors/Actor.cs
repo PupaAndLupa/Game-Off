@@ -23,6 +23,7 @@ public class Actor : MonoBehaviour
         }
     }
 
+    public AudioClip WalkingSound;
     public GameObject WeaponPrefab;
     public ActorStats Stats = new ActorStats(100, 500f, 1f);
     public Movement Movement = new Movement();
