@@ -16,9 +16,11 @@ public class GameManager : MonoBehaviour {
     [Tooltip("Initialized on runtime")]
     public AudioManager AudioManager;
 
-    public GameObject Player { get; set; }
     public GameObject PauseMenu { get; set; }
+    public GameObject PlayerPrefab { get; set; }
     public GameStates CurrentState { get; set; }
+
+    public Actor Player { get; set; }
 
     void Start ()
     {
@@ -39,15 +41,43 @@ public class GameManager : MonoBehaviour {
                 case GameStates.Playing:
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        DisableCamera();
                         DisableMovement();
                         PauseGame();
+                    } else {
+                        Vector2 direction = new Vector3(0, 0);
+                        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        mousePosition.z = 0f;
+
+                        Player.LookTowards(mousePosition);
+                        Camera.main.transform.rotation = Quaternion.Euler(0, 0, 0);
+                        if (Input.GetKey(KeyCode.W))
+                        {
+                            ++direction.y;
+                        }
+                        if (Input.GetKey(KeyCode.S))
+                        {
+                            --direction.y;
+                        }
+                        if (Input.GetKey(KeyCode.A))
+                        {
+                            --direction.x;
+                        }
+                        if (Input.GetKey(KeyCode.D))
+                        {
+                            ++direction.x;
+                        }
+
+                        Player.Move(direction);
+
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            Player.Attack(mousePosition - Player.transform.position);
+                        }
                     }
                     break;
                 case GameStates.Pause:
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        EnableCamera();
                         EnableMovement();
                         ContinueGame();
                     }
@@ -55,7 +85,6 @@ public class GameManager : MonoBehaviour {
             }
             yield return null;
         }
-
     }
 
     void Update()
@@ -66,12 +95,12 @@ public class GameManager : MonoBehaviour {
     public void InitGame()
     {
         BoardManager.SetupScene();
-        Instantiate(Player, BoardManager.StartPosition, Quaternion.identity);
+        Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
     }
 
     public void SetPlayer(GameObject player)
     {
-        Player = player;
+        PlayerPrefab = player;
     }
 
     public void SetPauseMenu(GameObject pausePanel)
@@ -82,22 +111,12 @@ public class GameManager : MonoBehaviour {
 
     public void DisableMovement()
     {
-
+        Player.Movement.Disable();
     }
 
     public void EnableMovement()
     {
-
-    }
-
-    public void DisableCamera()
-    {
-
-    }
-
-    public void EnableCamera()
-    {
-
+        Player.Movement.Enable();
     }
 
     public void PauseGame()

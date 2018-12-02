@@ -16,15 +16,40 @@ public class Actor : MonoBehaviour
         
         public ActorStats(int maxHealth, float movespeed, float damageModifier)
         {
-            MaxHealth = maxHealth;
             Movespeed = movespeed;
-            DamageModifier = damageModifier;
-
+            MaxHealth = maxHealth;
             CurrentHealth = MaxHealth;
+            DamageModifier = damageModifier;
         }
     }
 
-    public Movement Movement;
-    public GameObject Weapon;
+    public GameObject WeaponPrefab;
     public ActorStats Stats = new ActorStats(100, 500f, 1f);
+    public Movement Movement = new Movement();
+
+    void Start()
+    {
+        WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
+    }
+
+    public virtual void Move(Vector2 direction)
+    {
+        Movement.SetDirection(direction);
+        Movement.Move(gameObject, Stats.Movespeed);
+    }
+
+    public virtual void Attack(Vector3 direction)
+    {
+        WeaponPrefab.GetComponent<Weapon>().Attack(direction);
+    }
+
+    public virtual void Rotate(float angle)
+    {
+        transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+    }
+
+    public virtual void LookTowards(Vector3 position)
+    {
+        Rotate(Mathf.Atan2(position.y - transform.position.y, position.x - transform.position.x) * Mathf.Rad2Deg);
+    }
 }

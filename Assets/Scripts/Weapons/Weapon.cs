@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    public GameObject projectile;
-
     [Serializable]
     public class WeaponStats
     {
         public float Damage;
-        public float PlayerModifier { get; set; }
+        public float Modifier { get; set; }
 
         public WeaponStats(float damage)
         {
@@ -19,17 +17,23 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public GameObject ProjectilePrefab;
     public WeaponStats Stats = new WeaponStats(30f);
 
-    public void Shoot(Vector3 direction)
+    public void Attack(Vector3 direction)
     {
-        GameObject bullet = Instantiate(projectile, transform.position, transform.rotation, transform.parent.parent);
-        bullet.GetComponent<Projectile>().Movement.SetDirection(direction);
-        bullet.GetComponent<Projectile>().SetDamage(Stats.Damage * Stats.PlayerModifier);
+        GameObject projectile = Instantiate(
+            ProjectilePrefab, 
+            transform.position, 
+            transform.rotation,
+            null
+        );
+        projectile.GetComponent<Projectile>().Movement.SetDirection(direction);
+        projectile.GetComponent<Projectile>().SetDamage(Stats.Damage * Stats.Modifier);
     }
 
-    public void SetPlayerModifier(float playerModifier)
+    public void SetModifier(float modifier)
     {
-        Stats.PlayerModifier = playerModifier;
+        Stats.Modifier = modifier;
     }
 }

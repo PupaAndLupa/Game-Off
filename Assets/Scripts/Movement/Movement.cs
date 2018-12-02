@@ -1,17 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Movement
 {
+    protected bool Enabled;
+    protected Vector2 Direction;
+
     public Movement()
     {
         Enabled = true;
-    }
-
-    public bool IsEnabled()
-    {
-        return Enabled;
     }
 
     public void Enable()
@@ -24,18 +23,21 @@ public class Movement : MonoBehaviour
         Enabled = false;
     }
 
-    public virtual void Move(float movespeed)
+    private bool IsEnabled()
     {
-        GetComponent<Rigidbody2D>().velocity = Direction * movespeed * Time.deltaTime;
+        return Enabled;
     }
 
-    public virtual void Rotate() {}
-    public virtual void LookTowards() {} 
-    public virtual void SetDirection(Vector3 direction)
+    public virtual void Move(GameObject obj, float movespeed)
+    {
+        if (IsEnabled())
+        {
+            obj.GetComponent<Rigidbody2D>().velocity = Direction * movespeed * Time.deltaTime;
+        }
+    }
+
+    public virtual void SetDirection(Vector2 direction)
     {
         Direction = direction.normalized;
     }
-
-    protected bool Enabled;
-    protected Vector3 Direction;
 }

@@ -37,8 +37,7 @@ GameObject:
   - component: {fileID: 4269367590005972}
   - component: {fileID: 70170193985244644}
   - component: {fileID: 50443728756169006}
-  - component: {fileID: 114143677027118616}
-  - component: {fileID: 114976660777907138}
+  - component: {fileID: 114660484096636232}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Projectile
@@ -108,7 +107,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0.001412496, y: -0.001222372}
   m_Size: {x: 0.14122745, y: 0.14122745}
   m_Direction: 0
---- !u!114 &114143677027118616
+--- !u!114 &114660484096636232
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,23 +115,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1260570442151024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6c0a0154170920429089f547b7ac76a, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b02977891a2ffe4d86e49156c2596cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114976660777907138
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1260570442151024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 478c2178cdcd00044b890db9fd840cb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Movement: {fileID: 114143677027118616}
+  LifeTime: 2
   Stats:
-    Movespeed: 700
+    Movespeed: 1000
 --- !u!212 &212057080135491384
 SpriteRenderer:
   m_ObjectHideFlags: 1
