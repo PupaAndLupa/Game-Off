@@ -240,6 +240,7 @@ MonoBehaviour:
     type: 2}
   Stats:
     Damage: 30
+    Cooldown: 0.5
 --- !u!114 &114809678525573086
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -257,6 +258,7 @@ MonoBehaviour:
     MaxHealth: 100
     Movespeed: 500
     DamageModifier: 1
+    DetectionRadius: 5
 --- !u!212 &212226095034702322
 SpriteRenderer:
   m_ObjectHideFlags: 1

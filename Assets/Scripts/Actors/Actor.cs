@@ -13,22 +13,24 @@ public class Actor : MonoBehaviour
 
         public float Movespeed;
         public float DamageModifier;
+        public float DetectionRadius;
         
-        public ActorStats(int maxHealth, float movespeed, float damageModifier)
+        public ActorStats(int maxHealth, float movespeed, float damageModifier, float detectionRadius)
         {
             Movespeed = movespeed;
             MaxHealth = maxHealth;
             CurrentHealth = MaxHealth;
             DamageModifier = damageModifier;
+            DetectionRadius = detectionRadius;
         }
     }
 
     public AudioClip WalkingSound;
     public GameObject WeaponPrefab;
-    public ActorStats Stats = new ActorStats(100, 500f, 1f);
+    public ActorStats Stats = new ActorStats(100, 500f, 1f, 5f);
     public Movement Movement = new Movement();
 
-    void Start()
+    protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
     }
@@ -52,5 +54,20 @@ public class Actor : MonoBehaviour
     public virtual void LookTowards(Vector3 position)
     {
         Rotate(Mathf.Atan2(position.y - transform.position.y, position.x - transform.position.x) * Mathf.Rad2Deg);
+    }
+
+    public virtual bool CastRay(GameObject gameObject)
+    {
+        LayerMask mask = LayerMask.GetMask("Wall");
+        if (Physics2D.Raycast(transform.position, gameObject.transform.position - transform.position, Stats.DetectionRadius, mask))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public virtual Vector3 VectorTo(Vector3 position)
+    {
+        return (position - transform.position);
     }
 }
