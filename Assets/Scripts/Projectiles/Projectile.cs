@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     {
         public float Movespeed;
         public float Damage { get; set; }
+        public float Range { get; set; }
 
         public ProjectileStats(float movespeed)
         {
@@ -17,18 +18,25 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public float LifeTime;
     public ProjectileStats Stats = new ProjectileStats(700f);
     public Movement Movement = new Movement();
 
-    void Start()
-    {
-        Destroy(gameObject, LifeTime);
-    }
+    protected Vector3 startPoint;
+
 
     public void SetDamage(float damage)
     {
         Stats.Damage = damage;
+    }
+
+    public void SetRange(float range)
+    {
+        Stats.Range = range;
+    }
+
+    protected float distanceTraveled()
+    {
+        return (transform.position - startPoint).magnitude;
     }
 
     public void Move()
@@ -36,7 +44,7 @@ public class Projectile : MonoBehaviour
         Movement.Move(gameObject, Stats.Movespeed);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag != "projectile")
         {
@@ -44,8 +52,17 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        startPoint = transform.position;
+    }
+
     private void FixedUpdate()
     {
+        if (distanceTraveled() > Stats.Range)
+        {
+            Destroy(gameObject);
+        }
         Move();
     }
 }

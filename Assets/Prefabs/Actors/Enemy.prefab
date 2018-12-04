@@ -181,6 +181,7 @@ MonoBehaviour:
   Stats:
     Damage: 30
     Cooldown: 0.8
+    Range: 4
 --- !u!212 &212108796973967578
 SpriteRenderer:
   m_ObjectHideFlags: 1

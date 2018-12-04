@@ -11,16 +11,18 @@ public class Weapon : MonoBehaviour
         public float Damage;
         public float Modifier { get; set; }
         public float Cooldown;
+        public float Range;
 
-        public WeaponStats(float damage, float cooldown)
+        public WeaponStats(float damage, float cooldown, float range)
         {
             Damage = damage;
             Cooldown = cooldown;
+            Range = range;
         }
     }
 
     public GameObject ProjectilePrefab;
-    public WeaponStats Stats = new WeaponStats(30f, 0.5f);
+    public WeaponStats Stats = new WeaponStats(30f, 0.5f, 3f);
     public bool OnCooldown { get; set; }
     public float ShotTime { get; set; }
 
@@ -40,7 +42,6 @@ public class Weapon : MonoBehaviour
         }
     }
 
-
     public void Attack(Vector3 direction)
     {
         if (!OnCooldown)
@@ -53,6 +54,7 @@ public class Weapon : MonoBehaviour
             );
             projectile.GetComponent<Projectile>().Movement.SetDirection(direction);
             projectile.GetComponent<Projectile>().SetDamage(Stats.Damage * Stats.Modifier);
+            projectile.GetComponent<Projectile>().SetRange(Stats.Range);
             OnCooldown = true;
             ShotTime = Time.time;
         }
