@@ -58,11 +58,10 @@ public class Actor : MonoBehaviour
 
     public virtual bool CastRay(GameObject gameObject)
     {
-        LayerMask mask = LayerMask.GetMask("Wall");
-        if (Physics2D.Raycast(transform.position, gameObject.transform.position - transform.position, Stats.DetectionRadius, mask))
-        {
+        LayerMask mask = LayerMask.GetMask("Wall", "Player");
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, gameObject.transform.position - transform.position, Stats.DetectionRadius, mask);
+        if (!hit || hit.collider.gameObject.tag == "Wall")
             return false;
-        }
         return true;
     }
 

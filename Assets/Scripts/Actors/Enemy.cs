@@ -16,9 +16,9 @@ public class Enemy : Actor
 
         if (VectorTo(player.transform.position).magnitude <= Stats.DetectionRadius)
         {
-            LookTowards(player.transform.position);
             if (CastRay(player))
             {
+                LookTowards(player.transform.position);
                 WeaponPrefab.GetComponent<Weapon>().Attack(VectorTo(player.transform.position));
             }
         }
