@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.SceneManagement;  // TEMP
+
 public class Actor : MonoBehaviour
 {
     [Serializable]
     public class ActorStats
     {
-        public int MaxHealth;
-        public int CurrentHealth { get; set; }
+        public float MaxHealth;
+        public float CurrentHealth { get; set; }
 
         public float Movespeed;
         public float DamageModifier;
@@ -29,10 +31,18 @@ public class Actor : MonoBehaviour
     public GameObject WeaponPrefab;
     public ActorStats Stats = new ActorStats(100, 500f, 1f, 5f);
     public Movement Movement = new Movement();
+    public bool IsDead { get; set; }
 
     protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
+        IsDead = false;
+    }
+
+    protected virtual void Update()
+    {
+        if (IsDead)
+            return;
     }
 
     public virtual void Move(Vector2 direction)
@@ -72,6 +82,14 @@ public class Actor : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-
+        if (collision.gameObject.tag == "Projectile")
+        {
+            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
+            Stats.CurrentHealth -= projectile.Stats.Damage;
+            if (Stats.CurrentHealth <= 0)
+            {
+                IsDead = true;
+            }
+        }
     }
 }

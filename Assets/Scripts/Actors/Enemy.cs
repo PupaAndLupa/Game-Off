@@ -9,9 +9,11 @@ public class Enemy : Actor
         base.Start();
 	}
 	
-	void Update ()
+	protected override void Update ()
     {
-        GameObject player = FindObjectOfType<GameManager>().Player.gameObject;
+        base.Update();
+
+        GameObject player = FindObjectOfType<GameManager>().Player.gameObject;  // TEMP
 
 
         if (VectorTo(player.transform.position).magnitude <= Stats.DetectionRadius)
