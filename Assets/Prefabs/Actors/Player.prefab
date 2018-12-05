@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 50166629451313838}
   - component: {fileID: 61433495416954422}
   - component: {fileID: 114809678525573086}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Player
   m_TagString: Actor
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 1000000
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -240,6 +240,8 @@ MonoBehaviour:
     type: 2}
   Stats:
     Damage: 30
+    Cooldown: 0.5
+    Range: 4
 --- !u!114 &114809678525573086
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -257,6 +259,7 @@ MonoBehaviour:
     MaxHealth: 100
     Movespeed: 500
     DamageModifier: 1
+    DetectionRadius: 5
 --- !u!212 &212226095034702322
 SpriteRenderer:
   m_ObjectHideFlags: 1

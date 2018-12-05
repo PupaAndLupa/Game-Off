@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
 
     public GameObject PauseMenu { get; set; }
     public GameObject PlayerPrefab { get; set; }
+    public GameObject EnemyPrefab { get; set; } // TEMP
     public GameStates CurrentState { get; set; }
 
     public Actor Player { get; set; }
@@ -104,12 +105,22 @@ public class GameManager : MonoBehaviour {
     {
         BoardManager.SetupScene();
         Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
+        Instantiate(EnemyPrefab, BoardManager.StartPosition, Quaternion.identity);  // TEMP
     }
 
     public void SetPlayer(GameObject player)
     {
         PlayerPrefab = player;
     }
+
+    //  TEMP
+    //
+    public void SetEnemy(GameObject enemy)
+    {                                          
+        EnemyPrefab = enemy;               
+    }
+    //
+    //  TEMP
 
     public void SetPauseMenu(GameObject pausePanel)
     {
