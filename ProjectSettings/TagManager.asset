@@ -24,8 +24,8 @@ TagManager:
   - PostProcessing
   - Wall
   - Player
-  - 
-  - 
+  - Actor
+  - Projectile
   - 
   - 
   - 

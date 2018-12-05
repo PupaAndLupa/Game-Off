@@ -44,12 +44,12 @@ public class Projectile : MonoBehaviour
         Movement.Move(gameObject, Stats.Movespeed);
     }
 
-    protected void OnCollisionEnter2D(Collision2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag != "projectile")
-        {
-            Destroy(gameObject);
-        }
+            if (collision.gameObject.tag != "Projectile")
+            {
+                Destroy(gameObject);
+            }
     }
 
     private void Start()

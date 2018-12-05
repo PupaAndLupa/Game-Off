@@ -69,4 +69,9 @@ public class Actor : MonoBehaviour
     {
         return (position - transform.position);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+    }
 }
