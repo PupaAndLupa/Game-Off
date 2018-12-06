@@ -10,8 +10,24 @@ public class Actor : MonoBehaviour
     [Serializable]
     public class ActorStats
     {
+        public event Action<float> OnHPChanged;
+
         public float MaxHealth;
-        public float CurrentHealth { get; set; }
+
+        private float currentHealth;
+        public float CurrentHealth
+        {
+            get { return currentHealth; }
+            set
+            {
+                currentHealth = value;
+
+                if (null != OnHPChanged)
+                {
+                    OnHPChanged(value);
+                }
+            }
+        }
 
         public float Movespeed;
         public float DamageModifier;
