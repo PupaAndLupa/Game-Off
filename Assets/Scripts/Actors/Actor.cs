@@ -11,8 +11,22 @@ public class Actor : MonoBehaviour
     public class ActorStats
     {
         public event Action<float> OnHPChanged;
+        public event Action<float> OnMaxHPChanged;
 
-        public float MaxHealth;
+        private float maxHealth;
+        public float MaxHealth
+        {
+            get { return maxHealth; }
+            set
+            {
+                maxHealth = value;
+
+                if (null != OnMaxHPChanged)
+                {
+                    OnMaxHPChanged(value);
+                }
+            }
+        }
 
         private float currentHealth;
         public float CurrentHealth
