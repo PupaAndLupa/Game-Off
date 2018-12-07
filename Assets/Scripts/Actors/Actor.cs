@@ -32,6 +32,7 @@ public class Actor : MonoBehaviour
     public ActorStats Stats = new ActorStats(100, 500f, 1f, 5f);
     public Movement Movement = new Movement();
     public bool IsDead { get; set; }
+    public float Rotation { get; set; }
 
     protected virtual void Start()
     {
@@ -43,6 +44,18 @@ public class Actor : MonoBehaviour
     {
         if (IsDead)
             return;
+    }
+
+    protected virtual void FixedUpdate()
+    {
+            if (GetComponent<Rigidbody2D>().velocity != Vector2.zero)
+            {
+                GetComponent<Animator>().SetBool("isMoving", true);
+            }
+            else
+            {
+                GetComponent<Animator>().SetBool("isMoving", false);
+            }
     }
 
     public virtual void Move(Vector2 direction)
@@ -58,7 +71,12 @@ public class Actor : MonoBehaviour
 
     public virtual void Rotate(float angle)
     {
-        transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+        Rotation = angle;
+        GetComponent<Animator>().SetFloat("Rotation", Rotation);
+        if (Mathf.Abs(Rotation) > 90)
+            GetComponent<SpriteRenderer>().flipX = true;
+        else
+            GetComponent<SpriteRenderer>().flipX = false;
     }
 
     public virtual void LookTowards(Vector3 position)
@@ -85,7 +103,7 @@ public class Actor : MonoBehaviour
         if (collision.gameObject.tag == "Projectile")
         {
             Projectile projectile = collision.gameObject.GetComponent<Projectile>();
-            Stats.CurrentHealth -= projectile.Stats.Damage;
+            //Stats.CurrentHealth -= projectile.Stats.Damage;   TEMP
             if (Stats.CurrentHealth <= 0)
             {
                 IsDead = true;
