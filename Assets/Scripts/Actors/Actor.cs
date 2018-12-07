@@ -10,8 +10,8 @@ public class Actor : MonoBehaviour
     [Serializable]
     public class ActorStats
     {
-        public event Action<float> OnHPChanged;
-        public event Action<float> OnMaxHPChanged;
+        public event Action<float> OnHitPointsChanged;
+        public event Action<float> OnMaxHitPointsChanged;
 
         private float maxHealth;
         public float MaxHealth
@@ -21,9 +21,9 @@ public class Actor : MonoBehaviour
             {
                 maxHealth = value;
 
-                if (null != OnMaxHPChanged)
+                if (OnMaxHitPointsChanged != null)
                 {
-                    OnMaxHPChanged(value);
+                    OnMaxHitPointsChanged(value);
                 }
             }
         }
@@ -36,9 +36,9 @@ public class Actor : MonoBehaviour
             {
                 currentHealth = value;
 
-                if (null != OnHPChanged)
+                if (OnHitPointsChanged != null)
                 {
-                    OnHPChanged(value);
+                    OnHitPointsChanged(value);
                 }
             }
         }

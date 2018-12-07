@@ -5,33 +5,51 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
-    public Text HP;
+    public Text HitPoints;
     public Slider HealthSlider;
 
     private Actor.ActorStats playerStats;
+    private GameObject slot1;
+    private float timer = 0;
 
     // Use this for initialization
 	void Start () {
         playerStats = FindObjectOfType<GameManager>().Player.Stats;
 
-        playerStats.OnHPChanged += ActorStats_OnHPChanged;
-        playerStats.OnMaxHPChanged += ActorStats_OnMaxHPChanged;
+        playerStats.OnHitPointsChanged += ActorStats_OnHitPointsChanged;
+        playerStats.OnMaxHitPointsChanged += ActorStats_OnMaxHitPointsChanged;
+
+        slot1 = GameObject.Find("Slot1");
     }
 
     private void OnDestroy()
     {
-        playerStats.OnHPChanged -= ActorStats_OnHPChanged;
-        playerStats.OnMaxHPChanged -= ActorStats_OnMaxHPChanged;
+        playerStats.OnHitPointsChanged -= ActorStats_OnHitPointsChanged;
+        playerStats.OnMaxHitPointsChanged -= ActorStats_OnMaxHitPointsChanged;
     }
 
-    private void ActorStats_OnHPChanged(float HP)
+    private void ActorStats_OnHitPointsChanged(float HP)
     {
-        this.HP.text = "HP: " + HP + "/" + playerStats.MaxHealth;
+        Debug.Log(HP);
+        HitPoints.text = "HP: " + HP + "/" + playerStats.MaxHealth;
         HealthSlider.value = HP;
     }
-    private void ActorStats_OnMaxHPChanged(float HP)
+    private void ActorStats_OnMaxHitPointsChanged(float HP)
     {
-        this.HP.text = "HP: " + playerStats.CurrentHealth + "/" + HP;
+        HitPoints.text = "HP: " + playerStats.CurrentHealth + "/" + HP;
         HealthSlider.maxValue = HP;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            slot1.GetComponentInChildren<Image>().color = new Color(.47f, .46f, 1f, 1f);
+            timer = .3f;
+        } else if (timer > 0)
+        {
+            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.47f, .46f, 1f, .4f), new Color(.47f, .46f, 1f, 1f), timer/.3f);
+            timer -= Time.deltaTime;
+        }
     }
 }
