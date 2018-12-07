@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour {
                         mousePosition.z = 0f;
 
                         Player.LookTowards(mousePosition);
-                        Camera.main.transform.rotation = Quaternion.Euler(0, 0, 0);
                         if (Input.GetKey(KeyCode.W))
                         {
                             ++direction.y;
@@ -80,7 +79,7 @@ public class GameManager : MonoBehaviour {
 
                         if (Input.GetMouseButtonDown(0))
                         {
-                            Player.Attack(mousePosition - Player.transform.position);
+                            Player.Attack(mousePosition - Player.WeaponPrefab.GetComponent<Weapon>().GetGunBarrel());
                         }
                     }
                     break;
