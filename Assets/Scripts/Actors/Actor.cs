@@ -72,6 +72,7 @@ public class Actor : MonoBehaviour
     public virtual void Rotate(float angle)
     {
         Rotation = angle;
+        GetComponent<Animator>().SetFloat("Rotation", Rotation);
         if (Mathf.Abs(Rotation) > 90)
             GetComponent<SpriteRenderer>().flipX = true;
         else
