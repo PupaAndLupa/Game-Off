@@ -36,6 +36,7 @@ public class Actor : MonoBehaviour
 
     protected virtual void Start()
     {
+        WeaponPrefab = transform.Find("Weapon pivot").Find("Weapon").gameObject;
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
         IsDead = false;
     }
@@ -57,9 +58,9 @@ public class Actor : MonoBehaviour
         Movement.Move(gameObject, Stats.Movespeed);
     }
 
-    public virtual void Attack(Vector3 direction)
+    public virtual void Attack()
     {
-        WeaponPrefab.GetComponent<Weapon>().Attack(direction);
+        WeaponPrefab.GetComponent<Weapon>().Attack();
     }
 
     public virtual void Rotate(float angle)

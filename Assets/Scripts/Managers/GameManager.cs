@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour {
 
                         if (Input.GetMouseButtonDown(0))
                         {
-                            Player.Attack(mousePosition - Player.WeaponPrefab.GetComponent<Weapon>().GetGunBarrel());
+                            Player.Attack();
                         }
                     }
                     break;

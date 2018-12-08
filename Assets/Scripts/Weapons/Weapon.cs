@@ -42,7 +42,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public void Attack(Vector3 direction)
+    public void Attack()
     {
         if (!OnCooldown)
         {
@@ -50,13 +50,15 @@ public class Weapon : MonoBehaviour
 
             GameObject projectile = Instantiate(
                 ProjectilePrefab,
-                transform.Find("Gun barrel").position,
+                transform.position + transform.right * 0.3f,
                 Quaternion.Euler(rotation.x, rotation.y, rotation.z - 90),
                 null
             );
-            projectile.GetComponent<Projectile>().Movement.SetDirection(direction);
-            projectile.GetComponent<Projectile>().SetDamage(Stats.Damage * Stats.Modifier);
-            projectile.GetComponent<Projectile>().SetRange(Stats.Range);
+
+            Projectile projectileClass = projectile.GetComponent<Projectile>();
+            projectileClass.Movement.SetDirection(transform.right);
+            projectileClass.SetDamage(Stats.Damage * Stats.Modifier);
+            projectileClass.SetRange(Stats.Range);
             OnCooldown = true;
             ShotTime = Time.time;
             GetComponent<Animator>().SetTrigger("Shot");
@@ -66,10 +68,5 @@ public class Weapon : MonoBehaviour
     public void SetModifier(float modifier)
     {
         Stats.Modifier = modifier;
-    }
-
-    public Vector3 GetGunBarrel()
-    {
-        return transform.Find("Gun barrel").transform.position;
     }
 }

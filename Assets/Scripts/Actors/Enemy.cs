@@ -21,7 +21,7 @@ public class Enemy : Actor
             if (CastRay(player))
             {
                 LookTowards(player.transform.position);
-                WeaponPrefab.GetComponent<Weapon>().Attack(VectorTo(player.transform.position, WeaponPrefab.GetComponent<Weapon>().GetGunBarrel()));
+                WeaponPrefab.GetComponent<Weapon>().Attack();
             }
         }
 	}
