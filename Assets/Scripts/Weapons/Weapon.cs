@@ -46,10 +46,12 @@ public class Weapon : MonoBehaviour
     {
         if (!OnCooldown)
         {
+            Vector3 rotation = transform.rotation.eulerAngles;
+
             GameObject projectile = Instantiate(
                 ProjectilePrefab,
-                transform.position,
-                transform.rotation,
+                transform.Find("Gun barrel").position,
+                Quaternion.Euler(rotation.x, rotation.y, rotation.z - 90),
                 null
             );
             projectile.GetComponent<Projectile>().Movement.SetDirection(direction);
@@ -57,11 +59,17 @@ public class Weapon : MonoBehaviour
             projectile.GetComponent<Projectile>().SetRange(Stats.Range);
             OnCooldown = true;
             ShotTime = Time.time;
+            GetComponent<Animator>().SetTrigger("Shot");
         }
     }
 
     public void SetModifier(float modifier)
     {
         Stats.Modifier = modifier;
+    }
+
+    public Vector3 GetGunBarrel()
+    {
+        return transform.Find("Gun barrel").transform.position;
     }
 }

@@ -72,11 +72,18 @@ public class Actor : MonoBehaviour
     public virtual void Rotate(float angle)
     {
         Rotation = angle;
+        transform.Find("Weapon pivot").rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         GetComponent<Animator>().SetFloat("Rotation", Rotation);
         if (Mathf.Abs(Rotation) > 90)
+        {
             GetComponent<SpriteRenderer>().flipX = true;
+            transform.Find("Weapon pivot").Find("Weapon").GetComponent<SpriteRenderer>().flipY = true;
+        }
         else
+        {
             GetComponent<SpriteRenderer>().flipX = false;
+            transform.Find("Weapon pivot").Find("Weapon").GetComponent<SpriteRenderer>().flipY = false;
+        }
     }
 
     public virtual void LookTowards(Vector3 position)
@@ -95,7 +102,12 @@ public class Actor : MonoBehaviour
 
     public virtual Vector3 VectorTo(Vector3 position)
     {
-        return (position - transform.position);
+        return position - transform.position;
+    }
+
+    public virtual Vector3 VectorTo(Vector3 position, Vector3 from)
+    {
+        return from - position;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
