@@ -46,10 +46,10 @@ public class Projectile : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-            if (collision.gameObject.tag != "Projectile")
-            {
-                Destroy(gameObject);
-            }
+        if (collision.gameObject.tag != "Projectile")
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Start()

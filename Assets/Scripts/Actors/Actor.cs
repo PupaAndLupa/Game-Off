@@ -48,14 +48,7 @@ public class Actor : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-            if (GetComponent<Rigidbody2D>().velocity != Vector2.zero)
-            {
-                GetComponent<Animator>().SetBool("isMoving", true);
-            }
-            else
-            {
-                GetComponent<Animator>().SetBool("isMoving", false);
-            }
+        GetComponent<Animator>().SetBool("isMoving", GetComponent<Rigidbody2D>().velocity != Vector2.zero);
     }
 
     public virtual void Move(Vector2 direction)
@@ -72,18 +65,13 @@ public class Actor : MonoBehaviour
     public virtual void Rotate(float angle)
     {
         Rotation = angle;
-        transform.Find("Weapon pivot").rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        Transform weaponPivot = transform.Find("Weapon pivot");
+        weaponPivot.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         GetComponent<Animator>().SetFloat("Rotation", Rotation);
-        if (Mathf.Abs(Rotation) > 90)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-            transform.Find("Weapon pivot").Find("Weapon").GetComponent<SpriteRenderer>().flipY = true;
-        }
-        else
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
-            transform.Find("Weapon pivot").Find("Weapon").GetComponent<SpriteRenderer>().flipY = false;
-        }
+        bool flip = Mathf.Abs(Rotation) > 90;
+
+        GetComponent<SpriteRenderer>().flipX = flip;
+        weaponPivot.Find("Weapon").GetComponent<SpriteRenderer>().flipY = flip;
     }
 
     public virtual void LookTowards(Vector3 position)
@@ -107,7 +95,7 @@ public class Actor : MonoBehaviour
 
     public virtual Vector3 VectorTo(Vector3 position, Vector3 from)
     {
-        return from - position;
+        return position - from;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

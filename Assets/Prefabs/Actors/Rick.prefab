@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72aee2a912d913f42b69e35a4ae022bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProjectilePrefab: {fileID: 1260570442151024, guid: 698833c5314e01c4c991347c3156d850,
+  ProjectilePrefab: {fileID: 1353318182932614, guid: a7876855123db93419b9f10e9173b139,
     type: 2}
   Stats:
     Damage: 30
