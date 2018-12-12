@@ -10,8 +10,38 @@ public class Actor : MonoBehaviour
     [Serializable]
     public class ActorStats
     {
-        public float MaxHealth;
-        public float CurrentHealth { get; set; }
+        public event Action<float> OnHitPointsChanged;
+        public event Action<float> OnMaxHitPointsChanged;
+
+        private float maxHealth;
+        public float MaxHealth
+        {
+            get { return maxHealth; }
+            set
+            {
+                maxHealth = value;
+
+                if (OnMaxHitPointsChanged != null)
+                {
+                    OnMaxHitPointsChanged(value);
+                }
+            }
+        }
+
+        private float currentHealth;
+        public float CurrentHealth
+        {
+            get { return currentHealth; }
+            set
+            {
+                currentHealth = value;
+
+                if (OnHitPointsChanged != null)
+                {
+                    OnHitPointsChanged(value);
+                }
+            }
+        }
 
         public float Movespeed;
         public float DamageModifier;

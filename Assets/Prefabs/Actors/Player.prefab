@@ -295,7 +295,6 @@ MonoBehaviour:
   WalkingSound: {fileID: 8300000, guid: 956b5b783c3b80549b41f8243ec8ac5a, type: 3}
   WeaponPrefab: {fileID: 0}
   Stats:
-    MaxHealth: 100
     Movespeed: 500
     DamageModifier: 1
     DetectionRadius: 5
