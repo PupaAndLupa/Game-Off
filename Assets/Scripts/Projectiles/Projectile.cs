@@ -23,6 +23,8 @@ public class Projectile : MonoBehaviour
 
     protected Vector3 startPoint;
 
+    private bool isDead;
+
 
     public void SetDamage(float damage)
     {
@@ -48,17 +50,27 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.tag != "Projectile")
         {
-            Destroy(gameObject);
+            GetComponent<Animator>().SetBool("Hit", true);
+            GetComponent<Collider2D>().enabled = false;
+            Stats.Movespeed = 0;
+            isDead = true;
         }
     }
 
     private void Start()
     {
         startPoint = transform.position;
+        isDead = false;
     }
 
     private void FixedUpdate()
     {
+        if (isDead && GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        {
+            Destroy(gameObject);
+        }
+
+
         if (distanceTraveled() > Stats.Range)
         {
             Destroy(gameObject);
