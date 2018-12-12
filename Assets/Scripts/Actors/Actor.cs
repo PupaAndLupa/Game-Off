@@ -134,10 +134,10 @@ public class Actor : MonoBehaviour
         if (collision.gameObject.tag == "Projectile")
         {
             Projectile projectile = collision.gameObject.GetComponent<Projectile>();
-            //Stats.CurrentHealth -= projectile.Stats.Damage;   TEMP
+            Stats.CurrentHealth -= projectile.Stats.Damage;
             if (Stats.CurrentHealth <= 0)
             {
-                IsDead = true;
+                //IsDead = true;
             }
         }
     }
