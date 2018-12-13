@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WalkingSound: {fileID: 0}
-  WeaponPrefab: {fileID: 0}
+  WeaponPrefab: {fileID: 1101488474992122}
   Stats:
     Movespeed: 500
     DamageModifier: 1

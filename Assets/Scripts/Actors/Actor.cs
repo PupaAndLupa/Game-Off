@@ -57,16 +57,23 @@ public class Actor : MonoBehaviour
         }
     }
 
-    public AudioClip WalkingSound;
+    [Serializable]
+    public struct SoundStruct
+    {
+        public AudioClip Walking;
+    }
+
     public GameObject WeaponPrefab;
+
+    public SoundStruct Sounds;
     public ActorStats Stats = new ActorStats(100, 500f, 1f, 5f);
+
     public Movement Movement = new Movement();
     public bool IsDead { get; set; }
     public float Rotation { get; set; }
 
     protected virtual void Start()
     {
-        WeaponPrefab = transform.Find("Weapon pivot").Find("Weapon").gameObject;
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
         IsDead = false;
     }
