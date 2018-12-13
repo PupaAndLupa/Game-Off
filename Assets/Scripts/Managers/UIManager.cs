@@ -30,7 +30,6 @@ public class UIManager : MonoBehaviour {
 
     private void ActorStats_OnHitPointsChanged(float HP)
     {
-        Debug.Log(HP);
         HitPoints.text = "HP: " + HP + "/" + playerStats.MaxHealth;
         HealthSlider.value = HP;
     }

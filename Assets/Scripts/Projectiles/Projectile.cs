@@ -18,6 +18,13 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public struct SoundStruct
+    {
+        public AudioClip Hit;
+    }
+
+
     public ProjectileStats Stats = new ProjectileStats(700f);
     public Movement Movement = new Movement();
 
@@ -50,6 +57,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.tag != "Projectile")
         {
+            //FindObjectOfType<SoundManager>().PlayOnce(Sounds.)
             GetComponent<Animator>().SetBool("Hit", true);
             GetComponent<Collider2D>().enabled = false;
             Stats.Movespeed = 0;

@@ -21,6 +21,15 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public struct SoundStruct
+    {
+        public AudioClip Shot;
+    }
+
+
+    public SoundStruct Sounds;
+
     public GameObject ProjectilePrefab;
     public WeaponStats Stats = new WeaponStats(30f, 0.5f, 3f);
     public bool OnCooldown { get; set; }
@@ -62,6 +71,8 @@ public class Weapon : MonoBehaviour
             OnCooldown = true;
             ShotTime = Time.time;
             GetComponent<Animator>().SetTrigger("Shot");
+
+            FindObjectOfType<SoundManager>().PlayOnce(Sounds.Shot);
         }
     }
 

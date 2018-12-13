@@ -19,7 +19,7 @@ public class GameplayOnLoad : MonoBehaviour {
 
         SoundManager.Instance.MusicSource.Stop();
         SoundManager.Instance.MusicSource.clip = BackgroundMusic;
-        SoundManager.Instance.MusicSource.volume = 0.5f;
+        SoundManager.Instance.MusicSource.volume = 0.2f;
         SoundManager.Instance.MusicSource.Play();
     }
 }
