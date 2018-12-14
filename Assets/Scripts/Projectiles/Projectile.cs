@@ -25,6 +25,8 @@ public class Projectile : MonoBehaviour
     }
 
 
+    public SoundStruct Sounds;
+
     public ProjectileStats Stats = new ProjectileStats(700f);
     public Movement Movement = new Movement();
 
@@ -57,7 +59,7 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.tag != "Projectile")
         {
-            //FindObjectOfType<SoundManager>().PlayOnce(Sounds.)
+            FindObjectOfType<SoundManager>().PlayOnce(Sounds.Hit);
             GetComponent<Animator>().SetBool("Hit", true);
             GetComponent<Collider2D>().enabled = false;
             Stats.Movespeed = 0;
