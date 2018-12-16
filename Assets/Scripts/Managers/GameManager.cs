@@ -102,8 +102,9 @@ public class GameManager : MonoBehaviour {
 
     public void InitGame()
     {
-        BoardManager.SetupScene();
-        Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
+        BoardManager.Board.LoadLevel("First");
+        BoardManager.Board.Generate();
+        Player = Instantiate(PlayerPrefab, BoardManager.Board.StartPosition, Quaternion.identity).GetComponent<Actor>();
     }
 
     public void SetPlayer(GameObject player)
