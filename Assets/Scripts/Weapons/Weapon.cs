@@ -35,6 +35,8 @@ public class Weapon : MonoBehaviour
     public bool OnCooldown { get; set; }
     public float ShotTime { get; set; }
 
+    private string parentTag;
+
     protected virtual void Start()
     {
         OnCooldown = false;
@@ -68,6 +70,7 @@ public class Weapon : MonoBehaviour
             projectileClass.Movement.SetDirection(transform.right);
             projectileClass.SetDamage(Stats.Damage * Stats.Modifier);
             projectileClass.SetRange(Stats.Range);
+            projectileClass.SetParentTag(parentTag);
             OnCooldown = true;
             ShotTime = Time.time;
             GetComponent<Animator>().SetTrigger("Shot");
@@ -79,5 +82,10 @@ public class Weapon : MonoBehaviour
     public void SetModifier(float modifier)
     {
         Stats.Modifier = modifier;
+    }
+
+    public void SetParentTag(string tag)
+    {
+        parentTag = tag;
     }
 }

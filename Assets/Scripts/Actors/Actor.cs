@@ -75,6 +75,7 @@ public class Actor : MonoBehaviour
     protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
+        WeaponPrefab.GetComponent<Weapon>().SetParentTag(tag);
         IsDead = false;
     }
 
