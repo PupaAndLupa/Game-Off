@@ -6,19 +6,6 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [Serializable]
-    public class ProjectileStats
-    {
-        public float Movespeed;
-        public float Damage { get; set; }
-        public float Range { get; set; }
-
-        public ProjectileStats(float movespeed)
-        {
-            Movespeed = movespeed;
-        }
-    }
-
-    [Serializable]
     public struct SoundStruct
     {
         public AudioClip Hit;
