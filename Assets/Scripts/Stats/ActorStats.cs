@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class ActorStats
+public class ActorStats: Stats
 {
     public event Action<float> OnHitPointsChanged;
     public event Action<float> OnMaxHitPointsChanged;
