@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
                         {
                             if (!SoundManager.Instance.FxSource.isPlaying)
                             {
-                                SoundManager.Instance.PlayOnce(Player.WalkingSound);
+                                SoundManager.Instance.PlayOnce(Player.Sounds.Walking);
                             }
                         }
 
