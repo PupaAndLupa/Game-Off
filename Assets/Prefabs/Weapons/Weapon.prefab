@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4717657895245696}
+  - component: {fileID: 1960394664069398866}
+  - component: {fileID: 1068776828266126672}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Weapon
@@ -31,6 +33,45 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1960394664069398866
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602310634964066}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e7c49c6c2d6088a4fba7d16450ce2c9b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1068776828266126672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602310634964066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72aee2a912d913f42b69e35a4ae022bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sounds:
+    Shot: {fileID: 8300000, guid: fa75bc2ae7def064b865d6fe0b567469, type: 3}
+  ProjectilePrefab: {fileID: 1353318182932614, guid: a7876855123db93419b9f10e9173b139,
+    type: 3}
+  Stats:
+    Damage: 30
+    Cooldown: 0.5
+    Range: 3
 --- !u!1 &3796248621183549630
 GameObject:
   m_ObjectHideFlags: 0
@@ -40,9 +81,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6265903026791793197}
-  - component: {fileID: 3539494052634611082}
   - component: {fileID: 6432219736689674544}
-  - component: {fileID: 2721252519144359461}
   m_Layer: 0
   m_Name: Weapon
   m_TagString: Untagged
@@ -64,26 +103,6 @@ Transform:
   m_Father: {fileID: 4717657895245696}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3539494052634611082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3796248621183549630}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72aee2a912d913f42b69e35a4ae022bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Sounds:
-    Shot: {fileID: 8300000, guid: fa75bc2ae7def064b865d6fe0b567469, type: 3}
-  ProjectilePrefab: {fileID: 1353318182932614, guid: a7876855123db93419b9f10e9173b139,
-    type: 3}
-  Stats:
-    Damage: 30
-    Cooldown: 0.5
-    Range: 3
 --- !u!212 &6432219736689674544
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -132,22 +151,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &2721252519144359461
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3796248621183549630}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1b0ab99a32c15304a988dcdf9aba2a2a, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

@@ -21,7 +21,7 @@ public class Enemy : Actor
             if (CastRay(player))
             {
                 LookTowards(player.transform.position);
-                WeaponPrefab.GetComponentInChildren<Weapon>().Attack();
+                WeaponPrefab.GetComponent<Weapon>().Attack();
             }
         }
 	}

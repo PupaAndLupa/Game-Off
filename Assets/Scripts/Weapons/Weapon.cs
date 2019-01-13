@@ -58,10 +58,11 @@ public class Weapon : MonoBehaviour
         if (!OnCooldown)
         {
             Vector3 rotation = transform.rotation.eulerAngles;
+            Vector3 position = transform.Find("Weapon").position + transform.Find("Weapon").right * 0.3f;
 
             GameObject projectile = Instantiate(
                 ProjectilePrefab,
-                transform.position + transform.right * 0.3f,
+                position,
                 Quaternion.Euler(rotation.x, rotation.y, rotation.z - 90),
                 null
             );
@@ -76,6 +77,13 @@ public class Weapon : MonoBehaviour
             GetComponent<Animator>().SetTrigger("Attack");
             FindObjectOfType<SoundManager>().PlayOnce(Sounds.Shot);
         }
+    }
+
+
+    public void Rotate(float angle)
+    {
+        //if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
 
     public void SetModifier(float modifier)
