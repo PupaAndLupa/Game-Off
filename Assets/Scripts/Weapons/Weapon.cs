@@ -33,7 +33,7 @@ public class Weapon : MonoBehaviour
     public GameObject ProjectilePrefab;
     public WeaponStats Stats = new WeaponStats(30f, 0.5f, 3f);
     public bool OnCooldown { get; set; }
-    public float ShotTime { get; set; }
+    public float AttackTime { get; set; }
 
     private string parentTag;
 
@@ -46,7 +46,7 @@ public class Weapon : MonoBehaviour
     {
         if (OnCooldown)
         {
-            if (Time.time - ShotTime >= Stats.Cooldown)
+            if (Time.time - AttackTime >= Stats.Cooldown)
             {
                 OnCooldown = false;
             }
@@ -72,9 +72,8 @@ public class Weapon : MonoBehaviour
             projectileClass.SetRange(Stats.Range);
             projectileClass.SetParentTag(parentTag);
             OnCooldown = true;
-            ShotTime = Time.time;
-            GetComponent<Animator>().SetTrigger("Shot");
-
+            AttackTime = Time.time;
+            GetComponent<Animator>().SetTrigger("Attack");
             FindObjectOfType<SoundManager>().PlayOnce(Sounds.Shot);
         }
     }

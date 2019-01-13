@@ -48,19 +48,18 @@ public class Actor : MonoBehaviour
 
     public virtual void Attack()
     {
-        WeaponPrefab.GetComponent<Weapon>().Attack();
+        WeaponPrefab.GetComponentInChildren<Weapon>().Attack();
     }
 
     public virtual void Rotate(float angle)
     {
         Rotation = angle;
-        Transform weaponPivot = transform.Find("Weapon pivot");
-        weaponPivot.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        WeaponPrefab.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         GetComponent<Animator>().SetFloat("Rotation", Rotation);
         bool flip = Mathf.Abs(Rotation) > 90;
 
         GetComponent<SpriteRenderer>().flipX = flip;
-        weaponPivot.Find("Weapon").GetComponent<SpriteRenderer>().flipY = flip;
+        WeaponPrefab.GetComponentInChildren<SpriteRenderer>().flipY = flip;
     }
 
     public virtual void LookTowards(Vector3 position)
