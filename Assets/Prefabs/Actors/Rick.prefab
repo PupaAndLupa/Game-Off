@@ -49,7 +49,7 @@ MonoBehaviour:
     type: 3}
   Stats:
     Damage: 30
-    Cooldown: 0.5
+    Cooldown: 0.1
     Range: 3
 --- !u!212 &212755550111388180
 SpriteRenderer:
