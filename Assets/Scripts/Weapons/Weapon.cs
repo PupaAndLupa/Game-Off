@@ -82,8 +82,11 @@ public class Weapon : MonoBehaviour
 
     public void Rotate(float angle)
     {
-        //if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Attack"))
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        {
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            GetComponent<Animator>().SetFloat("Rotation", angle);
+        }
     }
 
     public void SetModifier(float modifier)
