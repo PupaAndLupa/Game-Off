@@ -6,20 +6,18 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [Serializable]
-    public class ProjectileStats
+    public struct SoundStruct
     {
-        public float Movespeed;
-        public float Damage { get; set; }
-        public float Range { get; set; }
-
-        public ProjectileStats(float movespeed)
-        {
-            Movespeed = movespeed;
-        }
+        public AudioClip Hit;
     }
+
+
+    public SoundStruct Sounds;
 
     public ProjectileStats Stats = new ProjectileStats(700f);
     public Movement Movement = new Movement();
+
+    private string parentTag;
 
     protected Vector3 startPoint;
 
@@ -36,6 +34,11 @@ public class Projectile : MonoBehaviour
         Stats.Range = range;
     }
 
+    public void SetParentTag(string tag)
+    {
+        parentTag = tag;
+    }
+
     protected float distanceTraveled()
     {
         return (transform.position - startPoint).magnitude;
@@ -48,8 +51,9 @@ public class Projectile : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag != "Projectile")
+        if (collision.gameObject.tag != "Projectile" && collision.gameObject.tag != parentTag)
         {
+            FindObjectOfType<SoundManager>().PlayOnce(Sounds.Hit);
             GetComponent<Animator>().SetBool("Hit", true);
             GetComponent<Collider2D>().enabled = false;
             Stats.Movespeed = 0;

@@ -8,66 +8,24 @@ using UnityEngine.SceneManagement;  // TEMP
 public class Actor : MonoBehaviour
 {
     [Serializable]
-    public class ActorStats
+    public struct SoundStruct
     {
-        public event Action<float> OnHitPointsChanged;
-        public event Action<float> OnMaxHitPointsChanged;
-
-        private float maxHealth;
-        public float MaxHealth
-        {
-            get { return maxHealth; }
-            set
-            {
-                maxHealth = value;
-
-                if (OnMaxHitPointsChanged != null)
-                {
-                    OnMaxHitPointsChanged(value);
-                }
-            }
-        }
-
-        private float currentHealth;
-        public float CurrentHealth
-        {
-            get { return currentHealth; }
-            set
-            {
-                currentHealth = value;
-
-                if (OnHitPointsChanged != null)
-                {
-                    OnHitPointsChanged(value);
-                }
-            }
-        }
-
-        public float Movespeed;
-        public float DamageModifier;
-        public float DetectionRadius;
-        
-        public ActorStats(int maxHealth, float movespeed, float damageModifier, float detectionRadius)
-        {
-            Movespeed = movespeed;
-            MaxHealth = maxHealth;
-            CurrentHealth = MaxHealth;
-            DamageModifier = damageModifier;
-            DetectionRadius = detectionRadius;
-        }
+        public AudioClip Walking;
     }
 
-    public AudioClip WalkingSound;
     public GameObject WeaponPrefab;
+
+    public SoundStruct Sounds;
     public ActorStats Stats = new ActorStats(100, 500f, 1f, 5f);
+
     public Movement Movement = new Movement();
     public bool IsDead { get; set; }
     public float Rotation { get; set; }
 
     protected virtual void Start()
     {
-        WeaponPrefab = transform.Find("Weapon pivot").Find("Weapon").gameObject;
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
+        WeaponPrefab.GetComponent<Weapon>().SetParentTag(tag);
         IsDead = false;
     }
 
@@ -96,13 +54,13 @@ public class Actor : MonoBehaviour
     public virtual void Rotate(float angle)
     {
         Rotation = angle;
-        Transform weaponPivot = transform.Find("Weapon pivot");
-        weaponPivot.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        GetComponent<Animator>().SetFloat("Rotation", Rotation);
-        bool flip = Mathf.Abs(Rotation) > 90;
+        WeaponPrefab.GetComponent<Weapon>().Rotate(angle);
 
+        GetComponent<Animator>().SetFloat("Rotation", Rotation);
+
+        bool flip = Mathf.Abs(Rotation) > 90;
         GetComponent<SpriteRenderer>().flipX = flip;
-        weaponPivot.Find("Weapon").GetComponent<SpriteRenderer>().flipY = flip;
+        WeaponPrefab.GetComponentInChildren<SpriteRenderer>().flipY = flip;
     }
 
     public virtual void LookTowards(Vector3 position)

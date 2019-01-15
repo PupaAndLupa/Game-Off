@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour {
     public Text HitPoints;
     public Slider HealthSlider;
 
-    private Actor.ActorStats playerStats;
+    private ActorStats playerStats;
     private GameObject slot1;
     private float timer = 0;
 

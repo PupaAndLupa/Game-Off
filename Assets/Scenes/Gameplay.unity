@@ -480,9 +480,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 1293979414604022, guid: c5913f623d135ab47ba37058a5f74da0,
     type: 3}
-  EnemyPrefab: {fileID: 1224487239359228, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+  EnemyPrefab: {fileID: 3768143138727889643, guid: c3e7b923940a58347bb4fd107c0623d7,
     type: 3}
   PauseMenuPrefab: {fileID: 957321566}
+  BackgroundMusic: {fileID: 8300000, guid: a1d9574b4c52c23428b77c41991091c1, type: 3}
 --- !u!1 &236432177
 GameObject:
   m_ObjectHideFlags: 0

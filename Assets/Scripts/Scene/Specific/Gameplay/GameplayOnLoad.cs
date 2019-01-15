@@ -8,6 +8,8 @@ public class GameplayOnLoad : MonoBehaviour {
     public GameObject EnemyPrefab;  // TEMP
     public GameObject PauseMenuPrefab;
 
+    public AudioClip BackgroundMusic;
+
     void Start () {
         GameManager gm = FindObjectOfType<GameManager>();
         gm.SetPlayer(PlayerPrefab);
@@ -16,8 +18,8 @@ public class GameplayOnLoad : MonoBehaviour {
         gm.InitGame();
 
         SoundManager.Instance.MusicSource.Stop();
-        SoundManager.Instance.MusicSource.clip = Resources.Load("track_faithyorfaithless_loop") as AudioClip;
-        SoundManager.Instance.MusicSource.volume = 0.1f;
+        SoundManager.Instance.MusicSource.clip = BackgroundMusic;
+        SoundManager.Instance.MusicSource.volume = 0.2f;
         SoundManager.Instance.MusicSource.Play();
     }
 }

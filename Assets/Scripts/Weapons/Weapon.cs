@@ -21,10 +21,21 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public struct SoundStruct
+    {
+        public AudioClip Shot;
+    }
+
+
+    public SoundStruct Sounds;
+
     public GameObject ProjectilePrefab;
     public WeaponStats Stats = new WeaponStats(30f, 0.5f, 3f);
     public bool OnCooldown { get; set; }
-    public float ShotTime { get; set; }
+    public float AttackTime { get; set; }
+
+    private string parentTag;
 
     protected virtual void Start()
     {
@@ -35,7 +46,7 @@ public class Weapon : MonoBehaviour
     {
         if (OnCooldown)
         {
-            if (Time.time - ShotTime >= Stats.Cooldown)
+            if (Time.time - AttackTime >= Stats.Cooldown)
             {
                 OnCooldown = false;
             }
@@ -47,10 +58,11 @@ public class Weapon : MonoBehaviour
         if (!OnCooldown)
         {
             Vector3 rotation = transform.rotation.eulerAngles;
+            Vector3 position = transform.Find("Weapon").position + transform.Find("Weapon").right * 0.3f;
 
             GameObject projectile = Instantiate(
                 ProjectilePrefab,
-                transform.position + transform.right * 0.3f,
+                position,
                 Quaternion.Euler(rotation.x, rotation.y, rotation.z - 90),
                 null
             );
@@ -59,14 +71,28 @@ public class Weapon : MonoBehaviour
             projectileClass.Movement.SetDirection(transform.right);
             projectileClass.SetDamage(Stats.Damage * Stats.Modifier);
             projectileClass.SetRange(Stats.Range);
+            projectileClass.SetParentTag(parentTag);
             OnCooldown = true;
-            ShotTime = Time.time;
-            GetComponent<Animator>().SetTrigger("Shot");
+            AttackTime = Time.time;
+            GetComponent<Animator>().SetTrigger("Attack");
+            FindObjectOfType<SoundManager>().PlayOnce(Sounds.Shot);
         }
+    }
+
+
+    public void Rotate(float angle)
+    {
+        //if (!GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Attack"))
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
 
     public void SetModifier(float modifier)
     {
         Stats.Modifier = modifier;
+    }
+
+    public void SetParentTag(string tag)
+    {
+        parentTag = tag;
     }
 }

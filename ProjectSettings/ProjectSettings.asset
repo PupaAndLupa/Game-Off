@@ -612,10 +612,10 @@ PlayerSettings:
   facebookXfbml: 0
   facebookFrictionlessRequests: 1
   apiCompatibilityLevel: 2
-  cloudProjectId: 608af1f7-eb62-44a8-bcfb-94b26c518217
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
-  projectName: Game Off
-  organizationId: alexandrchori
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
