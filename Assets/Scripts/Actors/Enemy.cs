@@ -15,9 +15,9 @@ public class Enemy : Actor
         base.Start();
 
         player = FindObjectOfType<GameManager>().Player.gameObject;  // TEMP
-        aIDestinationSetter = gameObject.GetComponent(typeof(AIDestinationSetter)) as AIDestinationSetter;
+        aIDestinationSetter = gameObject.GetComponent<AIDestinationSetter>();
 
-        aIPath = gameObject.GetComponent(typeof(AIPath)) as AIPath;
+        aIPath = gameObject.GetComponent<AIPath>();
         aIPath.endReachedDistance = Stats.DetectionRadius * 0.75f;
 
         weapon = WeaponPrefab.GetComponent<Weapon>();
