@@ -66,5 +66,26 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1068776828266126672, guid: 2790532169c018640abd95cc3d7599da,
+        type: 3}
+      propertyPath: ProjectilePrefab
+      value: 
+      objectReference: {fileID: 6601466214335050394, guid: 299cf66afa9ea2c4d9337c83bab24912,
+        type: 3}
+    - target: {fileID: 1068776828266126672, guid: 2790532169c018640abd95cc3d7599da,
+        type: 3}
+      propertyPath: Stats.Range
+      value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068776828266126672, guid: 2790532169c018640abd95cc3d7599da,
+        type: 3}
+      propertyPath: Stats.Cooldown
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068776828266126672, guid: 2790532169c018640abd95cc3d7599da,
+        type: 3}
+      propertyPath: Stats.Damage
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2790532169c018640abd95cc3d7599da, type: 3}
