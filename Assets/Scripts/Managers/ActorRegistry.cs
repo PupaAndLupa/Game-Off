@@ -7,6 +7,8 @@ public class ActorRegistry : MonoBehaviour
     public List<Actor> Actors { get; set; }
     public Actor Player { get; set; }
 
+    public GameObject coin;
+
     public void AddActor(Actor actor)
     {
         Actors.Add(actor);
@@ -27,7 +29,7 @@ public class ActorRegistry : MonoBehaviour
     {
         if (Player != null)
         {
-            if (Player.IsDead)
+            if (Player.IsDead && FindObjectOfType<GameManager>().CurrentState != GameManager.GameStates.End)
             {
                 FindObjectOfType<GameManager>().FinishGame(GameManager.GameStates.Dead);
             }
@@ -36,16 +38,34 @@ public class ActorRegistry : MonoBehaviour
             {
                 if (actor.IsDead)
                 {
-                    Player.Stats.Experience += actor.Stats.Experience + Mathf.RoundToInt(Random.Range(-actor.Stats.Experience * 0.1f, actor.Stats.Experience * 0.1f));
+                    long score = actor.Stats.Experience + Mathf.RoundToInt(Random.Range(-actor.Stats.Experience * 0.1f, actor.Stats.Experience * 0.1f));
+                    Player.Stats.Experience += score;
+                    FindObjectOfType<UIManager>().AddScore(score);
+
+                    if (Random.Range(1, 5) > 3)
+                    {
+                        Instantiate(coin, actor.transform.position, Quaternion.Euler(Vector3.zero), null);
+                    }
+
                     actor.Die();
                     Actors.Remove(actor);
+                    Actors.Add(FindObjectOfType<SpawnManager>().SpawnRandomEnemy().GetComponent<Actor>());
                 }
             }
 
-            if (Actors.Count == 0)
+            if (Actors.Count == 0 && FindObjectOfType<GameManager>().CurrentState != GameManager.GameStates.End)
             {
                 FindObjectOfType<GameManager>().FinishGame(GameManager.GameStates.Win);
             }
         }
+    }
+
+    public void GetCoin()
+    {
+        long score = 100;
+        Player.Stats.Experience += score;
+        var uiManager = FindObjectOfType<UIManager>();
+        uiManager.AddScore(score);
+        uiManager.AddCoins(1);
     }
 }

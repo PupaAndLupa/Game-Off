@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+    public Text ScoreText;
     public Text HitPoints;
     public Text LevelText;
+    public Text CoinsText;
     public Slider HealthSlider;
     public Slider ExpSlider;
+
+    private long score = 0;
 
     private Actor player;
     private Weapon playerWeapon;
@@ -18,17 +22,17 @@ public class UIManager : MonoBehaviour {
     private GameObject slot2;
     private GameObject slot3;
     private GameObject slot4;
-    private float fisrtTimer = 0;
+    private float firstTimer = 0;
     private float secondTimer = 0;
     private float thirdTimer = 0;
     private float fourthTimer = 0;
     private bool speedChanged = false;
+    private int coins = 0;
 
     // Use this for initialization
     void Start () {
         player = FindObjectOfType<GameManager>().Player;
         playerSR = player.GetComponent<SpriteRenderer>();
-        playerWeapon = player.GetComponentInChildren<Weapon>();
         playerStats = player.Stats;
 
         playerStats.OnHitPointsChanged += ActorStats_OnHitPointsChanged;
@@ -46,6 +50,23 @@ public class UIManager : MonoBehaviour {
         ExpSlider.value = 0;
         ExpSlider.maxValue = ExpPerLevel(0);
     }
+
+    public void AddScore(long score)
+    {
+        this.score += score;
+        ScoreText.text = string.Format("{0:D7}", this.score);
+    }
+
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+        CoinsText.text = "Coins: " + coins;
+    }
+
+	public Text GetScore()
+	{
+		return ScoreText;
+	}
 
     private void OnDestroy()
     {
@@ -100,12 +121,12 @@ public class UIManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             slot1.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, .4f);
-            playerStats.CurrentHealth += 10;
-            fisrtTimer = .3f * (1 / playerStats.CooldownReduction);
-        } else if (fisrtTimer > 0)
+            playerStats.CurrentHealth = playerStats.MaxHealth;
+            firstTimer = 100f * (1 / playerStats.CooldownReduction);
+        } else if (firstTimer > 0)
         {
-            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.9f, .9f, 1f, 1f), new Color(.9f, .9f, 1f, .4f), fisrtTimer/.3f);
-            fisrtTimer -= Time.deltaTime;
+            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.9f, .9f, 1f, 1f), new Color(.9f, .9f, 1f, .4f), firstTimer/.3f);
+            firstTimer -= Time.deltaTime;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -173,7 +194,7 @@ public class UIManager : MonoBehaviour {
                 if (!speedChanged)
                 {
                     playerStats.Movespeed *= 2;
-                    playerWeapon.Stats.Cooldown /= 5;
+                    player.GetComponent<Player>().Weapons[player.GetComponent<Player>().currentWeaponIndex].GetComponent<Weapon>().Stats.Cooldown /= 5f;
 
                     speedChanged = true;
                 }
@@ -193,7 +214,7 @@ public class UIManager : MonoBehaviour {
                 if (speedChanged)
                 {
                     playerStats.Movespeed /= 2;
-                    playerWeapon.Stats.Cooldown *= 5;
+                    player.GetComponent<Player>().Weapons[player.GetComponent<Player>().currentWeaponIndex].GetComponent<Weapon>().Stats.Cooldown *= 5f;
 
                     speedChanged = false;
                 }

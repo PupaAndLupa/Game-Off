@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;  // TEMP
 
 public class Actor : MonoBehaviour
 {
+    public event Action<string, float, float> OnHover;
+
     [Serializable]
     public struct SoundStruct
     {
@@ -28,6 +30,8 @@ public class Actor : MonoBehaviour
     protected bool damaged { get; set; }
     protected float timer { get; set; }
 
+    protected Color startingColor;
+
     protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
@@ -35,13 +39,15 @@ public class Actor : MonoBehaviour
         IsDead = false;
         IsTotallyDead = false;
         damaged = false;
+
+        startingColor = GetComponent<SpriteRenderer>().color;
     }
 
     protected virtual void Update()
     {
         if (damaged && Time.time - timer > 0.3f)
         {
-            GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+            GetComponent<SpriteRenderer>().color = startingColor;
             damaged = false;
         }
         Stats.CurrentHealth = Mathf.Clamp(Stats.CurrentHealth, 0, Stats.MaxHealth);
@@ -123,5 +129,21 @@ public class Actor : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
         IsTotallyDead = true;
+    }
+
+    public virtual void OnMouseOver()
+    {
+        if (OnHover != null)
+        {
+            if (gameObject.tag == "Player")
+            {
+                OnHover(Stats.Name, Stats.CurrentHealth, Stats.DamageModifier * WeaponPrefab.GetComponent<Weapon>().Stats.Damage);
+            }
+            else
+            {
+                
+                OnHover(Stats.Name, Stats.CurrentHealth, Stats.DamageModifier * (this as Player).Weapons[(this as Player).currentWeaponIndex].GetComponent<Weapon>().Stats.Damage);
+            }
+        }
     }
 }

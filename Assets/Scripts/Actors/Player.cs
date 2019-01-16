@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : Actor
 {
     public GameObject[] Weapons;
-    private int currentWeaponIndex;
+    public int currentWeaponIndex;
     
     protected override void Start()
     {
@@ -26,6 +26,8 @@ public class Player : Actor
         {
             hideWeapon(i);
         }
+
+        startingColor = GetComponent<SpriteRenderer>().color;
     }
 
     public void ChangeWeapon()

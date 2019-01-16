@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -104,12 +105,16 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public float timer { get; set; }
+	public Text Score { get; set; }
+
     void Update()
     {
-        /*if (CurrentState == GameStates.End)
+        if (CurrentState == GameStates.End && Time.time - timer > 2f)
         {
-            FindObjectOfType<Fading>().LoadScene(1);
-        }*/
+			Score = FindObjectOfType<UIManager>().GetScore();
+            SceneManager.LoadScene(3);
+        }
     }
 
     public void InitGame()
@@ -132,8 +137,8 @@ public class GameManager : MonoBehaviour {
                 Player.Die();
                 break;
         }
-        //CurrentState = GameStates.End;
-        SceneManager.LoadScene(1);
+        CurrentState = GameStates.End;
+        timer = Time.time;
     }
 
     public void SetPlayer(GameObject player)

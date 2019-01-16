@@ -42,7 +42,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -187,6 +187,7 @@ MonoBehaviour:
     DetectionRadius: 5
     Name: You
     maxHealth: 100
+    currentHealth: 100
     experience: 0
     movespeed: 600
     damageModifier: 1
@@ -195,6 +196,7 @@ MonoBehaviour:
   Weapons:
   - {fileID: 8378482614397995311}
   - {fileID: 2130278606443426254}
+  currentWeaponIndex: 0
 --- !u!95 &95809433372388944
 Animator:
   serializedVersion: 3
@@ -269,11 +271,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4805559047340186}
     m_Modifications:
-    - target: {fileID: 3857514915964808649, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: m_Name
-      value: Melee weapon
-      objectReference: {fileID: 0}
     - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -329,6 +326,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3857514915964808649, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Name
+      value: Melee weapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Cooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Range
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Damage
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d80f0c5a04bb24291b4887312f5d96, type: 3}
 --- !u!1 &2130278606443426254 stripped
@@ -350,6 +367,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4805559047340186}
     m_Modifications:
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Cooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Range
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1602310634964066, guid: 2790532169c018640abd95cc3d7599da, type: 3}
       propertyPath: m_Name
       value: Weapon
@@ -409,21 +441,6 @@ PrefabInstance:
       value: -0.037
       objectReference: {fileID: 0}
     - target: {fileID: 3366912020006856953, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: Stats.Cooldown
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: Stats.Range
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_Enabled
       value: 0

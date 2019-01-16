@@ -13,6 +13,9 @@ public class ActorStats: Stats
     public event Action<int> OnLevelChanged;
     public event Action<long> OnExpChanged;
 
+    public string Name;
+
+    [SerializeField]
     private float maxHealth;
     public float MaxHealth
     {
@@ -29,6 +32,7 @@ public class ActorStats: Stats
     }
 
     public event Action<float> OnHitPointsChanged;
+    [SerializeField]
     private float currentHealth;
     public float CurrentHealth
     {
@@ -75,6 +79,7 @@ public class ActorStats: Stats
     }
 
     public event Action<float> OnMovespeedChanged;
+    [SerializeField]
     private float movespeed;
     public float Movespeed
     {
@@ -91,6 +96,7 @@ public class ActorStats: Stats
     }
 
     public event Action<float> OnDamageModifierChanged;
+    [SerializeField]
     private float damageModifier;
     public float DamageModifier
     {
@@ -107,6 +113,7 @@ public class ActorStats: Stats
     }
 
     public event Action<float> OnDamageReductionChanged;
+    [SerializeField]
     private float damageReduction;
     public float DamageReduction
     {
@@ -123,6 +130,7 @@ public class ActorStats: Stats
     }
 
     public event Action<float> OnCooldownReductionChanged;
+    [SerializeField]
     private float cooldownReduction;
     public float CooldownReduction
     {
@@ -139,7 +147,7 @@ public class ActorStats: Stats
     }
 
     public ActorStats(int maxHealth=100, float movespeed=300, float damageModifier=1f, 
-        float damageReduction=1f, float detectionRadius=5f, float cooldownReduction=1f)
+        float damageReduction=1f, float detectionRadius=5f, float cooldownReduction=1f, string name="Monster")
     {
         Movespeed = movespeed;
         MaxHealth = maxHealth;
@@ -148,5 +156,6 @@ public class ActorStats: Stats
         DamageReduction = damageReduction;
         DetectionRadius = detectionRadius;
         CooldownReduction = cooldownReduction;
+        Name = name;
     }
 }
