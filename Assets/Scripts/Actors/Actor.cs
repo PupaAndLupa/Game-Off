@@ -30,6 +30,8 @@ public class Actor : MonoBehaviour
     protected bool damaged { get; set; }
     protected float timer { get; set; }
 
+    protected Color startingColor;
+
     protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
@@ -37,13 +39,15 @@ public class Actor : MonoBehaviour
         IsDead = false;
         IsTotallyDead = false;
         damaged = false;
+
+        startingColor = GetComponent<SpriteRenderer>().color;
     }
 
     protected virtual void Update()
     {
         if (damaged && Time.time - timer > 0.3f)
         {
-            GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+            GetComponent<SpriteRenderer>().color = startingColor;
             damaged = false;
         }
         Stats.CurrentHealth = Mathf.Clamp(Stats.CurrentHealth, 0, Stats.MaxHealth);

@@ -59,7 +59,132 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 22100000, guid: 3fee1f8926f7be544b75d871274aec1c,
-        type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 3985655215572506540, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: m_Name
+      value: Melee Rick
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: WeaponPrefab
+      value: 
+      objectReference: {fileID: 8212508108726157264}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.DetectionRadius
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.movespeed
+      value: 700
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.experience
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6228521864068663320, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868833137310045210, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1443204568142413946, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d218e1f4f4f5ac044b1de66b556fb4ff, type: 3}
+--- !u!4 &5178064855256941179 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8328093729078039148, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+    type: 3}
+  m_PrefabInstance: {fileID: 3769367282147168279}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4931465765094773273
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5178064855256941179}
+    m_Modifications:
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3857514915964808649, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Name
+      value: Melee weapon
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Range
+      value: 0.25
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 42d80f0c5a04bb24291b4887312f5d96, type: 3}
+--- !u!1 &8212508108726157264 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3857514915964808649, guid: 42d80f0c5a04bb24291b4887312f5d96,
+    type: 3}
+  m_PrefabInstance: {fileID: 4931465765094773273}
+  m_PrefabAsset: {fileID: 0}

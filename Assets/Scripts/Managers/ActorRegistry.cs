@@ -29,7 +29,7 @@ public class ActorRegistry : MonoBehaviour
     {
         if (Player != null)
         {
-            if (Player.IsDead)
+            if (Player.IsDead && FindObjectOfType<GameManager>().CurrentState != GameManager.GameStates.End)
             {
                 FindObjectOfType<GameManager>().FinishGame(GameManager.GameStates.Dead);
             }
@@ -44,9 +44,8 @@ public class ActorRegistry : MonoBehaviour
 
                     if (Random.Range(1, 5) > 3)
                     {
-                        //Instantiate(coin, actor.transform.position, Quaternion.Euler(Vector3.zero), null);
+                        Instantiate(coin, actor.transform.position, Quaternion.Euler(Vector3.zero), null);
                     }
-                    Instantiate(coin, actor.transform.position, Quaternion.Euler(Vector3.zero), null);
 
                     actor.Die();
                     Actors.Remove(actor);

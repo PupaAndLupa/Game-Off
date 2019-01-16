@@ -104,12 +104,14 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    public float timer { get; set; }
+
     void Update()
     {
-        /*if (CurrentState == GameStates.End)
+        if (CurrentState == GameStates.End && Time.time - timer > 2f)
         {
-            FindObjectOfType<Fading>().LoadScene(1);
-        }*/
+            SceneManager.LoadScene(1);
+        }
     }
 
     public void InitGame()
@@ -130,8 +132,8 @@ public class GameManager : MonoBehaviour {
                 Player.Die();
                 break;
         }
-        //CurrentState = GameStates.End;
-        SceneManager.LoadScene(1);
+        CurrentState = GameStates.End;
+        timer = Time.time;
     }
 
     public void SetPlayer(GameObject player)

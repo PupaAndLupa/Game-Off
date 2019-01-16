@@ -487,6 +487,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Enemies:
   - {fileID: 3985655215572506540, guid: d218e1f4f4f5ac044b1de66b556fb4ff, type: 3}
+  - {fileID: 2982050018757229213, guid: f4255885edc3d70458b33e032680ab6b, type: 3}
+  - {fileID: 216348563334842299, guid: c3e7b923940a58347bb4fd107c0623d7, type: 3}
 --- !u!4 &1514696704
 Transform:
   m_ObjectHideFlags: 0
