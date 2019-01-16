@@ -51,7 +51,7 @@ public class Projectile : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag != "Projectile" && collision.gameObject.tag != parentTag)
+        if (collision.gameObject.tag != "Projectile" && collision.gameObject.tag != parentTag && collision.gameObject.tag != "Coin")
         {
             FindObjectOfType<SoundManager>().PlayOnce(Sounds.Hit);
             GetComponent<Animator>().SetBool("Hit", true);

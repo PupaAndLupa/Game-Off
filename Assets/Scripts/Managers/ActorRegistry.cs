@@ -7,6 +7,8 @@ public class ActorRegistry : MonoBehaviour
     public List<Actor> Actors { get; set; }
     public Actor Player { get; set; }
 
+    public GameObject coin;
+
     public void AddActor(Actor actor)
     {
         Actors.Add(actor);
@@ -40,6 +42,12 @@ public class ActorRegistry : MonoBehaviour
                     Player.Stats.Experience += score;
                     FindObjectOfType<UIManager>().AddScore(score);
 
+                    if (Random.Range(1, 5) > 3)
+                    {
+                        //Instantiate(coin, actor.transform.position, Quaternion.Euler(Vector3.zero), null);
+                    }
+                    Instantiate(coin, actor.transform.position, Quaternion.Euler(Vector3.zero), null);
+
                     actor.Die();
                     Actors.Remove(actor);
                 }
@@ -50,5 +58,12 @@ public class ActorRegistry : MonoBehaviour
                 FindObjectOfType<GameManager>().FinishGame(GameManager.GameStates.Win);
             }
         }
+    }
+
+    public void GetCoin()
+    {
+        long score = 100;
+        Player.Stats.Experience += score;
+        FindObjectOfType<UIManager>().AddScore(score);
     }
 }

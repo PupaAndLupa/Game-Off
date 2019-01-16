@@ -12,6 +12,7 @@ TagManager:
   - Wall
   - MainMenu
   - Weapon
+  - Coin
   layers:
   - Default
   - TransparentFX
