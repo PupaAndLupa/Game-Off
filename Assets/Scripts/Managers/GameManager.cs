@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -7,7 +8,10 @@ public class GameManager : MonoBehaviour {
     {
         MainMenu,
         Playing,
-        Pause
+        Pause,
+        Dead,
+        Win,
+        End
     }
 
     [Tooltip("Initialized on runtime")]
@@ -20,7 +24,7 @@ public class GameManager : MonoBehaviour {
     public GameObject PlayerPrefab { get; set; }
     public GameObject EnemyPrefab { get; set; } // TEMP
     public GameStates CurrentState { get; set; }
-
+    private GameObject fadeScreen { get; set; }
     public Actor Player { get; set; }
 
     void Start ()
@@ -104,7 +108,22 @@ public class GameManager : MonoBehaviour {
     {
         BoardManager.SetupScene();
         Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
-        Instantiate(EnemyPrefab, BoardManager.StartPosition, Quaternion.identity);  // TEMP
+        FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
+        FindObjectOfType<SpawnManager>().Init();
+    }
+
+    public void FinishGame(GameStates state)
+    {
+        switch (state)
+        {
+            case GameStates.Win:
+                break;
+            case GameStates.Dead:
+                Player.Die();
+                break;
+        }
+        //CurrentState = GameStates.End;
+        SceneManager.LoadScene(1);
     }
 
     public void SetPlayer(GameObject player)
@@ -112,14 +131,10 @@ public class GameManager : MonoBehaviour {
         PlayerPrefab = player;
     }
 
-    //  TEMP
-    //
     public void SetEnemy(GameObject enemy)
     {                                          
         EnemyPrefab = enemy;               
     }
-    //
-    //  TEMP
 
     public void SetPauseMenu(GameObject pausePanel)
     {

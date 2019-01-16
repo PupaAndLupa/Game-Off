@@ -29,6 +29,9 @@ public class Enemy : Actor
     {
         base.Update();
 
+        if (IsTotallyDead)
+            return;
+
         if (VectorTo(player.transform.position).magnitude <= Stats.DetectionRadius)
         {
             if (!playerActor.Stats.IsInvisible)
@@ -55,4 +58,13 @@ public class Enemy : Actor
             aIDestinationSetter.target = null;
         }
 	}
+
+    public override void Die()
+    {
+        base.Die();
+
+        GetComponent<Seeker>().enabled = false;
+        GetComponent<AIPath>().enabled = false;
+        GetComponent<AIDestinationSetter>().enabled = false;
+    }
 }
