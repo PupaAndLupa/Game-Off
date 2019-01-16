@@ -10,13 +10,9 @@ public class SpawnManager : MonoBehaviour
     {
         for (int i = 0; i < 40; i++)
         {
-            FindObjectOfType<ActorRegistry>().AddActor(SpawnRandomEnemy().GetComponent<Actor>());
+            Vector2 point = FindObjectOfType<BoardManager>().RandomFreePosition();
+            GameObject obj = Instantiate(Enemies[Random.Range(0, Enemies.Length - 1)], point, Quaternion.identity);
+            FindObjectOfType<ActorRegistry>().AddActor(obj.GetComponent<Actor>());
         }
-    }
-
-    public GameObject SpawnRandomEnemy()
-    {
-        Vector2 point = FindObjectOfType<BoardManager>().RandomFreePosition();
-        return Instantiate(Enemies[Random.Range(0, Enemies.Length)], point, Quaternion.identity);
     }
 }
