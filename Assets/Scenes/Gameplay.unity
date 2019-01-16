@@ -3041,6 +3041,7 @@ MonoBehaviour:
   LevelText: {fileID: 1853940497}
   HealthSlider: {fileID: 236432178}
   ExpSlider: {fileID: 310983939}
+  MaxPotionAmount: 5
 --- !u!1 &2000979461
 GameObject:
   m_ObjectHideFlags: 0

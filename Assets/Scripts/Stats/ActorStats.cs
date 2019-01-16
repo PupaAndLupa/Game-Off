@@ -32,6 +32,7 @@ public class ActorStats: Stats
     }
 
     public event Action<float> OnHitPointsChanged;
+    [SerializeField]
     private float currentHealth;
     public float CurrentHealth
     {
