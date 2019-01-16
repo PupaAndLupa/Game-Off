@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour {
 
                         Player.Move(direction);
 
-                        if (Input.GetMouseButtonDown(0))
+                        if (Input.GetMouseButton(0))
                         {
                             Player.Attack();
                         }
