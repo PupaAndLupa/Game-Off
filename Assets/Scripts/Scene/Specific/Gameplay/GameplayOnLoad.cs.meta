@@ -3,7 +3,12 @@ guid: 6e7c3b54e813e1f4eae36861ae9eb03a
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - PlayerPrefab: {instanceID: 0}
+  - EnemyPrefab: {fileID: 1101488474992122, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+      type: 3}
+  - PauseMenuPrefab: {instanceID: 0}
+  - BackgroundMusic: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

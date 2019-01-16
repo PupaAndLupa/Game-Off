@@ -97,6 +97,11 @@ static class IEnumerableExtensions
 
 public class BoardManager : MonoBehaviour
 {
+  public Vector2 RandomFreePosition()
+  {
+    return Vector2.zero;
+  }
+
 	public static class LevelDesign
 	{
 		public class SpritePool

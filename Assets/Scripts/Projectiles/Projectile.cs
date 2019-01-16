@@ -6,29 +6,42 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [Serializable]
-    public class ProjectileStats
+    public struct SoundStruct
     {
-        public float Movespeed;
-        public float Damage { get; set; }
-
-        public ProjectileStats(float movespeed)
-        {
-            Movespeed = movespeed;
-        }
+        public AudioClip Hit;
     }
 
-    public float LifeTime;
+
+    public SoundStruct Sounds;
+
     public ProjectileStats Stats = new ProjectileStats(700f);
     public Movement Movement = new Movement();
 
-    void Start()
-    {
-        Destroy(gameObject, LifeTime);
-    }
+    public string parentTag { get; set; }
+
+    protected Vector3 startPoint;
+
+    private bool isDead;
+
 
     public void SetDamage(float damage)
     {
         Stats.Damage = damage;
+    }
+
+    public void SetRange(float range)
+    {
+        Stats.Range = range;
+    }
+
+    public void SetParentTag(string tag)
+    {
+        parentTag = tag;
+    }
+
+    protected float distanceTraveled()
+    {
+        return (transform.position - startPoint).magnitude;
     }
 
     public void Move()
@@ -36,16 +49,36 @@ public class Projectile : MonoBehaviour
         Movement.Move(gameObject, Stats.Movespeed);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag != "projectile")
+        if (collision.gameObject.tag != "Projectile" && collision.gameObject.tag != parentTag)
         {
-            Destroy(gameObject);
+            FindObjectOfType<SoundManager>().PlayOnce(Sounds.Hit);
+            GetComponent<Animator>().SetBool("Hit", true);
+            GetComponent<Collider2D>().enabled = false;
+            Stats.Movespeed = 0;
+            isDead = true;
         }
+    }
+
+    private void Start()
+    {
+        startPoint = transform.position;
+        isDead = false;
     }
 
     private void FixedUpdate()
     {
+        if (isDead && GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        {
+            Destroy(gameObject);
+        }
+
+
+        if (distanceTraveled() > Stats.Range)
+        {
+            Destroy(gameObject);
+        }
         Move();
     }
 }

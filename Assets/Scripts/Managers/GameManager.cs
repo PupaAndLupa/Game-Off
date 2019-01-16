@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -7,7 +8,10 @@ public class GameManager : MonoBehaviour {
     {
         MainMenu,
         Playing,
-        Pause
+        Pause,
+        Dead,
+        Win,
+        End
     }
 
     [Tooltip("Initialized on runtime")]
@@ -18,8 +22,9 @@ public class GameManager : MonoBehaviour {
 
     public GameObject PauseMenu { get; set; }
     public GameObject PlayerPrefab { get; set; }
+    public GameObject EnemyPrefab { get; set; } // TEMP
     public GameStates CurrentState { get; set; }
-
+    private GameObject fadeScreen { get; set; }
     public Actor Player { get; set; }
 
     void Start ()
@@ -49,7 +54,6 @@ public class GameManager : MonoBehaviour {
                         mousePosition.z = 0f;
 
                         Player.LookTowards(mousePosition);
-                        Camera.main.transform.rotation = Quaternion.Euler(0, 0, 0);
                         if (Input.GetKey(KeyCode.W))
                         {
                             ++direction.y;
@@ -71,15 +75,20 @@ public class GameManager : MonoBehaviour {
                         {
                             if (!SoundManager.Instance.FxSource.isPlaying)
                             {
-                                SoundManager.Instance.PlayOnce(Player.WalkingSound);
+                                SoundManager.Instance.PlayOnce(Player.Sounds.Walking);
                             }
                         }
 
                         Player.Move(direction);
 
-                        if (Input.GetMouseButtonDown(0))
+                        if (Input.GetMouseButton(0))
                         {
-                            Player.Attack(mousePosition - Player.transform.position);
+                            Player.Attack();
+                        }
+
+                        if (Input.GetKeyDown(KeyCode.Q))
+                        {
+                            (Player as Player).ChangeWeapon();
                         }
                     }
                     break;
@@ -97,30 +106,54 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        
+        /*if (CurrentState == GameStates.End)
+        {
+            FindObjectOfType<Fading>().LoadScene(1);
+        }*/
     }
 
     public void InitGame()
     {
         BoardManager.Board.LoadLevel("First");
-		while (true)
-		{
-			try
-			{
-				BoardManager.Board.Generate();
-				break;
-			}
-			catch (System.Exception e)
-			{
-				continue;
-			}
-		}
+        while (true)
+        {
+          try
+          {
+            BoardManager.Board.Generate();
+            break;
+          }
+          catch (System.Exception e)
+          {
+            continue;
+          }
+        }
         Player = Instantiate(PlayerPrefab, BoardManager.Board.StartPosition, Quaternion.identity).GetComponent<Actor>();
+        FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
+        FindObjectOfType<SpawnManager>().Init();
+    }
+
+    public void FinishGame(GameStates state)
+    {
+        switch (state)
+        {
+            case GameStates.Win:
+                break;
+            case GameStates.Dead:
+                Player.Die();
+                break;
+        }
+        //CurrentState = GameStates.End;
+        SceneManager.LoadScene(1);
     }
 
     public void SetPlayer(GameObject player)
     {
         PlayerPrefab = player;
+    }
+
+    public void SetEnemy(GameObject enemy)
+    {                                          
+        EnemyPrefab = enemy;               
     }
 
     public void SetPauseMenu(GameObject pausePanel)
