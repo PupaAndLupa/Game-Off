@@ -39,6 +39,7 @@ public class ActorStats: Stats
         }
     }
 
+    public bool IsInvisible;
     public float Movespeed;
     public float DamageModifier;
     public float DetectionRadius;

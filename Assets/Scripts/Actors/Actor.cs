@@ -33,6 +33,8 @@ public class Actor : MonoBehaviour
     {
         if (IsDead)
             return;
+
+        Stats.CurrentHealth = Mathf.Clamp(Stats.CurrentHealth, 0, Stats.MaxHealth);
     }
 
     protected virtual void FixedUpdate()
