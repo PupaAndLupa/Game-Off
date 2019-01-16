@@ -226,6 +226,7 @@ public class BoardManager : MonoBehaviour
 		public static Vector2 StartPosition = Vector2.zero;
 		public static Dictionary<string, bool> AssignedPositionsMap = new Dictionary<string, bool>();
 		public static Dictionary<string, Vector2> PathwaysPositionsMap = new Dictionary<string, Vector2>();
+		public static List<GameObject> InstancedPathways = new List<GameObject>();
 
 		public static void SetBoardHolder(GameObject boardHolder)
 		{
@@ -635,6 +636,13 @@ public class BoardManager : MonoBehaviour
 			{
 				chamber.Destroy();
 			}
+			AssignedPositionsMap.Clear();
+			PathwaysPositionsMap.Clear();
+			for (var i = 0; i < InstancedPathways.Count; ++i)
+			{
+				Destroy(InstancedPathways[i]);
+			}
+			InstancedPathways.Clear();
 		}
 
 		public static void Generate()
@@ -642,7 +650,7 @@ public class BoardManager : MonoBehaviour
 			Clear();
 			Partitioner.Clear();
 			Partitioner.MakePartition();
-
+			Debug.Log(AssignedPositionsMap);
 			foreach (var partition in Partitioner.ChamberPartitions)
 			{
 				var chamber = new Chamber(partition.A + Padding, partition.B - Padding);
@@ -687,6 +695,7 @@ public class BoardManager : MonoBehaviour
 						if (wall != null)
 						{
 							wall.transform.SetParent(BoardHolder);
+							InstancedPathways.Add(wall);
 						}
 					}
 				}
@@ -695,9 +704,9 @@ public class BoardManager : MonoBehaviour
 				if (floor != null)
 				{
 					floor.transform.SetParent(BoardHolder);
+					InstancedPathways.Add(floor);
 				}
 			}
-
 			AstarPath.active.Scan();
 		}
 
