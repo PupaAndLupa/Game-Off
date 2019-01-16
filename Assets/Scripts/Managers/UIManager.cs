@@ -99,12 +99,12 @@ public class UIManager : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            slot1.GetComponentInChildren<Image>().color = new Color(.47f, .46f, 1f, 1f);
+            slot1.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, .4f);
             playerStats.CurrentHealth += 10;
             fisrtTimer = .3f * (1 / playerStats.CooldownReduction);
         } else if (fisrtTimer > 0)
         {
-            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.47f, .46f, 1f, .4f), new Color(.47f, .46f, 1f, 1f), fisrtTimer/.3f);
+            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.9f, .9f, 1f, 1f), new Color(.9f, .9f, 1f, .4f), fisrtTimer/.3f);
             fisrtTimer -= Time.deltaTime;
         }
 
@@ -112,7 +112,7 @@ public class UIManager : MonoBehaviour {
         {
             if (secondTimer <= 0)
             {
-                slot2.GetComponentInChildren<Image>().color = new Color(1f, .46f, 1f, 1f);
+                slot2.GetComponentInChildren<Image>().color = new Color(1f, .9f, 1f, .4f);
                 playerStats.DamageModifier *= 2;
                 secondTimer = 20f * (1 / playerStats.CooldownReduction);
             }
@@ -120,7 +120,7 @@ public class UIManager : MonoBehaviour {
         {
             if (secondTimer <= 0)
             {
-                slot2.GetComponentInChildren<Image>().color = new Color(.47f, .46f, 1f, .4f);
+                slot2.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, 1f);
             }
 
             if (secondTimer < 15f)
@@ -135,7 +135,7 @@ public class UIManager : MonoBehaviour {
         {
             if (thirdTimer <= 0)
             {
-                slot3.GetComponentInChildren<Image>().color = new Color(1f, .46f, 1f, 1f);
+                slot3.GetComponentInChildren<Image>().color = new Color(1f, .9f, 1f, .4f);
 
                 var playerColor = playerSR.color;
                 playerColor.a = 0.3f;
@@ -149,7 +149,7 @@ public class UIManager : MonoBehaviour {
         {
             if (thirdTimer <= 0)
             {
-                slot3.GetComponentInChildren<Image>().color = new Color(.47f, .46f, 1f, .4f);
+                slot3.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, 1f);
             }
 
             if (thirdTimer < 40f)
@@ -168,7 +168,7 @@ public class UIManager : MonoBehaviour {
         {
             if (fourthTimer <= 0)
             {
-                slot4.GetComponentInChildren<Image>().color = new Color(1f, .46f, 1f, 1f);
+                slot4.GetComponentInChildren<Image>().color = new Color(1f, .9f, 1f, .4f);
 
                 if (!speedChanged)
                 {
@@ -185,7 +185,7 @@ public class UIManager : MonoBehaviour {
         {
             if (fourthTimer <= 0)
             {
-                slot4.GetComponentInChildren<Image>().color = new Color(.47f, .46f, 1f, .4f);
+                slot4.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, 1f);
             }
 
             if (fourthTimer < 20f)
