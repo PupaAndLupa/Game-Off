@@ -102,6 +102,8 @@ MonoBehaviour:
   Sounds:
     Walking: {fileID: 0}
   Stats:
+    experience: 30
+    IsInvisible: 0
     Movespeed: 500
     DamageModifier: 1
     DetectionRadius: 5

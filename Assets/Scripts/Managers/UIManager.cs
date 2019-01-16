@@ -6,38 +6,82 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 
     public Text HitPoints;
+    public Text LevelText;
     public Slider HealthSlider;
+    public Slider ExpSlider;
 
     private Actor player;
+    private Weapon playerWeapon;
     private SpriteRenderer playerSR;
     private ActorStats playerStats;
     private GameObject slot1;
     private GameObject slot2;
     private GameObject slot3;
+    private GameObject slot4;
     private float fisrtTimer = 0;
     private float secondTimer = 0;
     private float thirdTimer = 0;
+    private float fourthTimer = 0;
+    private bool speedChanged = false;
 
     // Use this for initialization
-	void Start () {
+    void Start () {
         player = FindObjectOfType<GameManager>().Player;
         playerSR = player.GetComponent<SpriteRenderer>();
+        playerWeapon = player.GetComponentInChildren<Weapon>();
         playerStats = player.Stats;
 
         playerStats.OnHitPointsChanged += ActorStats_OnHitPointsChanged;
         playerStats.OnMaxHitPointsChanged += ActorStats_OnMaxHitPointsChanged;
+        playerStats.OnLevelChanged += ActorStats_OnOnLevelChanged;
+        playerStats.OnExpChanged += ActorStats_OnExpChanged;
 
         playerStats.CurrentHealth = playerStats.MaxHealth;
 
         slot1 = GameObject.Find("Slot1");
         slot2 = GameObject.Find("Slot2");
         slot3 = GameObject.Find("Slot3");
+        slot4 = GameObject.Find("Slot4");
+
+        ExpSlider.value = 0;
+        ExpSlider.maxValue = ExpPerLevel(0);
     }
 
     private void OnDestroy()
     {
         playerStats.OnHitPointsChanged -= ActorStats_OnHitPointsChanged;
         playerStats.OnMaxHitPointsChanged -= ActorStats_OnMaxHitPointsChanged;
+        playerStats.OnLevelChanged -= ActorStats_OnOnLevelChanged;
+        playerStats.OnExpChanged -= ActorStats_OnExpChanged;
+    }
+
+    private long ExpPerLevel(int level)
+    {
+        return (level + 1) * 100;
+    }
+
+    private void ActorStats_OnExpChanged(long experience)
+    {
+        if (experience >= ExpSlider.maxValue)
+        {
+            playerStats.Level++;
+        } else
+        {
+            ExpSlider.value = experience;
+        }
+    }
+
+    private void ActorStats_OnOnLevelChanged(int level)
+    {
+        LevelText.text = level.ToString();
+
+        long expPerCurrLevel = ExpPerLevel(level - 2);
+        ExpSlider.maxValue = ExpPerLevel(level - 1);
+
+        long experienceLeft = playerStats.experience > expPerCurrLevel ? playerStats.experience - expPerCurrLevel : 0;
+
+        ExpSlider.value = experienceLeft;
+        playerStats.experience = experienceLeft;
     }
 
     private void ActorStats_OnHitPointsChanged(float HP)
@@ -118,6 +162,44 @@ public class UIManager : MonoBehaviour {
             }
 
             thirdTimer -= Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            if (fourthTimer <= 0)
+            {
+                slot4.GetComponentInChildren<Image>().color = new Color(1f, .46f, 1f, 1f);
+
+                if (!speedChanged)
+                {
+                    playerStats.Movespeed *= 2;
+                    playerWeapon.Stats.Cooldown /= 5;
+
+                    speedChanged = true;
+                }
+
+                fourthTimer = 30f;
+            }
+        }
+        else if (fourthTimer > -1)
+        {
+            if (fourthTimer <= 0)
+            {
+                slot4.GetComponentInChildren<Image>().color = new Color(.47f, .46f, 1f, .4f);
+            }
+
+            if (fourthTimer < 20f)
+            {
+                if (speedChanged)
+                {
+                    playerStats.Movespeed /= 2;
+                    playerWeapon.Stats.Cooldown *= 5;
+
+                    speedChanged = false;
+                }
+            }
+
+            fourthTimer -= Time.deltaTime;
         }
     }
 }

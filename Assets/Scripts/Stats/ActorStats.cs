@@ -10,6 +10,9 @@ public class ActorStats: Stats
     public float DetectionRadius;
 
     public event Action<float> OnMaxHitPointsChanged;
+    public event Action<int> OnLevelChanged;
+    public event Action<long> OnExpChanged;
+
     private float maxHealth;
     public float MaxHealth
     {
@@ -37,6 +40,36 @@ public class ActorStats: Stats
             if (OnHitPointsChanged != null)
             {
                 OnHitPointsChanged(value);
+            }
+        }
+    }
+
+    private int level = 1;
+    public int Level
+    {
+        get { return level; }
+        set
+        {
+            level = value;
+
+            if (OnLevelChanged != null)
+            {
+                OnLevelChanged(value);
+            }
+        }
+    }
+
+    public long experience = 0;
+    public long Experience
+    {
+        get { return experience; }
+        set
+        {
+            experience = value;
+
+            if (OnExpChanged != null)
+            {
+                OnExpChanged(value);
             }
         }
     }

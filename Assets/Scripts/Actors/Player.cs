@@ -16,7 +16,7 @@ public class Player : Actor
         currentWeaponIndex = 0;
         showWeapon(0);
 
-        for (int i = 0; i <= Weapons.Length; i++)
+        for (int i = 0; i < Weapons.Length; i++)
         {
             Weapons[i].GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
             Weapons[i].GetComponent<Weapon>().SetParentTag(tag);
