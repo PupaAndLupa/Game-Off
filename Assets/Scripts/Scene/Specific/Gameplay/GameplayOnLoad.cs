@@ -10,8 +10,6 @@ public class GameplayOnLoad : MonoBehaviour {
 
     public AudioClip BackgroundMusic;
 
-    public Texture2D cursorImage;
-
     void Start () {
         GameManager gm = FindObjectOfType<GameManager>();
         gm.SetPlayer(PlayerPrefab);
@@ -23,7 +21,5 @@ public class GameplayOnLoad : MonoBehaviour {
         SoundManager.Instance.MusicSource.clip = BackgroundMusic;
         SoundManager.Instance.MusicSource.volume = 0.2f;
         SoundManager.Instance.MusicSource.Play();
-
-        Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.Auto);
     }
 }
