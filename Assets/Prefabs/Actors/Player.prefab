@@ -185,6 +185,7 @@ MonoBehaviour:
     Movespeed: 500
     DamageModifier: 1
     DetectionRadius: 5
+  IsTotallyDead: 0
 --- !u!95 &95809433372388944
 Animator:
   serializedVersion: 3
@@ -328,6 +329,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.037
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Cooldown
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d80f0c5a04bb24291b4887312f5d96, type: 3}

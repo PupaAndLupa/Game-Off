@@ -22,13 +22,15 @@ public class Actor : MonoBehaviour
     public bool IsDead { get; set; }
     public float Rotation { get; set; }
 
-    protected bool totallyDead = false;
+
+    public bool IsTotallyDead { get; set; }
 
     protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
         WeaponPrefab.GetComponent<Weapon>().SetParentTag(tag);
         IsDead = false;
+        IsTotallyDead = false;
     }
 
     protected virtual void Update()
@@ -103,10 +105,10 @@ public class Actor : MonoBehaviour
 
     public virtual void Die()
     {
-        totallyDead = true;
         GetComponent<Collider2D>().enabled = false;
         GetComponent<Animator>().enabled = false;
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
+        IsTotallyDead = true;
     }
 }

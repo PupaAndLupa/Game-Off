@@ -27,7 +27,7 @@ public class Enemy : Actor
     {
         base.Update();
 
-        if (totallyDead)
+        if (IsTotallyDead)
             return;
 
         if (VectorTo(player.transform.position).magnitude <= Stats.DetectionRadius)

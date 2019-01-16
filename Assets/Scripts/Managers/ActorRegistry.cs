@@ -4,26 +4,46 @@ using UnityEngine;
 
 public class ActorRegistry : MonoBehaviour
 {
-    List<Actor> Actors { get; set; }
+    public List<Actor> Actors { get; set; }
+    public Actor Player { get; set; }
 
     public void AddActor(Actor actor)
     {
         Actors.Add(actor);
     }
 
+    public void SetPlayer(Actor actor)
+    {
+        Player = actor;
+    }
+
     void Start()
     {
         Actors = new List<Actor>();
+        Player = null;
     }
 
     void Update()
     {
-        foreach(var actor in Actors)
+        if (Player != null)
         {
-            if (actor.IsDead)
+            if (Player.IsDead)
             {
-                actor.Die();
-                Actors.Remove(actor);
+                FindObjectOfType<GameManager>().FinishGame(GameManager.GameStates.Dead);
+            }
+
+            foreach (var actor in Actors.ToArray())
+            {
+                if (actor.IsDead)
+                {
+                    actor.Die();
+                    Actors.Remove(actor);
+                }
+            }
+
+            if (Actors.Count == 0)
+            {
+                FindObjectOfType<GameManager>().FinishGame(GameManager.GameStates.Win);
             }
         }
     }

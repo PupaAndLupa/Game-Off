@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -7,7 +8,10 @@ public class GameManager : MonoBehaviour {
     {
         MainMenu,
         Playing,
-        Pause
+        Pause,
+        Dead,
+        Win,
+        End
     }
 
     [Tooltip("Initialized on runtime")]
@@ -97,14 +101,28 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        
+        // Fade out check
     }
 
     public void InitGame()
     {
         BoardManager.SetupScene();
         Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
+        FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
         FindObjectOfType<SpawnManager>().Init();
+    }
+
+    public void FinishGame(GameStates state)
+    {
+        switch (state)
+        {
+            case GameStates.Win:
+                break;
+            case GameStates.Dead:
+                Player.Die();
+                break;
+        }
+        SceneManager.LoadScene(1);
     }
 
     public void SetPlayer(GameObject player)
