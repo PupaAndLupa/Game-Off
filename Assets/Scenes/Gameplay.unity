@@ -520,6 +520,7 @@ MonoBehaviour:
     type: 3}
   PauseMenuPrefab: {fileID: 957321566}
   BackgroundMusic: {fileID: 8300000, guid: a1d9574b4c52c23428b77c41991091c1, type: 3}
+  cursorImage: {fileID: 2800000, guid: 8cd9f539344d67441be37b99f5e9526c, type: 3}
 --- !u!1 &236432177
 GameObject:
   m_ObjectHideFlags: 0

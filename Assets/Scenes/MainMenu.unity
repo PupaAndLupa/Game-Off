@@ -156,6 +156,11 @@ PrefabInstance:
       propertyPath: BackgroundMusic
       value: 
       objectReference: {fileID: 8300000, guid: 7658c740e911b784f8b8f7bea0f11ba7, type: 3}
+    - target: {fileID: 114195496417036500, guid: 2f54b6ff34516774580d5ac7eff724a3,
+        type: 3}
+      propertyPath: cursorImage
+      value: 
+      objectReference: {fileID: 2800000, guid: af3e1aaa1a3ff684ba6191f47f85cb8a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f54b6ff34516774580d5ac7eff724a3, type: 3}
 --- !u!1001 &2081962237

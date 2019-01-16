@@ -102,11 +102,15 @@ MonoBehaviour:
   Sounds:
     Walking: {fileID: 0}
   Stats:
-    experience: 30
     IsInvisible: 0
-    Movespeed: 500
-    DamageModifier: 1
     DetectionRadius: 5
+    Name: Rick
+    maxHealth: 100
+    experience: 30
+    movespeed: 500
+    damageModifier: 1
+    damageReduction: 1
+    cooldownReduction: 1
 --- !u!95 &7214345688972247470
 Animator:
   serializedVersion: 3
