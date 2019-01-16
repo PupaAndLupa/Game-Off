@@ -28,7 +28,6 @@ public class UIManager : MonoBehaviour {
     void Start () {
         player = FindObjectOfType<GameManager>().Player;
         playerSR = player.GetComponent<SpriteRenderer>();
-        playerWeapon = player.GetComponentInChildren<Weapon>();
         playerStats = player.Stats;
 
         playerStats.OnHitPointsChanged += ActorStats_OnHitPointsChanged;
@@ -173,7 +172,7 @@ public class UIManager : MonoBehaviour {
                 if (!speedChanged)
                 {
                     playerStats.Movespeed *= 2;
-                    playerWeapon.Stats.Cooldown /= 5;
+                    player.GetComponent<Player>().Weapons[player.GetComponent<Player>().currentWeaponIndex].GetComponent<Weapon>().Stats.Cooldown /= 5;
 
                     speedChanged = true;
                 }
@@ -193,7 +192,7 @@ public class UIManager : MonoBehaviour {
                 if (speedChanged)
                 {
                     playerStats.Movespeed /= 2;
-                    playerWeapon.Stats.Cooldown *= 5;
+                    player.GetComponent<Player>().Weapons[player.GetComponent<Player>().currentWeaponIndex].GetComponent<Weapon>().Stats.Cooldown *= 5;
 
                     speedChanged = false;
                 }
