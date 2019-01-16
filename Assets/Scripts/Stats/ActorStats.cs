@@ -6,9 +6,10 @@ using UnityEngine;
 [Serializable]
 public class ActorStats: Stats
 {
-    public event Action<float> OnHitPointsChanged;
-    public event Action<float> OnMaxHitPointsChanged;
+    public bool IsInvisible;
+    public float DetectionRadius;
 
+    public event Action<float> OnMaxHitPointsChanged;
     private float maxHealth;
     public float MaxHealth
     {
@@ -24,6 +25,7 @@ public class ActorStats: Stats
         }
     }
 
+    public event Action<float> OnHitPointsChanged;
     private float currentHealth;
     public float CurrentHealth
     {
@@ -39,12 +41,69 @@ public class ActorStats: Stats
         }
     }
 
-    public bool IsInvisible;
-    public float Movespeed;
-    public float DamageModifier;
-    public float DetectionRadius;
-    public float DamageReduction;
-    public float CooldownReduction;
+    public event Action<float> OnMovespeedChanged;
+    private float movespeed;
+    public float Movespeed
+    {
+        get { return movespeed; }
+        set
+        {
+            movespeed = value;
+
+            if (OnMovespeedChanged != null)
+            {
+                OnMovespeedChanged(value);
+            }
+        }
+    }
+
+    public event Action<float> OnDamageModifierChanged;
+    private float damageModifier;
+    public float DamageModifier
+    {
+        get { return damageModifier; }
+        set
+        {
+            damageModifier = value;
+
+            if (OnDamageModifierChanged != null)
+            {
+                OnDamageModifierChanged(value);
+            }
+        }
+    }
+
+    public event Action<float> OnDamageReductionChanged;
+    private float damageReduction;
+    public float DamageReduction
+    {
+        get { return damageReduction; }
+        set
+        {
+            damageReduction = value;
+
+            if (OnDamageReductionChanged != null)
+            {
+                OnDamageReductionChanged(value);
+            }
+        }
+    }
+
+    public event Action<float> OnCooldownReductionChanged;
+    private float cooldownReduction;
+    public float CooldownReduction
+    {
+        get { return cooldownReduction; }
+        set
+        {
+            cooldownReduction = value;
+
+            if (OnCooldownReductionChanged != null)
+            {
+                OnCooldownReductionChanged(value);
+            }
+        }
+    }
 
     public ActorStats(int maxHealth=100, float movespeed=300, float damageModifier=1f, 
         float damageReduction=1f, float detectionRadius=5f, float cooldownReduction=1f)
