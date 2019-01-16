@@ -187,6 +187,7 @@ MonoBehaviour:
     DetectionRadius: 5
     Name: You
     maxHealth: 100
+    currentHealth: 100
     experience: 0
     movespeed: 600
     damageModifier: 1
@@ -335,6 +336,16 @@ PrefabInstance:
       propertyPath: Stats.Cooldown
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Range
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Damage
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d80f0c5a04bb24291b4887312f5d96, type: 3}
 --- !u!1 &2130278606443426254 stripped
@@ -356,6 +367,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4805559047340186}
     m_Modifications:
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Cooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Range
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1602310634964066, guid: 2790532169c018640abd95cc3d7599da, type: 3}
       propertyPath: m_Name
       value: Weapon
@@ -415,21 +441,6 @@ PrefabInstance:
       value: -0.037
       objectReference: {fileID: 0}
     - target: {fileID: 3366912020006856953, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: Stats.Cooldown
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: Stats.Range
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_Enabled
       value: 0

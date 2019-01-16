@@ -49,6 +49,7 @@ public class ActorRegistry : MonoBehaviour
 
                     actor.Die();
                     Actors.Remove(actor);
+                    Actors.Add(FindObjectOfType<SpawnManager>().SpawnRandomEnemy().GetComponent<Actor>());
                 }
             }
 

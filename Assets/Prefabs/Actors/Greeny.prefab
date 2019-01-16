@@ -12,6 +12,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: Greeny
       objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.Name
+      value: Greeny
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.maxHealth
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.experience
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.movespeed
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: Stats.currentHealth
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 8328093729078039148, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -76,26 +101,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
-        type: 3}
-      propertyPath: Stats.Name
-      value: Greeny
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
-        type: 3}
-      propertyPath: Stats.maxHealth
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
-        type: 3}
-      propertyPath: Stats.experience
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 8682418394793099675, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
-        type: 3}
-      propertyPath: Stats.movespeed
-      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7785619596166927055, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
         type: 3}

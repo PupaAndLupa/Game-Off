@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour {
     private GameObject slot2;
     private GameObject slot3;
     private GameObject slot4;
-    private float fisrtTimer = 0;
+    private float firstTimer = 0;
     private float secondTimer = 0;
     private float thirdTimer = 0;
     private float fourthTimer = 0;
@@ -116,12 +116,12 @@ public class UIManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             slot1.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, .4f);
-            playerStats.CurrentHealth += 10;
-            fisrtTimer = .3f * (1 / playerStats.CooldownReduction);
-        } else if (fisrtTimer > 0)
+            playerStats.CurrentHealth = playerStats.MaxHealth;
+            firstTimer = 100f * (1 / playerStats.CooldownReduction);
+        } else if (firstTimer > 0)
         {
-            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.9f, .9f, 1f, 1f), new Color(.9f, .9f, 1f, .4f), fisrtTimer/.3f);
-            fisrtTimer -= Time.deltaTime;
+            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.9f, .9f, 1f, 1f), new Color(.9f, .9f, 1f, .4f), firstTimer/.3f);
+            firstTimer -= Time.deltaTime;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
