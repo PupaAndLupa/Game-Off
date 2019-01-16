@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour {
     public Text ScoreText;
     public Text HitPoints;
     public Text LevelText;
+    public Text CoinsText;
     public Slider HealthSlider;
     public Slider ExpSlider;
 
@@ -26,6 +27,7 @@ public class UIManager : MonoBehaviour {
     private float thirdTimer = 0;
     private float fourthTimer = 0;
     private bool speedChanged = false;
+    private int coins = 0;
 
     // Use this for initialization
     void Start () {
@@ -53,6 +55,12 @@ public class UIManager : MonoBehaviour {
     {
         this.score += score;
         ScoreText.text = string.Format("{0:D7}", this.score);
+    }
+
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+        CoinsText.text = "Coins: " + coins;
     }
 
     private void OnDestroy()

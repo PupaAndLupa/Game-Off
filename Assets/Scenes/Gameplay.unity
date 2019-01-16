@@ -3039,6 +3039,7 @@ MonoBehaviour:
   ScoreText: {fileID: 616521226}
   HitPoints: {fileID: 1674529376}
   LevelText: {fileID: 1853940497}
+  CoinsText: {fileID: 1746812574}
   HealthSlider: {fileID: 236432178}
   ExpSlider: {fileID: 310983939}
 --- !u!1 &2000979461

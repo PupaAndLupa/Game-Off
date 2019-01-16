@@ -52,6 +52,9 @@ public class Enemy : Actor
                 {
                     aIPath.endReachedDistance = Mathf.Max(aIPath.endReachedDistance - 0.1f, 0);
                 }
+            } else
+            {
+                aIDestinationSetter.target = null;
             }
         } else
         {
