@@ -25,17 +25,25 @@ public class Actor : MonoBehaviour
 
     public bool IsTotallyDead { get; set; }
 
+    private bool damaged { get; set; }
+    private float timer { get; set; }
+
     protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
         WeaponPrefab.GetComponent<Weapon>().SetParentTag(tag);
         IsDead = false;
         IsTotallyDead = false;
+        damaged = false;
     }
 
     protected virtual void Update()
     {
-
+        if (damaged && Time.time - timer > 0.3f)
+        {
+            GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+            damaged = false;
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -94,6 +102,10 @@ public class Actor : MonoBehaviour
     {
         if (collision.gameObject.tag == "Projectile" && collision.gameObject.GetComponent<Projectile>().parentTag != gameObject.tag)
         {
+            damaged = true;
+            timer = Time.time;
+            GetComponent<SpriteRenderer>().color = new Color(255, 0, 0);
+
             Projectile projectile = collision.gameObject.GetComponent<Projectile>();
             Stats.CurrentHealth -= projectile.Stats.Damage;
             if (Stats.CurrentHealth <= 0)
