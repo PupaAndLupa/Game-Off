@@ -187,6 +187,8 @@ MonoBehaviour:
     Movespeed: 600
     DamageModifier: 1
     DetectionRadius: 5
+    DamageReduction: 1.2
+    CooldownReduction: 1.2
   Weapons:
   - {fileID: 3309088191891036515}
   - {fileID: 4740968383369404548}

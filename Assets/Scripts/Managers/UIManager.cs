@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour {
         {
             slot1.GetComponentInChildren<Image>().color = new Color(.47f, .46f, 1f, 1f);
             playerStats.CurrentHealth += 10;
-            fisrtTimer = .3f;
+            fisrtTimer = .3f * (1 / playerStats.CooldownReduction);
         } else if (fisrtTimer > 0)
         {
             slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.47f, .46f, 1f, .4f), new Color(.47f, .46f, 1f, 1f), fisrtTimer/.3f);
@@ -70,7 +70,7 @@ public class UIManager : MonoBehaviour {
             {
                 slot2.GetComponentInChildren<Image>().color = new Color(1f, .46f, 1f, 1f);
                 playerStats.DamageModifier *= 2;
-                secondTimer = 20f;
+                secondTimer = 20f * (1 / playerStats.CooldownReduction);
             }
         } else if (secondTimer > -1)
         {
@@ -98,7 +98,7 @@ public class UIManager : MonoBehaviour {
                 playerSR.color = playerColor;
 
                 playerStats.IsInvisible = true;
-                thirdTimer = 60f;
+                thirdTimer = 60f * (1 / playerStats.CooldownReduction);
             }
         }
         else if (thirdTimer > -1)

@@ -16,7 +16,7 @@ public class Actor : MonoBehaviour
     public GameObject WeaponPrefab;
 
     public SoundStruct Sounds;
-    public ActorStats Stats = new ActorStats(100, 500f, 1f, 5f);
+    public ActorStats Stats = new ActorStats(100, 500f, 1f, 1f, 5f, 1f);
 
     public Movement Movement = new Movement();
     public bool IsDead { get; set; }
@@ -108,7 +108,7 @@ public class Actor : MonoBehaviour
             GetComponent<SpriteRenderer>().color = new Color(255, 0, 0);
 
             Projectile projectile = collision.gameObject.GetComponent<Projectile>();
-            Stats.CurrentHealth -= projectile.Stats.Damage;
+            Stats.CurrentHealth -= projectile.Stats.Damage * (1 / Stats.DamageReduction);
             if (Stats.CurrentHealth <= 0)
             {
                 IsDead = true;
