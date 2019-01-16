@@ -16,7 +16,7 @@ public class Actor : MonoBehaviour
     public GameObject WeaponPrefab;
 
     public SoundStruct Sounds;
-    public ActorStats Stats = new ActorStats(100, 500f, 1f, 1f, 5f);
+    public ActorStats Stats = new ActorStats(100, 500f, 1f, 1f, 5f, 1f);
 
     public Movement Movement = new Movement();
     public bool IsDead { get; set; }
