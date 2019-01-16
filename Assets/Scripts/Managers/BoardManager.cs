@@ -97,10 +97,12 @@ static class IEnumerableExtensions
 
 public class BoardManager : MonoBehaviour
 {
-  public Vector2 RandomFreePosition()
-  {
-    return Vector2.zero;
-  }
+    public Vector2 RandomFreePosition()
+    {
+        var chamber = Board.Chambers[Random.Range(0, Board.Chambers.Count)];
+        var row = chamber.Scheme[Random.Range(1, chamber.Scheme.Count - 1)];
+        return row[Random.Range(1, row.Count - 1)].Position;
+    }
 
 	public static class LevelDesign
 	{
@@ -593,11 +595,11 @@ public class BoardManager : MonoBehaviour
 				{
 					if (child.Area >= 1.8f * AreaThreshold)
 					{
-						if (!(finalPartitionsCount >= QuantityThreshold && Random.Range(0f, 1f) <= 0.1f))
-						{
-							Split(child, newDirection);
-						}
-					}
+                        if (!(finalPartitionsCount >= QuantityThreshold && Random.Range(0f, 1f) <= 0.00001f))
+                        {
+                            Split(child, newDirection);
+                        }
+                    }
 					else
 					{
 						++finalPartitionsCount;
@@ -613,7 +615,7 @@ public class BoardManager : MonoBehaviour
 			}
 		}
 
-		public static BinarySpacePartitionTree Partitioner = new BinarySpacePartitionTree(128, 128, 256, 30);
+		public static BinarySpacePartitionTree Partitioner = new BinarySpacePartitionTree(64, 64, 128, 10);
 
 		public static void LoadLevel(string id)
 		{

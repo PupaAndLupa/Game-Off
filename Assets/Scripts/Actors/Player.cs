@@ -22,7 +22,7 @@ public class Player : Actor
             Weapons[i].GetComponent<Weapon>().SetParentTag(tag);
         }
 
-        for (int i = 1; i <= Weapons.Length; i++)
+        for (int i = 1; i < Weapons.Length; i++)
         {
             hideWeapon(i);
         }
