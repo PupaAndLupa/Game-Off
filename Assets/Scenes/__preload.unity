@@ -208,6 +208,7 @@ MonoBehaviour:
     Max: 32
   roomSize: {x: 15, y: 12}
   outerWallsThickness: 1
+  board: {fileID: 9073710028522287419, guid: eeb57b27c7075fa409f3b19d621669b7, type: 3}
   Floor:
     sprites:
     - {fileID: 1022696056018328, guid: 691bed111ec4cea49a6760d75367bd79, type: 3}

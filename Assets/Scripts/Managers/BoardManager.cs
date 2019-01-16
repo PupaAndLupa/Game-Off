@@ -52,6 +52,8 @@ public class BoardManager : MonoBehaviour
     public Vector2Int roomSize = new Vector2Int(15, 12);
     public int outerWallsThickness = 1;
 
+    public GameObject board;
+
     public SpritePool Floor;
     public SpritePool Walls;
 
@@ -315,7 +317,7 @@ public class BoardManager : MonoBehaviour
 
     public void ShowDungeon()
     {
-        boardHolder = new GameObject("Board").transform;
+        boardHolder = Instantiate(board, new Vector3(0, 0, 0), Quaternion.identity).transform;
 
         for (int y = 0; y < availableVerticalSpace; y++)
         {
@@ -325,6 +327,8 @@ public class BoardManager : MonoBehaviour
                 instance.transform.SetParent(boardHolder);
             }
         }
+
+        AstarPath.active.Scan();
     }
 
     private Direction RandomDirection()
