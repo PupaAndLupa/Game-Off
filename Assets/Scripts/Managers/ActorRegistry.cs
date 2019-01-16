@@ -52,7 +52,7 @@ public class ActorRegistry : MonoBehaviour
                 }
             }
 
-            if (Actors.Count == 0)
+            if (Actors.Count == 0 && FindObjectOfType<GameManager>().CurrentState != GameManager.GameStates.End)
             {
                 FindObjectOfType<GameManager>().FinishGame(GameManager.GameStates.Win);
             }
