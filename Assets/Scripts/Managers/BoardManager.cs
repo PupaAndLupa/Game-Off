@@ -7,6 +7,8 @@ using System.Collections;
 using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 using SplitDirection = BoardManager.Board.BinarySpacePartitionTree.TreeNode.SplitDirection;
+using ChamberWall = BoardManager.Board.Chamber.Wall;
+using DigDirection = BoardManager.Board.DigDirection;
 using System.Security.Cryptography;
 
 static class DirectionExtensions
@@ -20,7 +22,53 @@ static class DirectionExtensions
 			case SplitDirection.Horizontal:
 				return SplitDirection.Vertical;
 			default:
-				return 0;
+				return SplitDirection.Any;
+		}
+	}
+}
+
+static class ChamberWallExtensions
+{
+	public static ChamberWall Inverse(this ChamberWall wall)
+	{
+		switch (wall)
+		{
+			case ChamberWall.Top:
+				return ChamberWall.Bottom;
+			case ChamberWall.Right:
+				return ChamberWall.Left;
+			case ChamberWall.Bottom:
+				return ChamberWall.Top;
+			case ChamberWall.Left:
+				return ChamberWall.Right;
+			default:
+				return ChamberWall.Any;
+		}
+	}
+
+	public static ChamberWall Random(this ChamberWall wall)
+	{
+		var types = new List<ChamberWall> { ChamberWall.Top, ChamberWall.Bottom, ChamberWall.Left, ChamberWall.Right };
+		return types[UnityEngine.Random.Range(0, types.Count)];
+	}
+}
+
+static class DigDirectionExtensions
+{
+	public static DigDirection Inverse(this DigDirection direction)
+	{
+		switch (direction)
+		{
+			case DigDirection.Up:
+				return DigDirection.Down;
+			case DigDirection.Right:
+				return DigDirection.Left;
+			case DigDirection.Down:
+				return DigDirection.Up;
+			case DigDirection.Left:
+				return DigDirection.Right;
+			default:
+				return DigDirection.Any;
 		}
 	}
 }
@@ -154,13 +202,33 @@ public class BoardManager : MonoBehaviour
 
 	public static class Board
 	{
+		public enum DigDirection
+		{
+			Any,
+			Up,
+			Right,
+			Down,
+			Left
+		}
+
 		public static Transform BoardHolder = new GameObject("Board").transform;
 		public static List<Chamber> Chambers = new List<Chamber>();
 		public static Vector2 Padding = new Vector2(3f, 3f);
 		public static Vector2 StartPosition = Vector2.zero;
+		public static Dictionary<string, bool> AssignedPositionsMap = new Dictionary<string, bool>();
+		public static Dictionary<string, Vector2> PathwaysPositionsMap = new Dictionary<string, Vector2>();
 
 		public class Chamber
 		{
+			public enum Wall
+			{
+				Any,
+				Top,
+				Right,
+				Bottom,
+				Left
+			}
+
 			public class Tile
 			{
 				public TileType Type;
@@ -183,6 +251,7 @@ public class BoardManager : MonoBehaviour
 				get { return (A + B) / 2; }
 			}
 			public List<GameObject> InstancedTiles { get; private set; }
+			public List<Chamber> Connections { get; private set; }
 
 			public Chamber(Vector2 A, Vector2 B)
 			{
@@ -190,6 +259,24 @@ public class BoardManager : MonoBehaviour
 				this.B = B;
 				CanSpawnEnemimes = true;
 				Scheme = new List<List<Tile>>();
+				Connections = new List<Chamber>();
+			}
+
+			public Vector2 RandomIndexAtWall(Wall wall)
+			{
+				switch (wall)
+				{
+					case Wall.Top:
+						return new Vector2(Random.Range(1, Scheme[0].Count - 1), 0);
+					case Wall.Right:
+						return new Vector2(Scheme[0].Count - 1, Random.Range(1, Scheme.Count - 1));
+					case Wall.Bottom:
+						return new Vector2(Random.Range(1, Scheme[0].Count - 1), Scheme.Count - 1);
+					case Wall.Left:
+						return new Vector2(0, Random.Range(1, Scheme.Count - 1));
+					default:
+						return Vector2.zero;
+				}
 			}
 
 			public virtual void Generate()
@@ -199,6 +286,7 @@ public class BoardManager : MonoBehaviour
 					var row = new List<Tile>();
 					for (var j = A.x; j < B.x; ++j)
 					{
+						AssignedPositionsMap[new Vector2(j, i).ToString()] =  true;
 						if (i == A.y && j == A.x)
 						{
 							row.Add(new Tile(TileType.WallCornerNorthWest, new Vector2(j, i)));
@@ -337,6 +425,7 @@ public class BoardManager : MonoBehaviour
 			{
 				public enum SplitDirection
 				{
+					Any,
 					Vertical,
 					Horizontal
 				}
@@ -499,7 +588,7 @@ public class BoardManager : MonoBehaviour
 				{
 					if (child.Area >= 1.8f * AreaThreshold)
 					{
-						if (!(finalPartitionsCount >= QuantityThreshold && Random.Range(0f, 1f) <= 0.2f))
+						if (!(finalPartitionsCount >= QuantityThreshold && Random.Range(0f, 1f) <= 0.1f))
 						{
 							Split(child, newDirection);
 						}
@@ -539,20 +628,216 @@ public class BoardManager : MonoBehaviour
 			Clear();
 			Partitioner.Clear();
 			Partitioner.MakePartition();
+
 			foreach (var partition in Partitioner.ChamberPartitions)
 			{
-				if (Random.Range(0f, 1f) <= 0.2f)
-				{
-					continue;
-				}
 				var chamber = new Chamber(partition.A + Padding, partition.B - Padding);
 				chamber.Generate();
 				chamber.Modify();
+				Chambers.Add(chamber);
+			}
+			for (var i = 0; i < Chambers.Count - 1; ++i)
+			{
+				Connect(Chambers[i], Chambers[i + 1]);
+			}
+			foreach(var chamber in Chambers)
+			{
 				chamber.Instantiate();
 				chamber.SpawnEnemies();
-				Chambers.Add(chamber);
 				StartPosition = chamber.Center;
 			}
+			foreach (var point in PathwaysPositionsMap)
+			{
+				var surroundings = new List<Vector2>
+				{
+					point.Value + new Vector2(0, 1),
+					point.Value + new Vector2(1, 1),
+					point.Value + new Vector2(1, 0),
+					point.Value + new Vector2(1, -1),
+					point.Value + new Vector2(0, -1),
+					point.Value + new Vector2(-1, -1),
+					point.Value + new Vector2(-1, 0),
+					point.Value + new Vector2(-1, 1),
+				};
+
+				foreach (var area in surroundings)
+				{
+					var value = false;
+					var pos = Vector2.zero;
+					if (
+						!AssignedPositionsMap.TryGetValue(area.ToString(), out value) && 
+						!PathwaysPositionsMap.TryGetValue(area.ToString(), out pos)
+					)
+					{
+						var wall = instancer[TileType.Wall].Invoke(area);
+						if (wall != null)
+						{
+							wall.transform.SetParent(BoardHolder);
+						}
+					}
+				}
+
+				var floor = instancer[TileType.Floor].Invoke(point.Value);
+				if (floor != null)
+				{
+					floor.transform.SetParent(BoardHolder);
+				}
+			}
 		}
+
+		public static void Connect(Chamber first, Chamber second)
+		{
+			if (first.Connections.Contains(second))
+			{
+				return;
+			}
+			ChamberWall doorPlacement = ChamberWall.Left;
+			var firstDoorIndex = first.RandomIndexAtWall(doorPlacement);
+			var secondDoorIndex = second.RandomIndexAtWall(doorPlacement.Inverse());
+			var firstDoorPos = first.Scheme[(int)firstDoorIndex.y][(int)firstDoorIndex.x].Position;
+			var secondDoorPos = second.Scheme[(int)secondDoorIndex.y][(int)secondDoorIndex.x].Position;
+			first.Scheme[(int)firstDoorIndex.y][(int)firstDoorIndex.x] = new Chamber.Tile(TileType.Floor, firstDoorPos);
+			second.Scheme[(int)secondDoorIndex.y][(int)secondDoorIndex.x] = new Chamber.Tile(TileType.Floor, secondDoorPos);
+
+			var direction = ChamberWallToDigDirection(doorPlacement);
+			var directionDest = ChamberWallToDigDirection(doorPlacement.Inverse());
+			var path = new Dictionary<string, Vector2>();
+
+			var currentPos = firstDoorPos;
+			for (var i = 0; i < Padding.x; ++i)
+			{
+				currentPos = Dig(currentPos, direction);
+				path.Add(currentPos.ToString(), currentPos);
+			}
+			var destinationPos = secondDoorPos;
+			for (var i = 0; i < Padding.x; ++i)
+			{
+				destinationPos = Dig(destinationPos, directionDest);
+				path.Add(destinationPos.ToString(), destinationPos);
+			}
+			MakePathway(currentPos, destinationPos, path, direction);
+			foreach (var point in path)
+			{
+				PathwaysPositionsMap[point.Key] = point.Value;
+			}
+			first.Connections.Add(second);
+			second.Connections.Add(first);
+		}
+
+		public static DigDirection ChamberWallToDigDirection(ChamberWall wall)
+		{
+			switch (wall)
+			{
+				case ChamberWall.Top:
+					return DigDirection.Up;
+				case ChamberWall.Right:
+					return DigDirection.Right;
+				case ChamberWall.Bottom:
+					return DigDirection.Down;
+				case ChamberWall.Left:
+					return DigDirection.Left;
+				default:
+					return DigDirection.Any;
+			}
+		}
+
+		public static void MakePathway(Vector2 currentPos, Vector2 destinationPos, Dictionary<string, Vector2> path, DigDirection direction)
+		{
+			var newDirection = direction;
+			if (direction == DigDirection.Left || direction == DigDirection.Right)
+			{
+				if (currentPos.y < destinationPos.y)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Up) ?
+						DigDirection.Up :
+						direction;
+				}
+				else if (currentPos.y > destinationPos.y)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Down) ?
+						DigDirection.Down :
+						direction;
+				}
+			}
+			else
+			{
+				if (currentPos.x < destinationPos.x)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Right) ?
+						DigDirection.Right :
+						direction;
+				}
+
+				if (currentPos.x > destinationPos.x)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Left) ?
+						DigDirection.Left :
+						direction;
+				}
+			}
+			
+			if (CheckDirectionAccessibility(currentPos, newDirection))
+			{
+				var newPos = Dig(currentPos, newDirection);
+				path[newPos.ToString()] = newPos;
+				if (!(newPos.x == destinationPos.x && newPos.y == destinationPos.y))
+				{
+					MakePathway(newPos, destinationPos, path, newDirection);
+				}
+			}
+		}
+
+		public static bool CheckDirectionAccessibility(Vector2 pos, DigDirection direction)
+		{
+			Vector2 shift = Vector2.zero;
+			switch (direction)
+			{
+				case DigDirection.Left:
+					shift.x = -1;
+					break;
+				case DigDirection.Right:
+					shift.x = 1;
+					break;
+				case DigDirection.Up:
+					shift.y = 1;
+					break;
+				case DigDirection.Down:
+					shift.y = -1;
+					break;
+			}
+			var value = true;
+			for (var i = 1; i <= Padding.x + 1; ++i)
+			{
+				if (AssignedPositionsMap.TryGetValue((pos + i * shift).ToString(), out value))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public static Vector2 Dig(Vector2 currentPos, DigDirection direction)
+		{
+			switch (direction)
+			{
+				case DigDirection.Up:
+					currentPos.y += 1;
+					break;
+				case DigDirection.Right:
+					currentPos.x += 1;
+					break;
+				case DigDirection.Down:
+					currentPos.y -= 1;
+					break;
+				case DigDirection.Left:
+					currentPos.x -= 1;
+					break;
+			}
+			return currentPos;
+		} 
 	}
 }
