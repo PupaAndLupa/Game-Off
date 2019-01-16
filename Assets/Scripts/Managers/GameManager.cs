@@ -101,7 +101,10 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        
+        /*if (CurrentState == GameStates.End)
+        {
+            FindObjectOfType<Fading>().LoadScene(1);
+        }*/
     }
 
     public void InitGame()

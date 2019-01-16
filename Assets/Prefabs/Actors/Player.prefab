@@ -183,7 +183,7 @@ MonoBehaviour:
     Walking: {fileID: 8300000, guid: 956b5b783c3b80549b41f8243ec8ac5a, type: 3}
   Stats:
     IsInvisible: 0
-    Movespeed: 500
+    Movespeed: 600
     DamageModifier: 1
     DetectionRadius: 5
 --- !u!95 &95809433372388944
