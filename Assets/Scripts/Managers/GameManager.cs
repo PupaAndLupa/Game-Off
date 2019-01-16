@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour {
     {
         BoardManager.SetupScene();
         Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
-        Instantiate(EnemyPrefab, BoardManager.StartPosition, Quaternion.identity);  // TEMP
+        FindObjectOfType<SpawnManager>().Init();
     }
 
     public void SetPlayer(GameObject player)
@@ -112,14 +112,10 @@ public class GameManager : MonoBehaviour {
         PlayerPrefab = player;
     }
 
-    //  TEMP
-    //
     public void SetEnemy(GameObject enemy)
     {                                          
         EnemyPrefab = enemy;               
     }
-    //
-    //  TEMP
 
     public void SetPauseMenu(GameObject pausePanel)
     {
