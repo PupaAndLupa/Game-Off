@@ -92,7 +92,7 @@ public class Actor : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Projectile")
+        if (collision.gameObject.tag == "Projectile" && collision.gameObject.GetComponent<Projectile>().parentTag != gameObject.tag)
         {
             Projectile projectile = collision.gameObject.GetComponent<Projectile>();
             Stats.CurrentHealth -= projectile.Stats.Damage;

@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
     public ProjectileStats Stats = new ProjectileStats(700f);
     public Movement Movement = new Movement();
 
-    private string parentTag;
+    public string parentTag { get; set; }
 
     protected Vector3 startPoint;
 
