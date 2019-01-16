@@ -43,13 +43,15 @@ public class ActorStats: Stats
     public float Movespeed;
     public float DamageModifier;
     public float DetectionRadius;
+    public float DamageReduction;
 
-    public ActorStats(int maxHealth, float movespeed, float damageModifier, float detectionRadius)
+    public ActorStats(int maxHealth, float movespeed, float damageModifier, float damageReduction, float detectionRadius)
     {
         Movespeed = movespeed;
         MaxHealth = maxHealth;
         CurrentHealth = MaxHealth;
         DamageModifier = damageModifier;
+        DamageReduction = damageReduction;
         DetectionRadius = detectionRadius;
     }
 }
