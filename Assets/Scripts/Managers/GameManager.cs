@@ -33,8 +33,8 @@ public class GameManager : MonoBehaviour {
         CurrentState = GameStates.MainMenu;
         BoardManager = FindObjectOfType<BoardManager>();
         SoundManager = FindObjectOfType<SoundManager>();
-        StartCoroutine(HandleInput());
-    }
+		StartCoroutine(HandleInput());
+	}
 
     IEnumerator HandleInput()
     {
@@ -119,8 +119,10 @@ public class GameManager : MonoBehaviour {
 
     public void InitGame()
     {
-        BoardManager.SetupScene();
-        Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
+		BoardManager.Board.SetBoardHolder(BoardManager.BoardHolder);
+		BoardManager.Board.LoadLevel("First");
+        BoardManager.Board.Generate();
+        Player = Instantiate(PlayerPrefab, BoardManager.Board.StartPosition, Quaternion.identity).GetComponent<Actor>();
         FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
         FindObjectOfType<SpawnManager>().Init();
     }

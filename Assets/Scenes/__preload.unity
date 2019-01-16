@@ -200,21 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19a8e9b304683ac43b3b80f24a5a0917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cols: 64
-  Rows: 64
-  ChanceRoom: 100
-  WallsAmount:
-    Min: 16
-    Max: 32
-  roomSize: {x: 15, y: 12}
-  outerWallsThickness: 1
-  board: {fileID: 9073710028522287419, guid: eeb57b27c7075fa409f3b19d621669b7, type: 3}
-  Floor:
-    sprites:
-    - {fileID: 1022696056018328, guid: 691bed111ec4cea49a6760d75367bd79, type: 3}
-  Walls:
-    sprites:
-    - {fileID: 1028359847062970, guid: 7fc0c09c207e7514c8da529693d324d7, type: 3}
+  BoardHolder: {fileID: 9073710028522287419, guid: eeb57b27c7075fa409f3b19d621669b7,
+    type: 3}
 --- !u!1 &1329838520
 GameObject:
   m_ObjectHideFlags: 0

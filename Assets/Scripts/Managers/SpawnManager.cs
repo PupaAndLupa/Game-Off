@@ -8,7 +8,7 @@ public class SpawnManager : MonoBehaviour
 
     public void Init()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 40; i++)
         {
             FindObjectOfType<ActorRegistry>().AddActor(SpawnRandomEnemy().GetComponent<Actor>());
         }

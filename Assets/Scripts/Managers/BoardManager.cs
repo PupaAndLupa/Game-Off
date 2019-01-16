@@ -3,539 +3,866 @@ using System.Collections.Generic;
 using System.Linq;
 using Random = UnityEngine.Random;
 using UnityEngine;
+using System.Collections;
+using Microsoft.Win32.SafeHandles;
+using System.Runtime.InteropServices;
+using SplitDirection = BoardManager.Board.BinarySpacePartitionTree.TreeNode.SplitDirection;
+using ChamberWall = BoardManager.Board.Chamber.Wall;
+using DigDirection = BoardManager.Board.DigDirection;
+using System.Security.Cryptography;
+
+static class DirectionExtensions
+{
+	public static SplitDirection Toggle(this SplitDirection direction)
+	{
+		switch (direction)
+		{
+			case SplitDirection.Vertical:
+				return SplitDirection.Horizontal;
+			case SplitDirection.Horizontal:
+				return SplitDirection.Vertical;
+			default:
+				return SplitDirection.Any;
+		}
+	}
+}
+
+static class ChamberWallExtensions
+{
+	public static ChamberWall Inverse(this ChamberWall wall)
+	{
+		switch (wall)
+		{
+			case ChamberWall.Top:
+				return ChamberWall.Bottom;
+			case ChamberWall.Right:
+				return ChamberWall.Left;
+			case ChamberWall.Bottom:
+				return ChamberWall.Top;
+			case ChamberWall.Left:
+				return ChamberWall.Right;
+			default:
+				return ChamberWall.Any;
+		}
+	}
+
+	public static ChamberWall Random(this ChamberWall wall)
+	{
+		var types = new List<ChamberWall> { ChamberWall.Top, ChamberWall.Bottom, ChamberWall.Left, ChamberWall.Right };
+		return types[UnityEngine.Random.Range(0, types.Count)];
+	}
+}
+
+static class DigDirectionExtensions
+{
+	public static DigDirection Inverse(this DigDirection direction)
+	{
+		switch (direction)
+		{
+			case DigDirection.Up:
+				return DigDirection.Down;
+			case DigDirection.Right:
+				return DigDirection.Left;
+			case DigDirection.Down:
+				return DigDirection.Up;
+			case DigDirection.Left:
+				return DigDirection.Right;
+			default:
+				return DigDirection.Any;
+		}
+	}
+}
+
+static class IEnumerableExtensions
+{
+	public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> enumerable)
+	{
+		IList<T> list = enumerable.ToList();
+		RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+		int n = list.Count;
+		while (n > 1)
+		{
+			byte[] box = new byte[1];
+			do provider.GetBytes(box);
+			while (!(box[0] < n * (Byte.MaxValue / n)));
+			int k = (box[0] % n--);
+			T value = list[k];
+			list[k] = list[n];
+			list[n] = value;
+		}
+		enumerable = list.AsEnumerable();
+		return enumerable;
+	}
+}
 
 public class BoardManager : MonoBehaviour
 {
-    [Serializable]
-    public class Amount
-    {
-        public int Min;
-        public int Max;
-
-        public Amount(int min, int max)
-        {
-            Min = min;
-            Max = max;
-        }
-    }
-
-    [Serializable]
-    public class SpritePool
-    {
-        public GameObject[] sprites;
-
-        public int Length
-        {
-            get { return sprites.Length; }
-        }
-
-        public SpritePool(GameObject[] sprites)
-        {
-            this.sprites = sprites;
-        }
-
-        public GameObject Get(int index)
-        {
-            return sprites[index];
-        }
-
-        public GameObject GetRandomSprite()
-        {
-            return sprites[Random.Range(0, sprites.Length)];
-        }
-    }
-
-    public int Cols = 64;
-    public int Rows = 64;
-    public int ChanceRoom = 100;
-    public Amount WallsAmount = new Amount(30, 70);
-    public Vector2Int roomSize = new Vector2Int(15, 12);
-    public int outerWallsThickness = 1;
-
-    public GameObject board;
-
-    public SpritePool Floor;
-    public SpritePool Walls;
-
-    public int Corridors
-    {
-        get;
-        private set;
-    }
-
-    public Vector2 StartPosition
-    {
-        get;
-        private set;
-    }
+	public GameObject BoardHolder;
 
     public Vector2 RandomFreePosition()
     {
-        while (true)
-        {
-            int x = Random.Range(0, Cols);
-            int y = Random.Range(0, Rows);
-            if (dungeonMap[x + availableHorizontalSpace * y] == Tile.Floor)
-                return new Vector2(x, y);
-        }
+        var chamber = Board.Chambers[Random.Range(0, Board.Chambers.Count)];
+        var row = chamber.Scheme[Random.Range(1, chamber.Scheme.Count - 1)];
+        return row[Random.Range(1, row.Count - 1)].Position;
     }
 
-    private enum Direction { North, East, South, West };
-    private enum Tile { Unused, Wall, Floor, Corridor };
+	public static class LevelDesign
+	{
+		public class SpritePool
+		{
+			private string pathPrefix;
+			private string targetDir;
+			private GameObject[] prefabs;
 
-    private int objects;
-    private Tile[] dungeonMap = { };
-    private Transform boardHolder;
+			public int Length
+			{
+				get { return prefabs.Length; }
+			}
 
-    private int availableHorizontalSpace;
-    private int availableVerticalSpace;
+			public SpritePool(string pathPrefix, string targetDir)
+			{
+				this.pathPrefix = pathPrefix;
+				this.targetDir = targetDir;
+			}
 
-    private static bool IsWall(int x, int y, int xlen, int ylen, int xt, int yt, Direction d)
-    {
-        Func<int, int, int> a = GetFeatureLowerBound;
-        Func<int, int, int> b = IsFeatureWallBound;
+			public GameObject this[int index]
+			{
+				get { return prefabs[index]; }
+				set { prefabs[index] = value; }
+			}
 
-        switch (d)
-        {
-            case Direction.North:
-                return xt == a(x, xlen) || xt == b(x, xlen) || yt == y || yt == y - ylen + 1;
-            case Direction.East:
-                return xt == x || xt == x + xlen - 1 || yt == a(y, ylen) || yt == b(y, ylen);
-            case Direction.South:
-                return xt == a(x, xlen) || xt == b(x, xlen) || yt == y || yt == y + ylen - 1;
-            case Direction.West:
-                return xt == x || xt == x - xlen + 1 || yt == a(y, ylen) || yt == b(y, ylen);
-        }
+			public void Load(string id)
+			{
+				prefabs = Resources.LoadAll(pathPrefix + id + targetDir).Cast<GameObject>().ToArray();
+			}
 
-        throw new InvalidOperationException();
-    }
+			public GameObject GetRandom()
+			{
+				return prefabs[Random.Range(0, prefabs.Length)];
+			}
+		}
 
-    public static int GetFeatureLowerBound(int c, int len)
-    {
-        return c - len / 2;
-    }
+		public static SpritePool Floor = new SpritePool("Board/Levels/", "/Floor");
+		public static SpritePool Wall  = new SpritePool("Board/Levels/", "/Wall");
+		public static SpritePool WallEdgeNorth = new SpritePool("Board/Levels/", "/WallEdgeNorth");
+		public static SpritePool WallEdgeEast  = new SpritePool("Board/Levels/", "/WallEdgeEast");
+		public static SpritePool WallEdgeSouth = new SpritePool("Board/Levels/", "/WallEdgeSouth");
+		public static SpritePool WallEdgeWest  = new SpritePool("Board/Levels/", "/WallEdgeWest");
+		public static SpritePool WallCornerNorthEast = new SpritePool("Board/Levels/", "/WallCornerNorthEast");
+		public static SpritePool WallCornerSouthEast = new SpritePool("Board/Levels/", "/WallCornerSouthEast");
+		public static SpritePool WallCornerSouthWest = new SpritePool("Board/Levels/", "/WallCornerSouthWest");
+		public static SpritePool WallCornerNorthWest = new SpritePool("Board/Levels/", "/WallCornerNorthWest");
+		public static SpritePool DoorClosedHorizontal = new SpritePool("Board/Levels/", "/DoorClosedHorizontal");
+		public static SpritePool DoorOpenedHorizontal = new SpritePool("Board/Levels/", "/DoorOpenedHorizontal");
+		public static SpritePool DoorClosedVertical   = new SpritePool("Board/Levels/", "/DoorClosedVertical");
+		public static SpritePool DoorOpenedVertical   = new SpritePool("Board/Levels/", "/DoorOpenedVertical");
 
-    public static int IsFeatureWallBound(int c, int len)
-    {
-        return c + (len - 1) / 2;
-    }
+		public static void Load(string id)
+		{
+			Floor.Load(id);
+			Wall.Load(id);
+			WallEdgeNorth.Load(id);
+			WallEdgeEast.Load(id);
+			WallEdgeSouth.Load(id);
+			WallEdgeWest.Load(id);
+			WallCornerNorthEast.Load(id);
+			WallCornerSouthEast.Load(id);
+			WallCornerSouthWest.Load(id);
+			WallCornerNorthWest.Load(id);
+			DoorClosedHorizontal.Load(id);
+			DoorOpenedHorizontal.Load(id);
+			DoorClosedVertical.Load(id);
+			DoorOpenedVertical.Load(id);
+		}
+	}
 
-    public static int GetFeatureUpperBound(int c, int len)
-    {
-        return c + (len + 1) / 2;
-    }
+	public enum TileType
+	{
+		None,
+		Floor,
+		Wall,
+		WallEdgeNorth,
+		WallEdgeEast,
+		WallEdgeSouth,
+		WallEdgeWest,
+		WallCornerNorthEast,
+		WallCornerSouthEast,
+		WallCornerSouthWest,
+		WallCornerNorthWest,
+		DoorHorizontal,
+		DoorVertical,
+	}
 
-    private static IEnumerable<PointI> GetRoomPoints(int x, int y, int xlen, int ylen, Direction d)
-    {
-        Func<int, int, int> a = GetFeatureLowerBound;
-        Func<int, int, int> b = GetFeatureUpperBound;
+	private static Dictionary<TileType, Func<Vector3, GameObject>> instancer = new Dictionary<TileType, Func<Vector3, GameObject>> {
+		{ TileType.None,                position => { return null; } },
+		{ TileType.Floor,               position => { return Instantiate(LevelDesign.Floor.GetRandom(), position, Quaternion.identity);                } },
+		{ TileType.Wall,                position => { return Instantiate(LevelDesign.Wall.GetRandom(), position, Quaternion.identity);                 } },
+		{ TileType.WallEdgeNorth,       position => { return Instantiate(LevelDesign.WallEdgeNorth.GetRandom(), position, Quaternion.identity);        } },
+		{ TileType.WallEdgeEast,        position => { return Instantiate(LevelDesign.WallEdgeEast.GetRandom(), position, Quaternion.identity);         } },
+		{ TileType.WallEdgeSouth,       position => { return Instantiate(LevelDesign.WallEdgeSouth.GetRandom(), position, Quaternion.identity);        } },
+		{ TileType.WallEdgeWest,        position => { return Instantiate(LevelDesign.WallEdgeWest.GetRandom(), position, Quaternion.identity);         } },
+		{ TileType.WallCornerNorthEast, position => { return Instantiate(LevelDesign.WallCornerNorthEast.GetRandom(), position, Quaternion.identity);  } },
+		{ TileType.WallCornerSouthEast, position => { return Instantiate(LevelDesign.WallCornerSouthEast.GetRandom(), position, Quaternion.identity);  } },
+		{ TileType.WallCornerSouthWest, position => { return Instantiate(LevelDesign.WallCornerSouthWest.GetRandom(), position, Quaternion.identity);  } },
+		{ TileType.WallCornerNorthWest, position => { return Instantiate(LevelDesign.WallCornerNorthWest.GetRandom(), position, Quaternion.identity);  } },
+		{ TileType.DoorHorizontal,      position => { return Instantiate(LevelDesign.DoorClosedHorizontal.GetRandom(), position, Quaternion.identity); } },
+		{ TileType.DoorVertical,        position => { return Instantiate(LevelDesign.DoorClosedVertical.GetRandom(), position, Quaternion.identity);   } },
+	};
 
-        switch (d)
-        {
-            case Direction.North:
-                for (var xt = a(x, xlen); xt < b(x, xlen); xt++) for (var yt = y; yt > y - ylen; yt--) yield return new PointI { X = xt, Y = yt };
-                break;
-            case Direction.East:
-                for (var xt = x; xt < x + xlen; xt++) for (var yt = a(y, ylen); yt < b(y, ylen); yt++) yield return new PointI { X = xt, Y = yt };
-                break;
-            case Direction.South:
-                for (var xt = a(x, xlen); xt < b(x, xlen); xt++) for (var yt = y; yt < y + ylen; yt++) yield return new PointI { X = xt, Y = yt };
-                break;
-            case Direction.West:
-                for (var xt = x; xt > x - xlen; xt--) for (var yt = a(y, ylen); yt < b(y, ylen); yt++) yield return new PointI { X = xt, Y = yt };
-                break;
-            default:
-                yield break;
-        }
-    }
+	public static class Board
+	{
+		public enum DigDirection
+		{
+			Any,
+			Up,
+			Right,
+			Down,
+			Left
+		}
 
-    private Tile GetCellType(int x, int y)
-    {
-        try
-        {
-            return dungeonMap[x + availableHorizontalSpace * y];
-        }
-        catch (IndexOutOfRangeException)
-        {
-            return Tile.Wall;
-        }
-    }
+		public static Transform BoardHolder = new GameObject("Board").transform;
+		public static List<Chamber> Chambers = new List<Chamber>();
+		public static Vector2 Padding = new Vector2(3f, 3f);
+		public static Vector2 StartPosition = Vector2.zero;
+		public static Dictionary<string, bool> AssignedPositionsMap = new Dictionary<string, bool>();
+		public static Dictionary<string, Vector2> PathwaysPositionsMap = new Dictionary<string, Vector2>();
+		public static List<GameObject> InstancedPathways = new List<GameObject>();
 
-    void SetCell(int x, int y, Tile celltype)
-    {
-        dungeonMap[x + availableHorizontalSpace * y] = celltype;
-    }
+		public static void SetBoardHolder(GameObject boardHolder)
+		{
+			BoardHolder = Instantiate(boardHolder, new Vector3(0, 0, 0), Quaternion.identity).transform;
+		}
 
-    private bool MakeCorridor(int x, int y, int length, Direction direction)
-    {
-        int len = Random.Range(0, length);
-        const Tile Floor = Tile.Corridor;
+		public class Chamber
+		{
+			public enum Wall
+			{
+				Any,
+				Top,
+				Right,
+				Bottom,
+				Left
+			}
 
-        int xtemp;
-        int ytemp = 0;
+			public class Tile
+			{
+				public TileType Type;
+				public Vector2 Position;
 
-        switch (direction)
-        {
-            case Direction.North:
-                if (x < 0 || x > availableHorizontalSpace) return false;
-                xtemp = x;
+				public Tile(TileType type, Vector2 position)
+				{
+					Type = type;
+					Position = position;
+				}
+			}
 
-                for (ytemp = y; ytemp > (y - len); ytemp--)
-                {
-                    if (ytemp < 0 || ytemp > availableVerticalSpace) return false;
-                    if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-                }
+			protected bool CanSpawnEnemimes { get; set; }
 
-                Corridors++;
-                for (ytemp = y; ytemp > (y - len); ytemp--)
-                {
-                    SetCell(xtemp, ytemp, Floor);
-                }
+			public List<List<Tile>> Scheme { get; private set; }
+			public Vector2 A { get; private set; }
+			public Vector2 B { get; private set; }
+			public Vector2 Center
+			{
+				get { return (A + B) / 2; }
+			}
+			public List<GameObject> InstancedTiles { get; private set; }
+			public List<Chamber> Connections { get; private set; }
 
-                break;
+			public Chamber(Vector2 A, Vector2 B)
+			{
+				this.A = A;
+				this.B = B;
+				CanSpawnEnemimes = true;
+				Scheme = new List<List<Tile>>();
+				Connections = new List<Chamber>();
+			}
 
-            case Direction.East:
-                if (y < 0 || y > availableVerticalSpace) return false;
-                ytemp = y;
+			public Vector2 RandomIndexAtWall(Wall wall)
+			{
+				switch (wall)
+				{
+					case Wall.Top:
+						return new Vector2(Random.Range(1, Scheme[0].Count - 1), 0);
+					case Wall.Right:
+						return new Vector2(Scheme[0].Count - 1, Random.Range(1, Scheme.Count - 1));
+					case Wall.Bottom:
+						return new Vector2(Random.Range(1, Scheme[0].Count - 1), Scheme.Count - 1);
+					case Wall.Left:
+						return new Vector2(0, Random.Range(1, Scheme.Count - 1));
+					default:
+						return Vector2.zero;
+				}
+			}
 
-                for (xtemp = x; xtemp < (x + len); xtemp++)
-                {
-                    if (xtemp < 0 || xtemp > availableHorizontalSpace) return false;
-                    if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-                }
+			public virtual void Generate()
+			{
+				for (var i = A.y; i < B.y; ++i)
+				{
+					var row = new List<Tile>();
+					for (var j = A.x; j < B.x; ++j)
+					{
+						AssignedPositionsMap[new Vector2(j, i).ToString()] =  true;
+						if (i == A.y && j == A.x)
+						{
+							row.Add(new Tile(TileType.WallCornerNorthWest, new Vector2(j, i)));
+						}
+						else if (i == A.y && j == B.x - 1)
+						{
+							row.Add(new Tile(TileType.WallCornerNorthEast, new Vector2(j, i)));
+						}
+						else if (i == B.y - 1 && j == A.x)
+						{
+							row.Add(new Tile(TileType.WallCornerSouthWest, new Vector2(j, i)));
+						}
+						else if (i == B.y - 1 && j == B.x - 1)
+						{
+							row.Add(new Tile(TileType.WallCornerSouthEast, new Vector2(j, i)));
+						}
+						else if (i == A.y)
+						{
+							row.Add(new Tile(TileType.WallEdgeNorth, new Vector2(j, i)));
+						}
+						else if (j == A.x)
+						{
+							row.Add(new Tile(TileType.WallEdgeWest, new Vector2(j, i)));
+						}
+						else if (i == B.y - 1)
+						{
+							row.Add(new Tile(TileType.WallEdgeSouth, new Vector2(j, i)));
+						}
+						else if (j == B.x - 1)
+						{
+							row.Add(new Tile(TileType.WallEdgeEast, new Vector2(j, i)));
+						}
+						else
+						{
+							row.Add(new Tile(TileType.Floor, new Vector2(j, i)));
+						}
+					}
+					Scheme.Add(row);
+				}
+			}
 
-                Corridors++;
-                for (xtemp = x; xtemp < (x + len); xtemp++)
-                {
-                    SetCell(xtemp, ytemp, Floor);
-                }
+			public virtual void Modify()
+			{
 
-                break;
+			}
 
-            case Direction.South:
-                if (x < 0 || x > availableHorizontalSpace) return false;
-                xtemp = x;
+			public virtual void SpawnEnemies()
+			{
 
-                for (ytemp = y; ytemp < (y + len); ytemp++)
-                {
-                    if (ytemp < 0 || ytemp > availableVerticalSpace) return false;
-                    if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-                }
+			}
 
-                Corridors++;
-                for (ytemp = y; ytemp < (y + len); ytemp++)
-                {
-                    SetCell(xtemp, ytemp, Floor);
-                }
+			public void Instantiate()
+			{
+				InstancedTiles = new List<GameObject>();
+				foreach (var row in Scheme)
+				{
+					foreach (var tile in row)
+					{
+						var instanced = instancer[tile.Type].Invoke(tile.Position);
+						if (instanced != null)
+						{
+							instanced.transform.SetParent(BoardHolder);
+							InstancedTiles.Add(instanced);
+						}
+					}
+				}
+			}
 
-                break;
-            case Direction.West:
-                if (ytemp < 0 || ytemp > availableVerticalSpace) return false;
-                ytemp = y;
+			public void Destroy()
+			{
+				for (var i = 0; i < InstancedTiles.Count; ++i)
+				{
+					UnityEngine.Object.Destroy(InstancedTiles[i]);
+				}
+				InstancedTiles.Clear();
+			}
+		}
 
-                for (xtemp = x; xtemp > (x - len); xtemp--)
-                {
-                    if (xtemp < 0 || xtemp > availableHorizontalSpace) return false;
-                    if (GetCellType(xtemp, ytemp) != Tile.Unused) return false;
-                }
+		public class Start : Chamber
+		{
+			public Start(Vector2 A, Vector2 B) : base(A, B)
+			{
+				CanSpawnEnemimes = false;
+			}
 
-                Corridors++;
-                for (xtemp = x; xtemp > (x - len); xtemp--)
-                {
-                    SetCell(xtemp, ytemp, Floor);
-                }
+			public override void Generate()
+			{
 
-                break;
-        }
+			}
 
-        return true;
-    }
+			public override void Modify()
+			{
 
-    private IEnumerable<Tuple> GetSurroundingPoints(PointI v)
-    {
-        var points = new[]
-                         {
-                                 new Tuple(new PointI { X = v.X, Y = v.Y + 1 }, Direction.North),
-                                 new Tuple(new PointI { X = v.X - 1, Y = v.Y }, Direction.East),
-                                 new Tuple(new PointI { X = v.X , Y = v.Y-1 }, Direction.South),
-                                 new Tuple(new PointI { X = v.X +1, Y = v.Y  }, Direction.West),
+			}
+		}
 
-                             };
-        return points.Where(p => InBounds(p.Item1));
-    }
+		public class Shop : Chamber
+		{
+			public Shop(Vector2 A, Vector2 B) : base(A, B)
+			{
+				CanSpawnEnemimes = false;
+			}
 
-    private IEnumerable<TupleWithTile> GetSurroundings(PointI v)
-    {
-        return
-            GetSurroundingPoints(v)
-                .Select(r => new TupleWithTile(r.Item1, r.Item2, GetCellType(r.Item1.X, r.Item1.Y)));
-    }
+			public override void Generate()
+			{
 
-    public bool InBounds(int x, int y)
-    {
-        return x > 0 && x < Rows && y > 0 && y < Cols;
-    }
+			}
 
-    public bool InBounds(PointI v)
-    {
-        return this.InBounds(v.X, v.Y);
-    }
+			public override void Modify()
+			{
 
-    private bool MakeRoom(int x, int y, int xlength, int ylength, Direction direction)
-    {
-        int xlen = Random.Range(4, xlength);
-        int ylen = Random.Range(4, ylength);
+			}
+		}
 
-        const Tile Floor = Tile.Floor;
-        const Tile Wall = Tile.Wall;
-        
-        var points = GetRoomPoints(x, y, xlen, ylen, direction).ToArray();
+		public class Treasury : Chamber
+		{
+			public Treasury(Vector2 A, Vector2 B) : base(A, B)
+			{
+				CanSpawnEnemimes = false;
+			}
 
-        if (
-            points.Any(
-                s =>
-                s.Y < 0 || s.Y > availableVerticalSpace || s.X < 0 || s.X > availableHorizontalSpace || GetCellType(s.X, s.Y) != Tile.Unused)) return false;
+			public override void Generate()
+			{
 
-        foreach (var p in points)
-        {
-            SetCell(p.X, p.Y, IsWall(x, y, xlen, ylen, p.X, p.Y, direction) ? Wall : Floor);
-        }
+			}
 
-        return true;
-    }
+			public override void Modify()
+			{
 
-    private Tile[] GetDungeon()
-    {
-        return dungeonMap;
-    }
+			}
+		}
 
-    public GameObject GetCellTile(int x, int y)
-    {
-        switch (GetCellType(x, y))
-        {
-            case Tile.Unused:
-                return Walls.GetRandomSprite();
-            case Tile.Wall:
-                return Walls.GetRandomSprite();
-            case Tile.Floor:
-                return Floor.GetRandomSprite();
-            case Tile.Corridor:
-                return Floor.GetRandomSprite();
-            default:
-                return Walls.GetRandomSprite();
-        }
-    }
+		public class BinarySpacePartitionTree
+		{
+			public class TreeNode : IEnumerable<TreeNode>, IDisposable
+			{
+				public enum SplitDirection
+				{
+					Any,
+					Vertical,
+					Horizontal
+				}
 
-    public void ShowDungeon()
-    {
-        boardHolder = Instantiate(board, new Vector3(0, 0, 0), Quaternion.identity).transform;
+				private bool isDisposed = false;
+				SafeHandle handle = new SafeFileHandle(IntPtr.Zero, true);
 
-        for (int y = 0; y < availableVerticalSpace; y++)
-        {
-            for (int x = 0; x < availableHorizontalSpace; x++)
-            {
-                GameObject instance = Instantiate(GetCellTile(x, y), new Vector3(x, y, 0.0f), Quaternion.identity) as GameObject;
-                instance.transform.SetParent(boardHolder);
-            }
-        }
+				public Vector2 A { get; private set; }
+				public Vector2 B { get; private set; }
+				public TreeNode Parent { get; private set; }
+				public List<TreeNode> Children { get; private set; }
 
-        AstarPath.active.Scan();
-    }
+				public int Width
+				{
+					get { return Math.Abs((int)(B.x - A.x)); }
+				}
 
-    private Direction RandomDirection()
-    {
-        int dir = Random.Range(0, 4);
-        switch (dir)
-        {
-            case 0:
-                return Direction.North;
-            case 1:
-                return Direction.East;
-            case 2:
-                return Direction.South;
-            case 3:
-                return Direction.West;
-            default:
-                throw new InvalidOperationException();
-        }
-    }
+				public int Height
+				{
+					get { return Math.Abs((int)(B.y - A.y)); }
+				}
 
-    Vector2Int DirectionToXY(Direction direction)
-    {
-        switch (direction)
-        {
-            case Direction.North:
-                return new Vector2Int(0, -1);
-            case Direction.East:
-                return new Vector2Int(1, 0);
-            case Direction.South:
-                return new Vector2Int(0, 1);
-            case Direction.West:
-                return new Vector2Int(-1, 0);
-            default:
-                throw new InvalidOperationException();
-        }
-    }
+				public int Area
+				{
+					get { return Width * Height; }
+				}
 
-    public bool CreateDungeon(int inx, int iny, int inobj)
-    {
-        objects = inobj < 1 ? 10 : inobj;
+				public TreeNode(TreeNode parent, Vector2 A, Vector2 B)
+				{
+					Parent = parent;
+					Children = new List<TreeNode>();
+					this.A = A;
+					this.B = B;
+				}
 
-        if (inx < 3) availableHorizontalSpace = 3;
-        else if (inx > Cols) availableHorizontalSpace = Cols;
-        else availableHorizontalSpace = inx;
+				public List<TreeNode> Split(SplitDirection direction, float ratio)
+				{
+					Func<float, int> division = v => (int)Math.Floor((v * ratio));
+					switch (direction)
+					{
+						case SplitDirection.Vertical:
+							Children = new List<TreeNode> {
+								new TreeNode(this, A, B - new Vector2(Width - division(Width), 0f)),
+								new TreeNode(this, A + new Vector2(division(Width), 0f), B)
+							};
+							break;
+						case SplitDirection.Horizontal:
+							Children = new List<TreeNode> {
+								new TreeNode(this, A, B - new Vector2(0f, Height - division(Height))),
+								new TreeNode(this, A + new Vector2(0f, division(Height)), B)
+							};
+							break;
+					}
+					return Children;
+				}
 
-        if (iny < 3) availableVerticalSpace = 3;
-        else if (iny > Rows) availableVerticalSpace = Rows;
-        else availableVerticalSpace = iny;
+				public bool IsLast()
+				{
+					return Children.Count == 0;
+				}
 
-        dungeonMap = new Tile[availableHorizontalSpace * availableVerticalSpace];
+				public void Clear()
+				{
+					for (var i = 0; i < Children.Count; ++i)
+					{
+						Children[i].Clear();
+						Children[i].Dispose();
+					}
+				}
 
-        Initialize();
+				public IEnumerable<TreeNode> GetFurthestDescendants()
+				{
+					if (IsLast())
+					{
+						yield return this;
+					}
+					else
+					{
+						foreach (var child in Children)
+						{
+							foreach (var node in child.GetFurthestDescendants())
+							{
+								yield return node;
+							}
+						}
+					}
+				}
 
-        int roomSizeX = Random.Range(4, roomSize.x);
-        int roomSizeY = Random.Range(4, roomSize.y);
-        Direction randomDirection = RandomDirection();
-        MakeRoom(availableHorizontalSpace / 2, availableVerticalSpace / 2, roomSizeX, roomSizeY, randomDirection); // getrand saken f????r att slumpa fram riktning p?? rummet
-        Vector2Int directionModifier = DirectionToXY(randomDirection);
-        StartPosition = new Vector2(availableHorizontalSpace / 2 + directionModifier.x, availableVerticalSpace / 2 + directionModifier.y);
+				public IEnumerator<TreeNode> GetEnumerator()
+				{
+					return Children.GetEnumerator();
+				}
 
-        int currentFeatures = 1;
+				IEnumerator IEnumerable.GetEnumerator()
+				{
+					return GetEnumerator();
+				}
 
-        for (int countingTries = 0; countingTries < 1000; countingTries++)
-        {
-            if (currentFeatures == objects)
-            {
-                break;
-            }
+				public void Dispose()
+				{
+					Dispose(true);
+					GC.SuppressFinalize(this);
+				}
 
-            int newx = 0;
-            int xmod = 0;
-            int newy = 0;
-            int ymod = 0;
-            Direction? validTile = null;
+				protected virtual void Dispose(bool disposing)
+				{
+					if (isDisposed)
+					{
+						return;
+					}
 
-            for (int testing = 0; testing < 1000; testing++)
-            {
-                newx = Random.Range(outerWallsThickness, availableHorizontalSpace - outerWallsThickness);
-                newy = Random.Range(outerWallsThickness, availableVerticalSpace - outerWallsThickness);
+					if (disposing) {
+						handle.Dispose();
+					}
 
-                if (GetCellType(newx, newy) == Tile.Wall || GetCellType(newx, newy) == Tile.Corridor)
-                {
-                    var surroundings = GetSurroundings(new PointI() { X = newx, Y = newy });
+					isDisposed = true;
+				}
+			}
 
-                    var canReach =
-                        surroundings.FirstOrDefault(s => s.Item3 == Tile.Corridor || s.Item3 == Tile.Floor);
-                    if (canReach == null)
-                    {
-                        continue;
+			private static int finalPartitionsCount = 0;
+
+			public TreeNode Root { get; private set; }
+			public int AreaThreshold { get; set; }
+			public int QuantityThreshold { get; set; }
+
+			private List<TreeNode> chamberPartitions;
+			public List<TreeNode> ChamberPartitions
+			{
+				get
+				{
+					if (chamberPartitions == null)
+					{
+						chamberPartitions = new List<TreeNode>();
+						foreach (var node in Root.GetFurthestDescendants())
+						{
+							chamberPartitions.Add(node);
+						}
+					}
+					return chamberPartitions;
+				}
+			}
+
+			public BinarySpacePartitionTree(int width, int height, int areaThreshold, int quantityThreshold)
+			{
+
+				Root = new TreeNode(null, Vector2.zero, new Vector2(width, height));
+				AreaThreshold = areaThreshold;
+				QuantityThreshold = quantityThreshold;
+			}
+
+			public void MakePartition()
+			{
+				Split(Root, SplitDirection.Vertical);
+			}
+
+			private void Split(TreeNode node, SplitDirection direction)
+			{
+				var newDirection = direction.Toggle();
+				foreach (var child in node.Split(direction, Random.Range(0.45f, 0.55f)))
+				{
+					if (child.Area >= 1.8f * AreaThreshold)
+					{
+                        if (!(finalPartitionsCount >= QuantityThreshold && Random.Range(0f, 1f) <= 0.00001f))
+                        {
+                            Split(child, newDirection);
+                        }
                     }
-                    validTile = canReach.Item2;
-                    directionModifier = DirectionToXY(canReach.Item2);
-                    xmod = directionModifier.x;
-                    ymod = directionModifier.y;
+					else
+					{
+						++finalPartitionsCount;
+					}
+				}
+			}
 
-                    if (GetCellType(newx, newy + 1) == Tile.Corridor)
-                    {
-                        validTile = null;
-                    }
+			public void Clear()
+			{
+				Root.Clear();
+				chamberPartitions = null;
+				finalPartitionsCount = 0;
+			}
+		}
 
-                    else if (GetCellType(newx - 1, newy) == Tile.Corridor)
-                        validTile = null;
-                    else if (GetCellType(newx, newy - 1) == Tile.Corridor)
-                        validTile = null;
-                    else if (GetCellType(newx + 1, newy) == Tile.Corridor)
-                        validTile = null;
+		public static BinarySpacePartitionTree Partitioner = new BinarySpacePartitionTree(128, 128, 256, 30);
 
+		public static void LoadLevel(string id)
+		{
+			LevelDesign.Load(id);
+		}
 
-                    if (validTile.HasValue) break;
-                }
-            }
+		public static void Clear()
+		{
+			foreach (var chamber in Chambers)
+			{
+				chamber.Destroy();
+			}
+			AssignedPositionsMap.Clear();
+			PathwaysPositionsMap.Clear();
+			for (var i = 0; i < InstancedPathways.Count; ++i)
+			{
+				Destroy(InstancedPathways[i]);
+			}
+			InstancedPathways.Clear();
+		}
 
-            if (validTile.HasValue)
-            {
-                int feature = Random.Range(0, 100);
-                if (feature <= ChanceRoom)
-                {
-                    roomSizeX = Random.Range(4, roomSize.x);
-                    roomSizeY = Random.Range(4, roomSize.y);
-                    if (MakeRoom(newx + xmod, newy + ymod, roomSizeX, roomSizeY, validTile.Value))
-                    {
-                        currentFeatures++;
+		public static void Generate()
+		{
+			Clear();
+			Partitioner.Clear();
+			Partitioner.MakePartition();
+			Debug.Log(AssignedPositionsMap);
+			foreach (var partition in Partitioner.ChamberPartitions)
+			{
+				var chamber = new Chamber(partition.A + Padding, partition.B - Padding);
+				chamber.Generate();
+				chamber.Modify();
+				Chambers.Add(chamber);
+			}
+			for (var i = 0; i < Chambers.Count - 1; ++i)
+			{
+				Connect(Chambers[i], Chambers[i + 1]);
+			}
+			foreach(var chamber in Chambers)
+			{
+				chamber.Instantiate();
+				chamber.SpawnEnemies();
+				StartPosition = chamber.Center;
+			}
+			foreach (var point in PathwaysPositionsMap)
+			{
+				var surroundings = new List<Vector2>
+				{
+					point.Value + new Vector2(0, 1),
+					point.Value + new Vector2(1, 1),
+					point.Value + new Vector2(1, 0),
+					point.Value + new Vector2(1, -1),
+					point.Value + new Vector2(0, -1),
+					point.Value + new Vector2(-1, -1),
+					point.Value + new Vector2(-1, 0),
+					point.Value + new Vector2(-1, 1),
+				};
 
-                        SetCell(newx, newy, Tile.Corridor);
-                        SetCell(newx + xmod, newy + ymod, Tile.Floor);
-                    }
-                }
-                else if (feature >= ChanceRoom)
-                {
-                    if (MakeCorridor(newx + xmod, newy + ymod, 6, validTile.Value))
-                    {
-                        currentFeatures++;
+				foreach (var area in surroundings)
+				{
+					var value = false;
+					var pos = Vector2.zero;
+					if (
+						!AssignedPositionsMap.TryGetValue(area.ToString(), out value) && 
+						!PathwaysPositionsMap.TryGetValue(area.ToString(), out pos)
+					)
+					{
+						var wall = instancer[TileType.Wall].Invoke(area);
+						if (wall != null)
+						{
+							wall.transform.SetParent(BoardHolder);
+							InstancedPathways.Add(wall);
+						}
+					}
+				}
 
-                        SetCell(newx, newy, Tile.Corridor);
-                    }
-                }
-            }
-        }
+				var floor = instancer[TileType.Floor].Invoke(point.Value);
+				if (floor != null)
+				{
+					floor.transform.SetParent(BoardHolder);
+					InstancedPathways.Add(floor);
+				}
+			}
+			AstarPath.active.Scan();
+		}
 
-        return true;
-    }
+		public static void Connect(Chamber first, Chamber second)
+		{
+			if (first.Connections.Contains(second))
+			{
+				return;
+			}
+			ChamberWall doorPlacement = ChamberWall.Left;
+			var firstDoorIndex = first.RandomIndexAtWall(doorPlacement);
+			var secondDoorIndex = second.RandomIndexAtWall(doorPlacement.Inverse());
+			var firstDoorPos = first.Scheme[(int)firstDoorIndex.y][(int)firstDoorIndex.x].Position;
+			var secondDoorPos = second.Scheme[(int)secondDoorIndex.y][(int)secondDoorIndex.x].Position;
+			first.Scheme[(int)firstDoorIndex.y][(int)firstDoorIndex.x] = new Chamber.Tile(TileType.Floor, firstDoorPos);
+			second.Scheme[(int)secondDoorIndex.y][(int)secondDoorIndex.x] = new Chamber.Tile(TileType.Floor, secondDoorPos);
 
-    void Initialize()
-    {
-        for (int y = 0; y < availableVerticalSpace; y++)
-        {
-            for (int x = 0; x < availableHorizontalSpace; x++)
-            {
-                if (y < outerWallsThickness || y > availableVerticalSpace - outerWallsThickness || x < outerWallsThickness || x > availableHorizontalSpace - outerWallsThickness)
-                {
-                    SetCell(x, y, Tile.Wall);
-                }
-                else
-                {
-                    SetCell(x, y, Tile.Unused);
-                }
-            }
-        }
-    }
+			var direction = ChamberWallToDigDirection(doorPlacement);
+			var directionDest = ChamberWallToDigDirection(doorPlacement.Inverse());
+			var path = new Dictionary<string, Vector2>();
 
-    public void SetupScene()
-    {
-        Initialize();
-        CreateDungeon(Cols, Rows, Random.Range(WallsAmount.Min, WallsAmount.Max));
-        ShowDungeon();
-    }
+			var currentPos = firstDoorPos;
+			for (var i = 0; i < Padding.x; ++i)
+			{
+				currentPos = Dig(currentPos, direction);
+				path.Add(currentPos.ToString(), currentPos);
+			}
+			var destinationPos = secondDoorPos;
+			for (var i = 0; i < Padding.x; ++i)
+			{
+				destinationPos = Dig(destinationPos, directionDest);
+				path.Add(destinationPos.ToString(), destinationPos);
+			}
+			MakePathway(currentPos, destinationPos, path, direction);
+			foreach (var point in path)
+			{
+				PathwaysPositionsMap[point.Key] = point.Value;
+			}
+			first.Connections.Add(second);
+			second.Connections.Add(first);
+		}
 
-    public class PointI
-    {
-        public int X { get; internal set; }
-        public int Y { get; internal set; }
-    }
+		public static DigDirection ChamberWallToDigDirection(ChamberWall wall)
+		{
+			switch (wall)
+			{
+				case ChamberWall.Top:
+					return DigDirection.Up;
+				case ChamberWall.Right:
+					return DigDirection.Right;
+				case ChamberWall.Bottom:
+					return DigDirection.Down;
+				case ChamberWall.Left:
+					return DigDirection.Left;
+				default:
+					return DigDirection.Any;
+			}
+		}
 
-    private class Tuple
-    {
-        public PointI Item1;
-        public Direction Item2;
+		public static void MakePathway(Vector2 currentPos, Vector2 destinationPos, Dictionary<string, Vector2> path, DigDirection direction)
+		{
+			var newDirection = direction;
+			if (direction == DigDirection.Left || direction == DigDirection.Right)
+			{
+				if (currentPos.y < destinationPos.y)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Up) ?
+						DigDirection.Up :
+						direction;
+				}
+				else if (currentPos.y > destinationPos.y)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Down) ?
+						DigDirection.Down :
+						direction;
+				}
+			}
+			else
+			{
+				if (currentPos.x < destinationPos.x)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Right) ?
+						DigDirection.Right :
+						direction;
+				}
 
-        public Tuple(PointI pointI, Direction direction)
-        {
-            Item1 = pointI;
-            Item2 = direction;
-        }
-    }
+				if (currentPos.x > destinationPos.x)
+				{
+					newDirection =
+						CheckDirectionAccessibility(currentPos, DigDirection.Left) ?
+						DigDirection.Left :
+						direction;
+				}
+			}
+			
+			if (CheckDirectionAccessibility(currentPos, newDirection))
+			{
+				var newPos = Dig(currentPos, newDirection);
+				path[newPos.ToString()] = newPos;
+				if (!(newPos.x == destinationPos.x && newPos.y == destinationPos.y))
+				{
+					MakePathway(newPos, destinationPos, path, newDirection);
+				}
+			}
+		}
 
-    private class TupleWithTile
-    {
-        public PointI Item1;
-        public Direction Item2;
-        public Tile Item3;
+		public static bool CheckDirectionAccessibility(Vector2 pos, DigDirection direction)
+		{
+			Vector2 shift = Vector2.zero;
+			switch (direction)
+			{
+				case DigDirection.Left:
+					shift.x = -1;
+					break;
+				case DigDirection.Right:
+					shift.x = 1;
+					break;
+				case DigDirection.Up:
+					shift.y = 1;
+					break;
+				case DigDirection.Down:
+					shift.y = -1;
+					break;
+			}
+			var value = true;
+			for (var i = 1; i <= Padding.x + 1; ++i)
+			{
+				if (AssignedPositionsMap.TryGetValue((pos + i * shift).ToString(), out value))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 
-        public TupleWithTile(PointI pointI, Direction direction, Tile tile)
-        {
-            Item1 = pointI;
-            Item2 = direction;
-            Item3 = tile;
-        }
-    }
+		public static Vector2 Dig(Vector2 currentPos, DigDirection direction)
+		{
+			switch (direction)
+			{
+				case DigDirection.Up:
+					currentPos.y += 1;
+					break;
+				case DigDirection.Right:
+					currentPos.x += 1;
+					break;
+				case DigDirection.Down:
+					currentPos.y -= 1;
+					break;
+				case DigDirection.Left:
+					currentPos.x -= 1;
+					break;
+			}
+			return currentPos;
+		} 
+	}
 }
