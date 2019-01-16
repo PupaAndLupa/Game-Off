@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
     public GameObject PlayerPrefab { get; set; }
     public GameObject EnemyPrefab { get; set; } // TEMP
     public GameStates CurrentState { get; set; }
-
+    private GameObject fadeScreen { get; set; }
     public Actor Player { get; set; }
 
     void Start ()
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        // Fade out check
+        
     }
 
     public void InitGame()
@@ -122,6 +122,7 @@ public class GameManager : MonoBehaviour {
                 Player.Die();
                 break;
         }
+        //CurrentState = GameStates.End;
         SceneManager.LoadScene(1);
     }
 
