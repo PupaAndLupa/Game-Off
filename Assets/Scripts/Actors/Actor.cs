@@ -22,6 +22,8 @@ public class Actor : MonoBehaviour
     public bool IsDead { get; set; }
     public float Rotation { get; set; }
 
+    protected bool totallyDead = false;
+
     protected virtual void Start()
     {
         WeaponPrefab.GetComponent<Weapon>().SetModifier(Stats.DamageModifier);
@@ -31,8 +33,7 @@ public class Actor : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (IsDead)
-            return;
+
     }
 
     protected virtual void FixedUpdate()
@@ -95,8 +96,17 @@ public class Actor : MonoBehaviour
             Stats.CurrentHealth -= projectile.Stats.Damage;
             if (Stats.CurrentHealth <= 0)
             {
-                //IsDead = true;
+                IsDead = true;
             }
         }
+    }
+
+    public virtual void Die()
+    {
+        totallyDead = true;
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<Animator>().enabled = false;
+
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
     }
 }

@@ -27,6 +27,9 @@ public class Enemy : Actor
     {
         base.Update();
 
+        if (totallyDead)
+            return;
+
         if (VectorTo(player.transform.position).magnitude <= Stats.DetectionRadius)
         {
             aIDestinationSetter.target = player.transform;
@@ -50,4 +53,13 @@ public class Enemy : Actor
             aIDestinationSetter.target = null;
         }
 	}
+
+    public override void Die()
+    {
+        base.Die();
+
+        GetComponent<Seeker>().enabled = false;
+        GetComponent<AIPath>().enabled = false;
+        GetComponent<AIDestinationSetter>().enabled = false;
+    }
 }
