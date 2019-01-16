@@ -63,6 +63,8 @@ public class ActorRegistry : MonoBehaviour
     {
         long score = 100;
         Player.Stats.Experience += score;
-        FindObjectOfType<UIManager>().AddScore(score);
+        var uiManager = FindObjectOfType<UIManager>();
+        uiManager.AddScore(score);
+        uiManager.AddCoins(1);
     }
 }
