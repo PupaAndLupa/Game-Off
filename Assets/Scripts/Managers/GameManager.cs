@@ -114,19 +114,9 @@ public class GameManager : MonoBehaviour {
 
     public void InitGame()
     {
+		BoardManager.Board.SetBoardHolder(BoardManager.BoardHolder);
         BoardManager.Board.LoadLevel("First");
-        while (true)
-        {
-          try
-          {
-            BoardManager.Board.Generate();
-            break;
-          }
-          catch (System.Exception e)
-          {
-            continue;
-          }
-        }
+        BoardManager.Board.Generate();
         Player = Instantiate(PlayerPrefab, BoardManager.Board.StartPosition, Quaternion.identity).GetComponent<Actor>();
         FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
         FindObjectOfType<SpawnManager>().Init();

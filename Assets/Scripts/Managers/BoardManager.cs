@@ -97,6 +97,8 @@ static class IEnumerableExtensions
 
 public class BoardManager : MonoBehaviour
 {
+	public GameObject BoardHolder;
+
     public Vector2 RandomFreePosition()
     {
         var chamber = Board.Chambers[Random.Range(0, Board.Chambers.Count)];
@@ -224,6 +226,11 @@ public class BoardManager : MonoBehaviour
 		public static Vector2 StartPosition = Vector2.zero;
 		public static Dictionary<string, bool> AssignedPositionsMap = new Dictionary<string, bool>();
 		public static Dictionary<string, Vector2> PathwaysPositionsMap = new Dictionary<string, Vector2>();
+
+		public static void SetBoardHolder(GameObject boardHolder)
+		{
+			BoardHolder = Instantiate(boardHolder, new Vector3(0, 0, 0), Quaternion.identity).transform;
+		}
 
 		public class Chamber
 		{
@@ -615,7 +622,7 @@ public class BoardManager : MonoBehaviour
 			}
 		}
 
-		public static BinarySpacePartitionTree Partitioner = new BinarySpacePartitionTree(64, 64, 128, 10);
+		public static BinarySpacePartitionTree Partitioner = new BinarySpacePartitionTree(128, 128, 256, 30);
 
 		public static void LoadLevel(string id)
 		{
@@ -690,6 +697,8 @@ public class BoardManager : MonoBehaviour
 					floor.transform.SetParent(BoardHolder);
 				}
 			}
+
+			AstarPath.active.Scan();
 		}
 
 		public static void Connect(Chamber first, Chamber second)

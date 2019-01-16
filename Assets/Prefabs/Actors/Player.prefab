@@ -42,7 +42,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -185,7 +185,13 @@ MonoBehaviour:
   Stats:
     IsInvisible: 0
     DetectionRadius: 5
+    Name: You
+    maxHealth: 100
     experience: 0
+    movespeed: 600
+    damageModifier: 1
+    damageReduction: 1
+    cooldownReduction: 1
   Weapons:
   - {fileID: 8378482614397995311}
   - {fileID: 2130278606443426254}
@@ -392,6 +398,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7168008432280513414, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.223
+      objectReference: {fileID: 0}
+    - target: {fileID: 7168008432280513414, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.037
+      objectReference: {fileID: 0}
     - target: {fileID: 3366912020006856953, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_Enabled
@@ -411,16 +427,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7168008432280513414, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.223
-      objectReference: {fileID: 0}
-    - target: {fileID: 7168008432280513414, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.037
       objectReference: {fileID: 0}
     - target: {fileID: 7840417232051560603, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
