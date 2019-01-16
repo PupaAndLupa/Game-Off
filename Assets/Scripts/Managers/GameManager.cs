@@ -85,6 +85,11 @@ public class GameManager : MonoBehaviour {
                         {
                             Player.Attack();
                         }
+
+                        if (Input.GetKeyDown(KeyCode.Q))
+                        {
+                            (Player as Player).ChangeWeapon();
+                        }
                     }
                     break;
                 case GameStates.Pause:
