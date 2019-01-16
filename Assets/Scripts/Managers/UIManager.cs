@@ -5,10 +5,13 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+    public Text ScoreText;
     public Text HitPoints;
     public Text LevelText;
     public Slider HealthSlider;
     public Slider ExpSlider;
+
+    private long score = 0;
 
     private Actor player;
     private Weapon playerWeapon;
@@ -44,6 +47,12 @@ public class UIManager : MonoBehaviour {
 
         ExpSlider.value = 0;
         ExpSlider.maxValue = ExpPerLevel(0);
+    }
+
+    public void AddScore(long score)
+    {
+        this.score += score;
+        ScoreText.text = string.Format("{0:D7}", this.score);
     }
 
     private void OnDestroy()

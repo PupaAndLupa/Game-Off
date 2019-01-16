@@ -1192,7 +1192,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0000583
+  m_Text: 0000000
 --- !u!222 &616521227
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3036,6 +3036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae3ba7b6cc90884448aa7c91e6042692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ScoreText: {fileID: 616521226}
   HitPoints: {fileID: 1674529376}
   LevelText: {fileID: 1853940497}
   HealthSlider: {fileID: 236432178}

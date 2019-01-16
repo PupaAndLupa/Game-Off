@@ -36,7 +36,10 @@ public class ActorRegistry : MonoBehaviour
             {
                 if (actor.IsDead)
                 {
-                    Player.Stats.Experience += actor.Stats.Experience + Mathf.RoundToInt(Random.Range(-actor.Stats.Experience * 0.1f, actor.Stats.Experience * 0.1f));
+                    long score = actor.Stats.Experience + Mathf.RoundToInt(Random.Range(-actor.Stats.Experience * 0.1f, actor.Stats.Experience * 0.1f));
+                    Player.Stats.Experience += score;
+                    FindObjectOfType<UIManager>().AddScore(score);
+
                     actor.Die();
                     Actors.Remove(actor);
                 }
