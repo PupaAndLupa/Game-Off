@@ -81,9 +81,14 @@ public class GameManager : MonoBehaviour {
 
                         Player.Move(direction);
 
-                        if (Input.GetMouseButtonDown(0))
+                        if (Input.GetMouseButton(0))
                         {
                             Player.Attack();
+                        }
+
+                        if (Input.GetKeyDown(KeyCode.Q))
+                        {
+                            (Player as Player).ChangeWeapon();
                         }
                     }
                     break;
@@ -101,7 +106,10 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        
+        /*if (CurrentState == GameStates.End)
+        {
+            FindObjectOfType<Fading>().LoadScene(1);
+        }*/
     }
 
     public void InitGame()

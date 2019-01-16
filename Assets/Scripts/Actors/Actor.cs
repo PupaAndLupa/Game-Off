@@ -25,8 +25,8 @@ public class Actor : MonoBehaviour
 
     public bool IsTotallyDead { get; set; }
 
-    private bool damaged { get; set; }
-    private float timer { get; set; }
+    protected bool damaged { get; set; }
+    protected float timer { get; set; }
 
     protected virtual void Start()
     {
