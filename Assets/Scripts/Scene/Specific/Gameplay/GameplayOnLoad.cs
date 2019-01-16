@@ -13,7 +13,7 @@ public class GameplayOnLoad : MonoBehaviour {
     void Start () {
         GameManager gm = FindObjectOfType<GameManager>();
         gm.SetPlayer(PlayerPrefab);
-        gm.SetEnemy(EnemyPrefab);   // TEMP
+        gm.SetEnemy(EnemyPrefab);
         gm.SetPauseMenu(PauseMenuPrefab);
         gm.InitGame();
 

@@ -69,6 +69,17 @@ public class BoardManager : MonoBehaviour
         private set;
     }
 
+    public Vector2 RandomFreePosition()
+    {
+        while (true)
+        {
+            int x = Random.Range(0, Cols);
+            int y = Random.Range(0, Rows);
+            if (dungeonMap[x + availableHorizontalSpace * y] == Tile.Floor)
+                return new Vector2(x, y);
+        }
+    }
+
     private enum Direction { North, East, South, West };
     private enum Tile { Unused, Wall, Floor, Corridor };
 
