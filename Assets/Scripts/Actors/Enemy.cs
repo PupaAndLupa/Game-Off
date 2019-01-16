@@ -7,6 +7,7 @@ public class Enemy : Actor
 {
     private AIDestinationSetter aIDestinationSetter;
     private AIPath aIPath;
+    private Actor playerActor;
     private GameObject player;
     private Weapon weapon;
 
@@ -14,7 +15,8 @@ public class Enemy : Actor
     {
         base.Start();
 
-        player = FindObjectOfType<GameManager>().Player.gameObject;  // TEMP
+        playerActor = FindObjectOfType<GameManager>().Player;
+        player = playerActor.gameObject;  // TEMP
         aIDestinationSetter = gameObject.GetComponent<AIDestinationSetter>();
 
         aIPath = gameObject.GetComponent<AIPath>();
@@ -32,21 +34,24 @@ public class Enemy : Actor
 
         if (VectorTo(player.transform.position).magnitude <= Stats.DetectionRadius)
         {
-            aIDestinationSetter.target = player.transform;
-
-            if (CastRay(player))
+            if (!playerActor.Stats.IsInvisible)
             {
-                LookTowards(player.transform.position);
-                if (VectorTo(player.transform.position).magnitude <= weapon.Stats.Range + 1)
+                aIDestinationSetter.target = player.transform;
+
+                if (CastRay(player))
                 {
-                    weapon.Attack();
-                }
+                    LookTowards(player.transform.position);
+                    if (VectorTo(player.transform.position).magnitude <= weapon.Stats.Range + 1)
+                    {
+                        weapon.Attack();
+                    }
 
-                aIPath.endReachedDistance = weapon.Stats.Range * 0.75f;
-            }
-            else
-            {
-                aIPath.endReachedDistance = Mathf.Max(aIPath.endReachedDistance - 0.1f, 0);
+                    aIPath.endReachedDistance = weapon.Stats.Range * 0.75f;
+                }
+                else
+                {
+                    aIPath.endReachedDistance = Mathf.Max(aIPath.endReachedDistance - 0.1f, 0);
+                }
             }
         } else
         {

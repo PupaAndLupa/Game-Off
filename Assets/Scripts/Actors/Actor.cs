@@ -44,6 +44,7 @@ public class Actor : MonoBehaviour
             GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
             damaged = false;
         }
+        Stats.CurrentHealth = Mathf.Clamp(Stats.CurrentHealth, 0, Stats.MaxHealth);
     }
 
     protected virtual void FixedUpdate()
