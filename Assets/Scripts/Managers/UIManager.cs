@@ -63,6 +63,11 @@ public class UIManager : MonoBehaviour {
         CoinsText.text = "Coins: " + coins;
     }
 
+	public Text GetScore()
+	{
+		return ScoreText;
+	}
+
     private void OnDestroy()
     {
         playerStats.OnHitPointsChanged -= ActorStats_OnHitPointsChanged;

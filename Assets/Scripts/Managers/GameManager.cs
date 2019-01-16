@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -105,12 +106,14 @@ public class GameManager : MonoBehaviour {
     }
 
     public float timer { get; set; }
+	public Text Score { get; set; }
 
     void Update()
     {
         if (CurrentState == GameStates.End && Time.time - timer > 2f)
         {
-            SceneManager.LoadScene(1);
+			Score = FindObjectOfType<UIManager>().GetScore();
+            SceneManager.LoadScene(3);
         }
     }
 
