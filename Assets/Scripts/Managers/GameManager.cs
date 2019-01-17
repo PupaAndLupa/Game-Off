@@ -158,6 +158,7 @@ public class GameManager : MonoBehaviour {
             DestroyImmediate(Player);
         }
         Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
+        FindObjectOfType<ActorRegistry>().level = 0;
         ClearActors();
         FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
         FindObjectOfType<SpawnManager>().Init();
@@ -175,12 +176,13 @@ public class GameManager : MonoBehaviour {
         }
         CurrentState = GameStates.End;
         timer = Time.time;
-		StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut());
     }
 
 	public void NextLevel()
 	{
 		CurrentState = GameStates.ChangingLevel;
+        FindObjectOfType<ActorRegistry>().level += 3;
 		StartCoroutine(FadeOut());
 	}
 

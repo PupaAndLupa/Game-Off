@@ -61,20 +61,23 @@ public class Actor : MonoBehaviour
                 break;
 
             case ActorStats.UpgradableStats.DMG_MOD:
-                Stats.DamageModifier += value;
+                Stats.DamageModifier += value + 0.000001f;
                 break;
 
             case ActorStats.UpgradableStats.DMG_RED:
-                Stats.DamageReduction += value;
+                Stats.DamageReduction += value + 0.000001f;
                 break;
 
             case ActorStats.UpgradableStats.CD_RED:
-                Stats.CooldownReduction += value;
+                Stats.CooldownReduction += value + 0.000001f;
                 break;
 
             default:
                 break;
         }
+        Stats.DamageModifier = (float)Math.Round(Stats.DamageModifier, 1);
+        Stats.DamageReduction = (float)Math.Round(Stats.DamageReduction, 1);
+        Stats.CooldownReduction = (float)Math.Round(Stats.CooldownReduction, 1);
     }
 
     protected virtual void FixedUpdate()
