@@ -13,6 +13,7 @@ TagManager:
   - MainMenu
   - Weapon
   - Coin
+  - FadeOutPanel
   layers:
   - Default
   - TransparentFX

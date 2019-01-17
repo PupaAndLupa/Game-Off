@@ -137,7 +137,20 @@ public class GameManager : MonoBehaviour {
         }
         CurrentState = GameStates.End;
         timer = Time.time;
+		StartCoroutine(FadeOut());
     }
+
+	public IEnumerator FadeOut()
+	{
+		while (true)
+		{
+			var image = GameObject.Find("FadeOutPanel").GetComponent<Image>();
+			var color = image.color;
+			color.a += 0.01f;
+			image.color = color;
+			yield return null;
+		}
+	}
 
     public void SetPlayer(GameObject player)
     {
