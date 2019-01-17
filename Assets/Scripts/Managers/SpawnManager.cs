@@ -10,13 +10,19 @@ public class SpawnManager : MonoBehaviour
     {
         for (int i = 0; i < 10; i++)
         {
-            FindObjectOfType<ActorRegistry>().AddActor(SpawnRandomEnemy().GetComponent<Actor>());
+            FindObjectOfType<ActorRegistry>().AddActor(SpawnRandomEnemy());
         }
     }
 
     public GameObject SpawnRandomEnemy()
     {
-        Vector2 point = FindObjectOfType<BoardManager>().RandomFreePosition();
+        Vector2 point;
+        Vector3 position = FindObjectOfType<Player>().transform.position;
+        do
+        {
+            point = FindObjectOfType<BoardManager>().RandomFreePosition();
+        } while (new Vector2(position.x - point.x, position.y - point.y).magnitude < 5);
+
         return Instantiate(Enemies[Random.Range(0, Enemies.Length)], point, Quaternion.identity);
     }
 }

@@ -192,7 +192,7 @@ MonoBehaviour:
     movespeed: 600
     damageModifier: 1
     damageReduction: 1
-    cooldownReduction: 5
+    cooldownReduction: 1
   Weapons:
   - {fileID: 8378482614397995311}
   - {fileID: 2130278606443426254}

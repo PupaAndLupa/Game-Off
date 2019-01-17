@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class ActorRegistry : MonoBehaviour
 {
-    public List<Actor> Actors { get; set; }
+    public List<GameObject> Actors { get; set; }
+    public List<GameObject> Corpses { get; set; }
     public Actor Player { get; set; }
 
     public GameObject coin;
 
-    public void AddActor(Actor actor)
+    public void AddActor(GameObject actor)
     {
         Actors.Add(actor);
     }
@@ -21,7 +22,8 @@ public class ActorRegistry : MonoBehaviour
 
     void Start()
     {
-        Actors = new List<Actor>();
+        Actors = new List<GameObject>();
+        Corpses = new List<GameObject>();
         Player = null;
     }
 
@@ -36,9 +38,11 @@ public class ActorRegistry : MonoBehaviour
 
             foreach (var actor in Actors.ToArray())
             {
-                if (actor.IsDead)
+                if (actor.GetComponent<Actor>().IsDead)
                 {
-                    long score = actor.Stats.Experience + Mathf.RoundToInt(Random.Range(-actor.Stats.Experience * 0.1f, actor.Stats.Experience * 0.1f));
+                    long score = actor.GetComponent<Actor>().Stats.Experience + 
+                        Mathf.RoundToInt(Random.Range(-actor.GetComponent<Actor>().Stats.Experience * 
+                        0.1f, actor.GetComponent<Actor>().Stats.Experience * 0.1f));
                     Player.Stats.Experience += score;
                     FindObjectOfType<UIManager>().AddScore(score);
 
@@ -47,9 +51,10 @@ public class ActorRegistry : MonoBehaviour
                         Instantiate(coin, actor.transform.position, Quaternion.Euler(Vector3.zero), null);
                     }
 
-                    actor.Die();
+                    actor.GetComponent<Actor>().Die();
                     Actors.Remove(actor);
-                    Actors.Add(FindObjectOfType<SpawnManager>().SpawnRandomEnemy().GetComponent<Actor>());
+                    Corpses.Add(actor);
+                    Actors.Add(FindObjectOfType<SpawnManager>().SpawnRandomEnemy());
                 }
             }
 

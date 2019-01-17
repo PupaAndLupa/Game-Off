@@ -7,8 +7,6 @@ using UnityEngine.SceneManagement;  // TEMP
 
 public class Actor : MonoBehaviour
 {
-    public event Action<string, float, float> OnHover;
-
     [Serializable]
     public struct SoundStruct
     {

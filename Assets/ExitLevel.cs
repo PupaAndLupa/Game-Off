@@ -14,7 +14,7 @@ public class ExitLevel : MonoBehaviour
 			FindObjectOfType<GameManager>().Player.Movement.Disable();
 			foreach (var actor in FindObjectOfType<ActorRegistry>().Actors)
 			{
-				actor.Movement.Disable();
+				actor.GetComponent<Actor>().Movement.Disable();
 			}
 			collided = true;
 		}

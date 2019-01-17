@@ -190,15 +190,25 @@ public class GameManager : MonoBehaviour {
 		FadeOutEnded = true;
 		if (CurrentState == GameStates.ChangingLevel)
 		{
-			BoardManager.Rebuild();
+            foreach (var actor in FindObjectOfType<ActorRegistry>().Actors.ToArray())
+            {
+                DestroyImmediate(actor);
+                FindObjectOfType<ActorRegistry>().Actors.Remove(actor);
+            }
+
+            foreach (var actor in FindObjectOfType<ActorRegistry>().Corpses.ToArray())
+            {
+                DestroyImmediate(actor);
+                FindObjectOfType<ActorRegistry>().Corpses.Remove(actor);
+            }
+
+            BoardManager.Rebuild();
 			Player.transform.position = BoardManager.StartPosition;
 			CurrentState = GameStates.Playing;
 
-			foreach (var actor in FindObjectOfType<ActorRegistry>().Actors.ToArray())
-			{
-				Destroy(actor, 0.1f);
-			}
-			Player.Movement.Enable();
+            FindObjectOfType<SpawnManager>().Init();
+
+            Player.Movement.Enable();
 			StartCoroutine(FadeIn());
 		}
 	}
