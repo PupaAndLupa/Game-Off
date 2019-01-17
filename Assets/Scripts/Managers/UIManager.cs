@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+    public Text HoverText;
+
     public Text MaxHPStatsOnScreen;
     public Text DMGModStatsOnScreen;
     public Text DMGRedStatsOnScreen;

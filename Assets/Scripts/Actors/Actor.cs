@@ -130,17 +130,24 @@ public class Actor : MonoBehaviour
 
     public virtual void OnMouseOver()
     {
-        if (OnHover != null)
+        if (!IsTotallyDead)
         {
-            if (gameObject.tag == "Player")
+            if (gameObject.tag != "Player")
             {
-                OnHover(Stats.Name, Stats.CurrentHealth, Stats.DamageModifier * WeaponPrefab.GetComponent<Weapon>().Stats.Damage);
+                FindObjectOfType<UIManager>().HoverText.text = "Name: " + Stats.Name + "\nHealth: " +
+                    Stats.CurrentHealth + "\nDamage: " + Stats.DamageModifier * WeaponPrefab.GetComponent<Weapon>().Stats.Damage;
             }
             else
             {
-                
-                OnHover(Stats.Name, Stats.CurrentHealth, Stats.DamageModifier * (this as Player).Weapons[(this as Player).currentWeaponIndex].GetComponent<Weapon>().Stats.Damage);
+                FindObjectOfType<UIManager>().HoverText.text = "Name: " + Stats.Name + "\nHealth: " +
+                    Stats.CurrentHealth + "\nDamage: " +
+                    Stats.DamageModifier * (this as Player).Weapons[(this as Player).currentWeaponIndex].GetComponent<Weapon>().Stats.Damage;
             }
         }
+    }
+
+    public virtual void OnMouseExit()
+    {
+        FindObjectOfType<UIManager>().HoverText.text = "";
     }
 }
