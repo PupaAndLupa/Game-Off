@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class HealthSkill : Skill
 {
-    public override bool Use(GameObject player)
+    public override bool Use()
     {
-        if (base.Use(player))
+        if (base.Use())
         {
             player.GetComponent<Player>().Stats.CurrentHealth += player.GetComponent<Player>().Stats.MaxHealth * 0.3f;
             return true;

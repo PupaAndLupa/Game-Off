@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class InvisibleSkill : Skill
 {
-    public override bool Use(GameObject player)
+    public override bool Use()
     {
-        if (base.Use(player))
+        if (base.Use())
         {
             player.GetComponent<Player>().Stats.IsInvisible = true;
             player.GetComponent<SpriteRenderer>().color /= 2;

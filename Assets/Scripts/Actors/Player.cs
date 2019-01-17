@@ -33,7 +33,7 @@ public class Player : Actor
 
         for (int i = 0; i < 4; i++)
         {
-            Skills[i].GetComponent<Skill>().Set(i);
+            Skills[i].GetComponent<Skill>().Set(i, gameObject);
         }
     }
 
@@ -106,6 +106,6 @@ public class Player : Actor
 
     public void UseSkill(int index)
     {
-        Skills[index].GetComponent<Skill>().Use(gameObject);
+        Skills[index].GetComponent<Skill>().Use();
     }
 }

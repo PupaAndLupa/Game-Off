@@ -70,7 +70,7 @@ public class Skill : MonoBehaviour
         }
     }
 
-    public virtual bool Use(GameObject Player)
+    public virtual bool Use()
     {
         if (state == States.ready)
         {
@@ -78,7 +78,6 @@ public class Skill : MonoBehaviour
             state = States.used;
             Debug.Log(Index);
             throwOnUse(Index, UsedImage);
-            player = Player;
             return true;
         }
         return false;
@@ -97,9 +96,10 @@ public class Skill : MonoBehaviour
         throwOnReady(Index, CooldownImage);
     }
 
-    public virtual void Set(int index)
+    public virtual void Set(int index, GameObject Player)
     {
         Index = index;
         throwOnReady(Index, ReadyImage);
+        player = Player;
     }
 }

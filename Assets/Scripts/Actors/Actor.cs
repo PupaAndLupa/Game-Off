@@ -105,20 +105,16 @@ public class Actor : MonoBehaviour
         return position - from;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void ApplyDamage(float damage)
     {
-        if (collision.gameObject.tag == "Projectile" && collision.gameObject.GetComponent<Projectile>().parentTag != gameObject.tag)
-        {
-            damaged = true;
-            timer = Time.time;
-            GetComponent<SpriteRenderer>().color = new Color(255, 0, 0);
+        damaged = true;
+        timer = Time.time;
+        GetComponent<SpriteRenderer>().color = new Color(255, 0, 0);
 
-            Projectile projectile = collision.gameObject.GetComponent<Projectile>();
-            Stats.CurrentHealth -= projectile.Stats.Damage * (1 / Stats.DamageReduction);
-            if (Stats.CurrentHealth <= 0)
-            {
-                IsDead = true;
-            }
+        Stats.CurrentHealth -= damage * (1 / Stats.DamageReduction);
+        if (Stats.CurrentHealth <= 0)
+        {
+            IsDead = true;
         }
     }
 
@@ -134,17 +130,24 @@ public class Actor : MonoBehaviour
 
     public virtual void OnMouseOver()
     {
-        if (OnHover != null)
+        if (!IsTotallyDead)
         {
-            if (gameObject.tag == "Player")
+            if (gameObject.tag != "Player")
             {
-                OnHover(Stats.Name, Stats.CurrentHealth, Stats.DamageModifier * WeaponPrefab.GetComponent<Weapon>().Stats.Damage);
+                FindObjectOfType<UIManager>().HoverText.text = "Name: " + Stats.Name + "\nHealth: " +
+                    Stats.CurrentHealth + "\nDamage: " + Stats.DamageModifier * WeaponPrefab.GetComponent<Weapon>().Stats.Damage;
             }
             else
             {
-                
-                OnHover(Stats.Name, Stats.CurrentHealth, Stats.DamageModifier * (this as Player).Weapons[(this as Player).currentWeaponIndex].GetComponent<Weapon>().Stats.Damage);
+                FindObjectOfType<UIManager>().HoverText.text = "Name: " + Stats.Name + "\nHealth: " +
+                    Stats.CurrentHealth + "\nDamage: " +
+                    Stats.DamageModifier * (this as Player).Weapons[(this as Player).currentWeaponIndex].GetComponent<Weapon>().Stats.Damage;
             }
         }
+    }
+
+    public virtual void OnMouseExit()
+    {
+        FindObjectOfType<UIManager>().HoverText.text = "";
     }
 }
