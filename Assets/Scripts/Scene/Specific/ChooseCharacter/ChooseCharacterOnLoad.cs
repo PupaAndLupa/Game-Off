@@ -10,13 +10,13 @@ public class ChooseCharacterOnLoad : MonoBehaviour
 
     void Start()
     {
-        GameObject one = Instantiate(class1, new Vector3(-3f, 0.2f, 0f), Quaternion.identity, null);
+        GameObject one = Instantiate(class1, new Vector3(-4f, 0.2f, 0f), Quaternion.identity, null);
         one.transform.localScale = new Vector3(8, 8, 1);
         one.GetComponent<Collider2D>().enabled = false;
         one.GetComponent<Player>().enabled = false;
         one.GetComponentInChildren<Camera>().enabled = false;
 
-        GameObject two = Instantiate(class2, new Vector3(3f, 0.2f, 0f), Quaternion.identity, null);
+        GameObject two = Instantiate(class2, new Vector3(4f, 0.2f, 0f), Quaternion.identity, null);
         two.transform.localScale = new Vector3(8, 8, 1);
         two.GetComponent<Collider2D>().enabled = false;
         two.GetComponent<Player>().enabled = false;

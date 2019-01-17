@@ -4,6 +4,7 @@ using System.Linq;
 using Random = UnityEngine.Random;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BoardManager : MonoBehaviour
 {
@@ -375,7 +376,19 @@ public class BoardManager : MonoBehaviour
 		while (true)
 		{
 			var elapsedTime = (int)(Time.time - timer);
-			if (elapsedTime >= 10)
+
+            int toTimer = Mathf.Clamp(30 - elapsedTime, 0, 30);
+
+            if (toTimer != 0)
+            {
+                GameObject.Find("Timer").GetComponent<Text>().text = "Exit opens in " + toTimer.ToString() + " seconds";
+            }
+            else
+            {
+                GameObject.Find("Timer").GetComponent<Text>().text = "Exit opened";
+            }
+
+			if (elapsedTime >= 30)
 			{
 				ExitOpenedObj = Instantiate(OpenedExit.GetRandomSprite(), ExitPos, Quaternion.identity);
 				instanced.Add(ExitOpenedObj);

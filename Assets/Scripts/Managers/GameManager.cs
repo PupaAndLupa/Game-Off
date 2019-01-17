@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour {
                 case GameStates.Playing:
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        DisableMovement();
                         PauseGame();
                     } else {
                         Vector2 direction = new Vector3(0, 0);
