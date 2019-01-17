@@ -136,8 +136,16 @@ public class GameManager : MonoBehaviour {
 
     void Update()
     {
-        if (CurrentState == GameStates.End && Time.time - timer > 2f)
+		if (GameObject.Find("PlayerSpotlight") != null)
+		{
+			var pos = GameObject.Find("PlayerSpotlight").transform.position;
+			pos = Player.transform.position;
+			pos.z -= 10;
+			GameObject.Find("PlayerSpotlight").transform.position = pos;
+		}
+		if (CurrentState == GameStates.End && Time.time - timer > 2f)
         {
+			ClearActors();
 			Score = FindObjectOfType<UIManager>().GetScore();
             SceneManager.LoadScene(3);
         }
@@ -168,8 +176,8 @@ public class GameManager : MonoBehaviour {
 
 	public void NextLevel()
 	{
-		StartCoroutine(FadeOut());
 		CurrentState = GameStates.ChangingLevel;
+		StartCoroutine(FadeOut());
 	}
 
 	public IEnumerator FadeOut()
@@ -190,19 +198,11 @@ public class GameManager : MonoBehaviour {
 		FadeOutEnded = true;
 		if (CurrentState == GameStates.ChangingLevel)
 		{
-            foreach (var actor in FindObjectOfType<ActorRegistry>().Actors.ToArray())
-            {
-                DestroyImmediate(actor);
-                FindObjectOfType<ActorRegistry>().Actors.Remove(actor);
-            }
-
-            foreach (var actor in FindObjectOfType<ActorRegistry>().Corpses.ToArray())
-            {
-                DestroyImmediate(actor);
-                FindObjectOfType<ActorRegistry>().Corpses.Remove(actor);
-            }
-
-            BoardManager.Rebuild();
+			ClearActors();
+			var light = GameObject.Find("PlayerSpotlight").GetComponent<Light>();
+			light.spotAngle -= 20;
+			GameObject.Find("PlayerSpotlight").GetComponent<Light>().spotAngle = Mathf.Clamp(light.spotAngle, 20, 100);
+			BoardManager.Rebuild();
 			Player.transform.position = BoardManager.StartPosition;
 			CurrentState = GameStates.Playing;
 
@@ -210,6 +210,26 @@ public class GameManager : MonoBehaviour {
 
             Player.Movement.Enable();
 			StartCoroutine(FadeIn());
+		}
+	}
+
+	public void ClearActors()
+	{
+		if (FindObjectOfType<ActorRegistry>().Actors != null)
+		{
+			foreach (var actor in FindObjectOfType<ActorRegistry>().Actors.ToArray())
+			{
+				Destroy(actor.GetComponent<Actor>());
+				DestroyImmediate(actor);
+			}
+			FindObjectOfType<ActorRegistry>().Actors.Clear();
+
+			foreach (var actor in FindObjectOfType<ActorRegistry>().Corpses.ToArray())
+			{
+				Destroy(actor.GetComponent<Actor>());
+				DestroyImmediate(actor);
+			}
+			FindObjectOfType<ActorRegistry>().Corpses.Clear();
 		}
 	}
 
