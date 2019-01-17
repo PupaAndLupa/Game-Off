@@ -424,6 +424,12 @@ PrefabInstance:
       propertyPath: Stats.Cooldown
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 1068776828266126672, guid: 2790532169c018640abd95cc3d7599da,
+        type: 3}
+      propertyPath: ProjectilePrefab
+      value: 
+      objectReference: {fileID: 9155790392764908707, guid: 20dc7945f7411394f9298382350f8b9c,
+        type: 3}
     - target: {fileID: 7168008432280513414, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_LocalPosition.x
