@@ -85,7 +85,7 @@ PrefabInstance:
     - target: {fileID: 5490272865777963404, guid: c3e7b923940a58347bb4fd107c0623d7,
         type: 3}
       propertyPath: Stats.movespeed
-      value: 200
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 5490272865777963404, guid: c3e7b923940a58347bb4fd107c0623d7,
         type: 3}
@@ -105,7 +105,7 @@ PrefabInstance:
     - target: {fileID: 5490272865777963404, guid: c3e7b923940a58347bb4fd107c0623d7,
         type: 3}
       propertyPath: Stats.damageModifier
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5490272865777963404, guid: c3e7b923940a58347bb4fd107c0623d7,
         type: 3}
@@ -146,6 +146,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9162589982532839138, guid: c3e7b923940a58347bb4fd107c0623d7,
+        type: 3}
+      propertyPath: Stats.Damage
+      value: 99
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3e7b923940a58347bb4fd107c0623d7, type: 3}

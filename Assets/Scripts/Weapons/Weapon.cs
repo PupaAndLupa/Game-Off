@@ -35,7 +35,7 @@ public class Weapon : MonoBehaviour
     public bool OnCooldown { get; set; }
     public float AttackTime { get; set; }
 
-    private string parentTag;
+    public string parentTag;
 
     protected virtual void Start()
     {

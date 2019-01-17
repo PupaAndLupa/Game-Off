@@ -29,7 +29,7 @@ public class Skill : MonoBehaviour
 
     [SerializeField] public float BaseCooldown;
     [SerializeField] public float BaseDuration;
-    private float timer;
+    protected float timer;
 
     public int Index { get; set; }
 
@@ -100,6 +100,7 @@ public class Skill : MonoBehaviour
     {
         Index = index;
         throwOnReady(Index, ReadyImage);
+        state = States.ready;
         player = Player;
     }
 }
