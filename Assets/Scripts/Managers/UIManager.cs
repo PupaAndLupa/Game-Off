@@ -189,7 +189,7 @@ public class UIManager : MonoBehaviour {
                 if (!speedChanged)
                 {
                     playerStats.Movespeed *= 2;
-                    player.GetComponent<Player>().Weapons[player.GetComponent<Player>().currentWeaponIndex].GetComponent<Weapon>().Stats.Cooldown /= 5f;
+                    (player as Player).ModifyWeaponSpeed(0.2f);
 
                     speedChanged = true;
                 }
@@ -209,7 +209,7 @@ public class UIManager : MonoBehaviour {
                 if (speedChanged)
                 {
                     playerStats.Movespeed /= 2;
-                    player.GetComponent<Player>().Weapons[player.GetComponent<Player>().currentWeaponIndex].GetComponent<Weapon>().Stats.Cooldown *= 5f;
+                    (player as Player).ModifyWeaponSpeed(5f);
 
                     speedChanged = false;
                 }

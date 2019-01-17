@@ -79,4 +79,12 @@ public class Player : Actor
         Weapons[index].GetComponent<Weapon>().enabled = true;
         Weapons[index].GetComponentInChildren<SpriteRenderer>().enabled = true;
     }
+
+    public void ModifyWeaponSpeed(float modifier)
+    {
+        for (int i = 0; i < Weapons.Length; i++)
+        {
+            Weapons[i].GetComponent<Weapon>().Stats.Cooldown *= modifier;
+        }
+    }
 }
