@@ -47,6 +47,10 @@ public class UIManager : MonoBehaviour {
         }
 
         playerStats.CurrentHealth = playerStats.MaxHealth;
+        playerStats.MaxHealth = playerStats.MaxHealth;
+        playerStats.DamageModifier = playerStats.DamageModifier;
+        playerStats.DamageReduction = playerStats.DamageReduction;
+        playerStats.CooldownReduction = playerStats.CooldownReduction;
 
         slots = new GameObject[] { GameObject.Find("Slot1"), GameObject.Find("Slot2"), GameObject.Find("Slot3"), GameObject.Find("Slot4") };
 
