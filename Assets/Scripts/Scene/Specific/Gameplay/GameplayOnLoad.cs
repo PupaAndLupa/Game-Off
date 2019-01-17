@@ -25,7 +25,7 @@ public class GameplayOnLoad : MonoBehaviour {
         SoundManager.Instance.MusicSource.volume = 0.2f;
         SoundManager.Instance.MusicSource.Play();
 
-        Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.Auto);
+        Cursor.SetCursor(cursorImage, new Vector2(cursorImage.width / 2, cursorImage.height / 2), CursorMode.Auto);
 
         Instantiate(StatsUpgraderPrefab).GetComponent<StatsUpgrader>().Actor = gm.Player;
     }
