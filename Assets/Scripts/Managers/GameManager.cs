@@ -183,6 +183,11 @@ public class GameManager : MonoBehaviour {
 	{
 		CurrentState = GameStates.ChangingLevel;
         FindObjectOfType<ActorRegistry>().level += 3;
+        Coin[] junk = FindObjectsOfType<Coin>();
+        for (int i = 0; i < junk.Length; i++)
+        {
+            Destroy(junk[i].gameObject);
+        }
 		StartCoroutine(FadeOut());
 	}
 

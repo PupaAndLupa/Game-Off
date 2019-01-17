@@ -356,7 +356,11 @@ public class BoardManager : MonoBehaviour
     public void ShowDungeon()
     {
         boardHolder = Instantiate(board, new Vector3(0, 0, 0), Quaternion.identity).transform;
-
+        Coin[] junk = FindObjectsOfType<Coin>();
+        for (int i = 0; i < junk.Length; i++)
+        {
+            Destroy(junk[i].gameObject);
+        }
         for (int y = 0; y < availableVerticalSpace; y++)
         {
             for (int x = 0; x < availableHorizontalSpace; x++)
