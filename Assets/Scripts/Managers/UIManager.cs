@@ -120,25 +120,68 @@ public class UIManager : MonoBehaviour {
         if (experience >= ExpSlider.maxValue)
         {
             playerStats.Level++;
+            upgradeScoreleft++;
+            ActorStats_OnOnLevelChanged(playerStats.Level);
         } else
         {
             ExpSlider.value = experience;
         }
     }
 
+    public void TryDisableButtons()
+    {
+        if (upgradeScoreleft > 0)
+        {
+            upgradeScoreleft--;
+        }
+
+        if (upgradeScoreleft <= 0)
+        {
+            foreach (var button in buttons)
+            {
+                button.SetActive(false);
+            }
+        }
+    }
+
+    private List<GameObject> buttons = new List<GameObject>();
     private void ActorStats_OnOnLevelChanged(int level)
     {
+        if (buttons.Count == 0)
+        {
+            foreach (var button in GameObject.FindGameObjectsWithTag("UpgradeBtns"))
+            {
+                buttons.Add(button.GetComponentInChildren<Button>(true).gameObject);
+            }
+        }
+
+        foreach (var button in buttons)
+        {
+            button.SetActive(true);
+        }
+
         LevelText.text = level.ToString();
 
         long expPerCurrLevel = ExpPerLevel(level - 2);
-        ExpSlider.maxValue = ExpPerLevel(level - 1);
+        long expPerNextLevel = ExpPerLevel(level - 1);
+        ExpSlider.maxValue = expPerNextLevel;
 
-        long experienceLeft = playerStats.experience > expPerCurrLevel ? playerStats.experience - expPerCurrLevel : 0;
+        long experienceLeft = playerStats.experience > expPerCurrLevel ? playerStats.experience - expPerCurrLevel : playerStats.experience;
 
-        ExpSlider.value = experienceLeft;
-        playerStats.experience = experienceLeft;
+        if (experienceLeft > expPerNextLevel)
+        {
+            upgradeScoreleft++;
+
+            ActorStats_OnExpChanged(experienceLeft);
+        }
+        else
+        {
+            ExpSlider.value = experienceLeft;
+            playerStats.experience = experienceLeft;
+        }
     }
 
+    public int upgradeScoreleft = 0;
     private void ActorStats_OnHitPointsChanged(float HP)
     {
         HitPoints.text = "HP: " + Mathf.RoundToInt(HP) + "/" + playerStats.MaxHealth;
