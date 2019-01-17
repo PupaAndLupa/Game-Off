@@ -335,6 +335,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3366912020006856953, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: Stats.Cooldown
@@ -349,6 +354,11 @@ PrefabInstance:
         type: 3}
       propertyPath: Stats.Damage
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7840417232051560603, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42d80f0c5a04bb24291b4887312f5d96, type: 3}
