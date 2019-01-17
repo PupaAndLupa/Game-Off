@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 
+    public Text MaxHPStatsOnScreen;
+    public Text DMGModStatsOnScreen;
+    public Text DMGRedStatsOnScreen;
+    public Text CooldownReductionStatsOnScreen;
+
     public Text ScoreText;
     public Text HitPoints;
     public Text LevelText;
@@ -35,7 +40,11 @@ public class UIManager : MonoBehaviour {
         playerSR = player.GetComponent<SpriteRenderer>();
         playerStats = player.Stats;
 
+        playerStats.OnCooldownReductionChanged += ActorStats_ChangeCooldownReductionStatsOnScreen;
+        playerStats.OnDamageModifierChanged += ActorStats_ChangeDMGModStatsOnScreen;
+        playerStats.OnDamageModifierChanged += ActorStats_ChangeDMGRedStatsOnScreen;
         playerStats.OnHitPointsChanged += ActorStats_OnHitPointsChanged;
+        playerStats.OnHitPointsChanged += ActorStats_ChangeMaxHPStatOnScreen;
         playerStats.OnMaxHitPointsChanged += ActorStats_OnMaxHitPointsChanged;
         playerStats.OnLevelChanged += ActorStats_OnOnLevelChanged;
         playerStats.OnExpChanged += ActorStats_OnExpChanged;
@@ -72,13 +81,37 @@ public class UIManager : MonoBehaviour {
     {
         playerStats.OnHitPointsChanged -= ActorStats_OnHitPointsChanged;
         playerStats.OnMaxHitPointsChanged -= ActorStats_OnMaxHitPointsChanged;
+        playerStats.OnHitPointsChanged -= ActorStats_ChangeMaxHPStatOnScreen;
         playerStats.OnLevelChanged -= ActorStats_OnOnLevelChanged;
         playerStats.OnExpChanged -= ActorStats_OnExpChanged;
+        playerStats.OnDamageModifierChanged -= ActorStats_ChangeDMGModStatsOnScreen;
+        playerStats.OnDamageModifierChanged -= ActorStats_ChangeDMGRedStatsOnScreen;
+        playerStats.OnCooldownReductionChanged -= ActorStats_ChangeCooldownReductionStatsOnScreen;
     }
 
     private long ExpPerLevel(int level)
     {
         return (level + 1) * 100;
+    }
+
+    private void ActorStats_ChangeCooldownReductionStatsOnScreen(float modifier)
+    {
+        CooldownReductionStatsOnScreen.text = "CD Reduction: " + modifier;
+    }
+
+    private void ActorStats_ChangeDMGRedStatsOnScreen(float modifier)
+    {
+        DMGRedStatsOnScreen.text = "DMG Reduction: " + modifier;
+    }
+
+    private void ActorStats_ChangeDMGModStatsOnScreen(float modifier)
+    {
+        DMGModStatsOnScreen.text = "DMG Modifier: " + modifier;
+    }
+
+    private void ActorStats_ChangeMaxHPStatOnScreen(float HP)
+    {
+        MaxHPStatsOnScreen.text = "Max HP: " + HP;
     }
 
     private void ActorStats_OnExpChanged(long experience)
