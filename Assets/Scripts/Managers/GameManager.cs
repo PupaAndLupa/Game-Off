@@ -48,7 +48,6 @@ public class GameManager : MonoBehaviour {
                 case GameStates.Playing:
                     if (Input.GetKeyDown(KeyCode.Escape))
                     {
-                        DisableMovement();
                         PauseGame();
                     } else {
                         Vector2 direction = new Vector3(0, 0);
@@ -154,7 +153,13 @@ public class GameManager : MonoBehaviour {
     public void InitGame()
     {
         BoardManager.SetupScene();
+        if (Player != null)
+        {
+            DestroyImmediate(Player);
+        }
         Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
+        FindObjectOfType<ActorRegistry>().level = 0;
+        ClearActors();
         FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
         FindObjectOfType<SpawnManager>().Init();
     }
@@ -171,12 +176,13 @@ public class GameManager : MonoBehaviour {
         }
         CurrentState = GameStates.End;
         timer = Time.time;
-		StartCoroutine(FadeOut());
+        StartCoroutine(FadeOut());
     }
 
 	public void NextLevel()
 	{
 		CurrentState = GameStates.ChangingLevel;
+        FindObjectOfType<ActorRegistry>().level += 3;
 		StartCoroutine(FadeOut());
 	}
 
@@ -221,8 +227,9 @@ public class GameManager : MonoBehaviour {
 			{
 				Destroy(actor.GetComponent<Actor>());
 				DestroyImmediate(actor);
-			}
-			FindObjectOfType<ActorRegistry>().Actors.Clear();
+                FindObjectOfType<ActorRegistry>().Actors.Remove(actor);
+            }
+			
 
 			foreach (var actor in FindObjectOfType<ActorRegistry>().Corpses.ToArray())
 			{

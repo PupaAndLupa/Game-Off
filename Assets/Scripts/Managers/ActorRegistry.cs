@@ -10,6 +10,8 @@ public class ActorRegistry : MonoBehaviour
 
     public GameObject coin;
 
+    public int level { get; set; }
+
     public void AddActor(GameObject actor)
     {
         Actors.Add(actor);
@@ -25,6 +27,7 @@ public class ActorRegistry : MonoBehaviour
         Actors = new List<GameObject>();
         Corpses = new List<GameObject>();
         Player = null;
+        level = 0;
     }
 
     void Update()
@@ -54,7 +57,7 @@ public class ActorRegistry : MonoBehaviour
                     actor.GetComponent<Actor>().Die();
                     Actors.Remove(actor);
                     Corpses.Add(actor);
-                    Actors.Add(FindObjectOfType<SpawnManager>().SpawnRandomEnemy());
+                    Actors.Add(FindObjectOfType<SpawnManager>().SpawnRandomEnemy(level));
                 }
             }
 

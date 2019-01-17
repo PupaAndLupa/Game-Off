@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameplayOnLoad : MonoBehaviour {
 
     public GameObject PlayerPrefab;
-    public GameObject EnemyPrefab;  // TEMP
+    public GameObject EnemyPrefab;
     public GameObject PauseMenuPrefab;
     public GameObject StatsUpgraderPrefab;
 
@@ -15,7 +15,6 @@ public class GameplayOnLoad : MonoBehaviour {
 
     void Start () {
         GameManager gm = FindObjectOfType<GameManager>();
-        gm.SetPlayer(PlayerPrefab);
         gm.SetEnemy(EnemyPrefab);
         gm.SetPauseMenu(PauseMenuPrefab);
         gm.InitGame();
