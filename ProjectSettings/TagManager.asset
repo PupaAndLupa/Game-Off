@@ -16,6 +16,7 @@ TagManager:
   - FadeOutPanel
   - Exit
   - Floor
+  - UpgradeBtns
   layers:
   - Default
   - TransparentFX

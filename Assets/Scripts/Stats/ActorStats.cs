@@ -6,6 +6,8 @@ using UnityEngine;
 [Serializable]
 public class ActorStats: Stats
 {
+    public enum UpgradableStats { MAX_HP, DMG_MOD, DMG_RED, CD_RED };
+
     public bool IsInvisible;
     public float DetectionRadius;
 
