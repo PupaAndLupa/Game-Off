@@ -51,6 +51,32 @@ public class Actor : MonoBehaviour
         Stats.CurrentHealth = Mathf.Clamp(Stats.CurrentHealth, 0, Stats.MaxHealth);
     }
 
+    public virtual void UpgradeStats(ActorStats.UpgradableStats stat, float value)
+    {
+        switch (stat)
+        {
+            case ActorStats.UpgradableStats.MAX_HP:
+                Stats.MaxHealth += value;
+                Stats.CurrentHealth += value;
+                break;
+
+            case ActorStats.UpgradableStats.DMG_MOD:
+                Stats.DamageModifier += value;
+                break;
+
+            case ActorStats.UpgradableStats.DMG_RED:
+                Stats.DamageReduction += value;
+                break;
+
+            case ActorStats.UpgradableStats.CD_RED:
+                Stats.CooldownReduction += value;
+                break;
+
+            default:
+                break;
+        }
+    }
+
     protected virtual void FixedUpdate()
     {
         GetComponent<Animator>().SetBool("isMoving", GetComponent<Rigidbody2D>().velocity != Vector2.zero);

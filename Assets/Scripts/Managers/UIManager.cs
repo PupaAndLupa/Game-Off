@@ -141,13 +141,13 @@ public class UIManager : MonoBehaviour {
 
     private void ActorStats_OnHitPointsChanged(float HP)
     {
-        HitPoints.text = "HP: " + HP + "/" + playerStats.MaxHealth;
+        HitPoints.text = "HP: " + Mathf.RoundToInt(HP) + "/" + playerStats.MaxHealth;
         HealthSlider.value = HP;
     }
 
     private void ActorStats_OnMaxHitPointsChanged(float HP)
     {
-        HitPoints.text = "HP: " + playerStats.CurrentHealth + "/" + HP;
+        HitPoints.text = "HP: " + Mathf.RoundToInt(playerStats.CurrentHealth) + "/" + HP;
         HealthSlider.maxValue = HP;
     }
 
