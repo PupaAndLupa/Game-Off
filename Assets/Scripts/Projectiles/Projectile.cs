@@ -58,6 +58,10 @@ public class Projectile : MonoBehaviour
             GetComponent<Collider2D>().enabled = false;
             Stats.Movespeed = 0;
             isDead = true;
+            if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Actor")
+            {
+                collision.gameObject.GetComponent<Actor>().ApplyDamage(Stats.Damage);
+            }
         }
     }
 

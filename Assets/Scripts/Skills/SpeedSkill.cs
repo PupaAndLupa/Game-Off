@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class SpeedSkill :Skill
 {
-    public override bool Use(GameObject player)
+    public override bool Use()
     {
-        if (base.Use(player))
+        if (base.Use())
         {
             player.GetComponent<Player>().ModifyWeaponSpeed(2f);
             player.GetComponent<Player>().Stats.Movespeed *= 2;
