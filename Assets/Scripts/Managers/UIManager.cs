@@ -120,9 +120,27 @@ public class UIManager : MonoBehaviour {
         if (experience >= ExpSlider.maxValue)
         {
             playerStats.Level++;
+            upgradeScoreleft++;
+            ActorStats_OnOnLevelChanged(playerStats.Level);
         } else
         {
             ExpSlider.value = experience;
+        }
+    }
+
+    public void TryDisableButtons()
+    {
+        if (upgradeScoreleft > 0)
+        {
+            upgradeScoreleft--;
+        }
+
+        if (upgradeScoreleft <= 0)
+        {
+            foreach (var button in buttons)
+            {
+                button.SetActive(false);
+            }
         }
     }
 
@@ -148,21 +166,22 @@ public class UIManager : MonoBehaviour {
         long expPerNextLevel = ExpPerLevel(level - 1);
         ExpSlider.maxValue = expPerNextLevel;
 
-        long experienceLeft = playerStats.experience > expPerCurrLevel ? playerStats.experience - expPerCurrLevel : 0;
+        long experienceLeft = playerStats.experience > expPerCurrLevel ? playerStats.experience - expPerCurrLevel : playerStats.experience;
 
         if (experienceLeft > expPerNextLevel)
         {
-            ExpSlider.value = 0;
-            playerStats.experience = 0;
+            upgradeScoreleft++;
 
             ActorStats_OnExpChanged(experienceLeft);
-        } else
+        }
+        else
         {
             ExpSlider.value = experienceLeft;
             playerStats.experience = experienceLeft;
         }
     }
 
+    public int upgradeScoreleft = 0;
     private void ActorStats_OnHitPointsChanged(float HP)
     {
         HitPoints.text = "HP: " + Mathf.RoundToInt(HP) + "/" + playerStats.MaxHealth;
