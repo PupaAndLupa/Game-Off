@@ -8,7 +8,7 @@ public class Player : Actor
     public int currentWeaponIndex { get; set; }
 
     public GameObject[] Skills;
-    
+
     protected override void Start()
     {
         IsDead = false;

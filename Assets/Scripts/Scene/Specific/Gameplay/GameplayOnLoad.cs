@@ -7,6 +7,7 @@ public class GameplayOnLoad : MonoBehaviour {
     public GameObject PlayerPrefab;
     public GameObject EnemyPrefab;  // TEMP
     public GameObject PauseMenuPrefab;
+    public GameObject StatsUpgraderPrefab;
 
     public AudioClip BackgroundMusic;
 
@@ -25,5 +26,7 @@ public class GameplayOnLoad : MonoBehaviour {
         SoundManager.Instance.MusicSource.Play();
 
         Cursor.SetCursor(cursorImage, Vector2.zero, CursorMode.Auto);
+
+        Instantiate(StatsUpgraderPrefab).GetComponent<StatsUpgrader>().Actor = gm.Player;
     }
 }
