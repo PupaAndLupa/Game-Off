@@ -81,11 +81,11 @@ public class UIManager : MonoBehaviour {
     {
         playerStats.OnHitPointsChanged -= ActorStats_OnHitPointsChanged;
         playerStats.OnMaxHitPointsChanged -= ActorStats_OnMaxHitPointsChanged;
-        playerStats.OnHitPointsChanged -= ActorStats_ChangeMaxHPStatOnScreen;
+        playerStats.OnMaxHitPointsChanged -= ActorStats_ChangeMaxHPStatOnScreen;
         playerStats.OnLevelChanged -= ActorStats_OnOnLevelChanged;
         playerStats.OnExpChanged -= ActorStats_OnExpChanged;
         playerStats.OnDamageModifierChanged -= ActorStats_ChangeDMGModStatsOnScreen;
-        playerStats.OnDamageModifierChanged -= ActorStats_ChangeDMGRedStatsOnScreen;
+        playerStats.OnDamageReductionChanged -= ActorStats_ChangeDMGRedStatsOnScreen;
         playerStats.OnCooldownReductionChanged -= ActorStats_ChangeCooldownReductionStatsOnScreen;
     }
 
