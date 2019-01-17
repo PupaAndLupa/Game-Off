@@ -5,7 +5,10 @@ using UnityEngine;
 public class Player : Actor
 {
     public GameObject[] Weapons;
-    public int currentWeaponIndex;
+    public int currentWeaponIndex { get; set; }
+
+    [SerializeField]
+    public Skill[] Skills;
     
     protected override void Start()
     {
@@ -86,5 +89,10 @@ public class Player : Actor
         {
             Weapons[i].GetComponent<Weapon>().Stats.Cooldown *= modifier;
         }
+    }
+
+    public void UseSkill(int index)
+    {
+        Skills[index].Use(Stats.CooldownReduction);
     }
 }

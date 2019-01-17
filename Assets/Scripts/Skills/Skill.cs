@@ -11,10 +11,10 @@ public class Skill : MonoBehaviour
         OnReady(index, image);
     }
 
-    public event Action<int, Texture2D> OnUsed;
-    protected void throwOnUsed(int index, Texture2D image)
+    public event Action<int, Texture2D> OnUse;
+    protected void throwOnUse(int index, Texture2D image)
     {
-        OnUsed(index, image);
+        OnUse(index, image);
     }
 
     public event Action<int, Texture2D> OnCooldown;
@@ -71,11 +71,14 @@ public class Skill : MonoBehaviour
 
     public virtual void Use(float CooldownReduction)
     {
-        cooldownReduction = CooldownReduction;
+        if (state == States.ready)
+        {
+            cooldownReduction = CooldownReduction;
 
-        timer = Time.time;
-        state = States.used;
-        throwOnUsed(Index, UsedImage);
+            timer = Time.time;
+            state = States.used;
+            throwOnUse(Index, UsedImage);
+        }
     }
 
     protected virtual void setCooldown()

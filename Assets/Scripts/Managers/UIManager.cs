@@ -15,24 +15,13 @@ public class UIManager : MonoBehaviour {
     private long score = 0;
 
     private Actor player;
-    private Weapon playerWeapon;
-    private SpriteRenderer playerSR;
     private ActorStats playerStats;
-    private GameObject slot1;
-    private GameObject slot2;
-    private GameObject slot3;
-    private GameObject slot4;
-    private float firstTimer = 0;
-    private float secondTimer = 0;
-    private float thirdTimer = 0;
-    private float fourthTimer = 0;
-    private bool speedChanged = false;
+    private GameObject[] slots;
     private int coins = 0;
 
     // Use this for initialization
     void Start () {
         player = FindObjectOfType<GameManager>().Player;
-        playerSR = player.GetComponent<SpriteRenderer>();
         playerStats = player.Stats;
 
         playerStats.OnHitPointsChanged += ActorStats_OnHitPointsChanged;
@@ -40,12 +29,16 @@ public class UIManager : MonoBehaviour {
         playerStats.OnLevelChanged += ActorStats_OnOnLevelChanged;
         playerStats.OnExpChanged += ActorStats_OnExpChanged;
 
+        for (int i = 0; i < 4; i++)
+        {
+            (player as Player).Skills[i].OnReady += Skill_OnReady;
+            (player as Player).Skills[i].OnUse += Skill_OnUse;
+            (player as Player).Skills[i].OnCooldown += Skill_OnCooldown;
+        }
+
         playerStats.CurrentHealth = playerStats.MaxHealth;
 
-        slot1 = GameObject.Find("Slot1");
-        slot2 = GameObject.Find("Slot2");
-        slot3 = GameObject.Find("Slot3");
-        slot4 = GameObject.Find("Slot4");
+        slots = new GameObject[] { GameObject.Find("Slot1"), GameObject.Find("Slot2"), GameObject.Find("Slot3"), GameObject.Find("Slot4") };
 
         ExpSlider.value = 0;
         ExpSlider.maxValue = ExpPerLevel(0);
@@ -69,6 +62,13 @@ public class UIManager : MonoBehaviour {
         playerStats.OnMaxHitPointsChanged -= ActorStats_OnMaxHitPointsChanged;
         playerStats.OnLevelChanged -= ActorStats_OnOnLevelChanged;
         playerStats.OnExpChanged -= ActorStats_OnExpChanged;
+
+        for (int i = 0; i < 4; i++)
+        {
+            (player as Player).Skills[i].OnReady -= Skill_OnReady;
+            (player as Player).Skills[i].OnUse -= Skill_OnUse;
+            (player as Player).Skills[i].OnCooldown -= Skill_OnCooldown;
+        }
     }
 
     private long ExpPerLevel(int level)
@@ -105,15 +105,37 @@ public class UIManager : MonoBehaviour {
         HitPoints.text = "HP: " + HP + "/" + playerStats.MaxHealth;
         HealthSlider.value = HP;
     }
+
     private void ActorStats_OnMaxHitPointsChanged(float HP)
     {
         HitPoints.text = "HP: " + playerStats.CurrentHealth + "/" + HP;
         HealthSlider.maxValue = HP;
     }
 
+    private void Skill_OnReady(int index, Texture2D image)
+    {
+        Sprite old = slots[index].GetComponentInChildren<Image>().sprite;
+        slots[index].GetComponentInChildren<Image>().sprite = Sprite.Create(image, old.rect, old.pivot);
+        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f);
+    }
+
+    private void Skill_OnUse(int index, Texture2D image)
+    {
+        Sprite old = slots[index].GetComponentInChildren<Image>().sprite;
+        slots[index].GetComponentInChildren<Image>().sprite = Sprite.Create(image, old.rect, old.pivot);
+        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+    }
+
+    private void Skill_OnCooldown(int index, Texture2D image)
+    {
+        Sprite old = slots[index].GetComponentInChildren<Image>().sprite;
+        slots[index].GetComponentInChildren<Image>().sprite = Sprite.Create(image, old.rect, old.pivot);
+        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 0f);
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        /*if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             slot1.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, .4f);
             playerStats.CurrentHealth = playerStats.MaxHealth;
@@ -216,6 +238,6 @@ public class UIManager : MonoBehaviour {
             }
 
             fourthTimer -= Time.deltaTime;
-        }
+        }*/
     }
 }
