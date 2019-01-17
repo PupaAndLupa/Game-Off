@@ -100,6 +100,7 @@ public class Skill : MonoBehaviour
     {
         Index = index;
         throwOnReady(Index, ReadyImage);
+        state = States.ready;
         player = Player;
     }
 }

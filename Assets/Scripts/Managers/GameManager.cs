@@ -154,7 +154,12 @@ public class GameManager : MonoBehaviour {
     public void InitGame()
     {
         BoardManager.SetupScene();
+        if (Player != null)
+        {
+            DestroyImmediate(Player);
+        }
         Player = Instantiate(PlayerPrefab, BoardManager.StartPosition, Quaternion.identity).GetComponent<Actor>();
+        ClearActors();
         FindObjectOfType<ActorRegistry>().SetPlayer(Player.GetComponent<Actor>());
         FindObjectOfType<SpawnManager>().Init();
     }
@@ -221,8 +226,9 @@ public class GameManager : MonoBehaviour {
 			{
 				Destroy(actor.GetComponent<Actor>());
 				DestroyImmediate(actor);
-			}
-			FindObjectOfType<ActorRegistry>().Actors.Clear();
+                FindObjectOfType<ActorRegistry>().Actors.Remove(actor);
+            }
+			
 
 			foreach (var actor in FindObjectOfType<ActorRegistry>().Corpses.ToArray())
 			{
