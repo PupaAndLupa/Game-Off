@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour {
         Pause,
         Dead,
         Win,
-        End
+        End,
+		ChangingLevel
     }
 
     [Tooltip("Initialized on runtime")]
@@ -121,13 +122,17 @@ public class GameManager : MonoBehaviour {
                         ContinueGame();
                     }
                     break;
-            }
+				default:
+					Player.Move(Vector2.zero);
+					break;
+			}
             yield return null;
         }
     }
 
     public float timer { get; set; }
 	public Text Score { get; set; }
+	public bool FadeOutEnded { get; set; }
 
     void Update()
     {
@@ -161,8 +166,15 @@ public class GameManager : MonoBehaviour {
 		StartCoroutine(FadeOut());
     }
 
+	public void NextLevel()
+	{
+		StartCoroutine(FadeOut());
+		CurrentState = GameStates.ChangingLevel;
+	}
+
 	public IEnumerator FadeOut()
 	{
+		FadeOutEnded = false;
 		while (true)
 		{
 			var image = GameObject.Find("FadeOutPanel").GetComponent<Image>();
@@ -170,6 +182,40 @@ public class GameManager : MonoBehaviour {
 			color.a += 0.01f;
 			image.color = color;
 			yield return null;
+			if (color.a >= 1)
+			{
+				break;
+			}
+		}
+		FadeOutEnded = true;
+		if (CurrentState == GameStates.ChangingLevel)
+		{
+			BoardManager.Rebuild();
+			Player.transform.position = BoardManager.StartPosition;
+			CurrentState = GameStates.Playing;
+
+			foreach (var actor in FindObjectOfType<ActorRegistry>().Actors.ToArray())
+			{
+				Destroy(actor, 0.1f);
+			}
+			Player.Movement.Enable();
+			StartCoroutine(FadeIn());
+		}
+	}
+
+	public IEnumerator FadeIn()
+	{
+		while (true)
+		{
+			var image = GameObject.Find("FadeOutPanel").GetComponent<Image>();
+			var color = image.color;
+			color.a -= 0.01f;
+			image.color = color;
+			yield return null;
+			if (color.a <= 0)
+			{
+				break;
+			}
 		}
 	}
 

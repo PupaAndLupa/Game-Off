@@ -21,7 +21,7 @@ public class Movement
     public void Disable()
     {
         Enabled = false;
-    }
+	}
 
     private bool IsEnabled()
     {
@@ -33,8 +33,11 @@ public class Movement
         if (IsEnabled())
         {
             obj.GetComponent<Rigidbody2D>().velocity = Direction * movespeed * Time.deltaTime;
-        }
-    }
+        } else
+		{
+			obj.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+		}
+	}
 
     public virtual void SetDirection(Vector2 direction)
     {
