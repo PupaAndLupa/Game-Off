@@ -27,12 +27,13 @@ public class Skill : MonoBehaviour
     public Texture2D UsedImage;
     public Texture2D CooldownImage;
 
-    public float BaseCooldown;
-    public float BaseDuration;
-    private float cooldownReduction;
+    [SerializeField] public float BaseCooldown;
+    [SerializeField] public float BaseDuration;
     private float timer;
 
     public int Index { get; set; }
+
+    protected GameObject player;
 
 
     protected enum States
@@ -48,7 +49,7 @@ public class Skill : MonoBehaviour
         state = States.ready;
     }
 
-    protected virtual void Update()
+    public virtual void Update()
     {
         switch (state)
         {
@@ -61,7 +62,7 @@ public class Skill : MonoBehaviour
                 }
                 break;
             case States.cooldown:
-                if (Time.time - timer > BaseCooldown * (1f / cooldownReduction))
+                if (Time.time - timer > BaseCooldown * (1f / player.GetComponent<Player>().Stats.CooldownReduction))
                 {
                     setReady();
                 }
@@ -69,16 +70,18 @@ public class Skill : MonoBehaviour
         }
     }
 
-    public virtual void Use(float CooldownReduction)
+    public virtual bool Use(GameObject Player)
     {
         if (state == States.ready)
         {
-            cooldownReduction = CooldownReduction;
-
             timer = Time.time;
             state = States.used;
+            Debug.Log(Index);
             throwOnUse(Index, UsedImage);
+            player = Player;
+            return true;
         }
+        return false;
     }
 
     protected virtual void setCooldown()
@@ -94,7 +97,7 @@ public class Skill : MonoBehaviour
         throwOnReady(Index, CooldownImage);
     }
 
-    protected virtual void Set(int index)
+    public virtual void Set(int index)
     {
         Index = index;
         throwOnReady(Index, ReadyImage);

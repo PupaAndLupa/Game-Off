@@ -90,6 +90,27 @@ public class GameManager : MonoBehaviour {
                         {
                             (Player as Player).ChangeWeapon();
                         }
+
+                        if (Input.GetKeyDown(KeyCode.Alpha1))
+                        {
+                            (Player as Player).UseSkill(0);
+                        }
+
+                        if (Input.GetKeyDown(KeyCode.Alpha2))
+                        {
+                            (Player as Player).UseSkill(1);
+                        }
+
+                        if (Input.GetKeyDown(KeyCode.Alpha3))
+                        {
+                            (Player as Player).UseSkill(2);
+                        }
+
+                        if (Input.GetKeyDown(KeyCode.Alpha4))
+                        {
+                            (Player as Player).UseSkill(3);
+                        }
+
                     }
                     break;
                 case GameStates.Pause:

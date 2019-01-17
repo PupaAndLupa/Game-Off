@@ -192,15 +192,15 @@ MonoBehaviour:
     movespeed: 600
     damageModifier: 1
     damageReduction: 1
-    cooldownReduction: 1
+    cooldownReduction: 5
   Weapons:
   - {fileID: 8378482614397995311}
   - {fileID: 2130278606443426254}
   Skills:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2220922840643103718, guid: 72f3c8b5c87e0fa40a4d5ad44e4fe50d, type: 3}
+  - {fileID: 1819385459671644396, guid: c1bc60469ad9f5149b3f6beb81170b3b, type: 3}
+  - {fileID: 8063463822207693462, guid: 4a59ba97fdf6a644cb868b46574a80cf, type: 3}
+  - {fileID: 1685877219698250419, guid: a27b8d59641553e4b9bcbaef4c7d4baa, type: 3}
 --- !u!95 &95809433372388944
 Animator:
   serializedVersion: 3

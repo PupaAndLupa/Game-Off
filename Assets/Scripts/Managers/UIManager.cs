@@ -31,9 +31,9 @@ public class UIManager : MonoBehaviour {
 
         for (int i = 0; i < 4; i++)
         {
-            (player as Player).Skills[i].OnReady += Skill_OnReady;
-            (player as Player).Skills[i].OnUse += Skill_OnUse;
-            (player as Player).Skills[i].OnCooldown += Skill_OnCooldown;
+            (player as Player).Skills[i].GetComponent<Skill>().OnReady += Skill_OnReady;
+            (player as Player).Skills[i].GetComponent<Skill>().OnUse += Skill_OnUse;
+            (player as Player).Skills[i].GetComponent<Skill>().OnCooldown += Skill_OnCooldown;
         }
 
         playerStats.CurrentHealth = playerStats.MaxHealth;
@@ -65,9 +65,9 @@ public class UIManager : MonoBehaviour {
 
         for (int i = 0; i < 4; i++)
         {
-            (player as Player).Skills[i].OnReady -= Skill_OnReady;
-            (player as Player).Skills[i].OnUse -= Skill_OnUse;
-            (player as Player).Skills[i].OnCooldown -= Skill_OnCooldown;
+            (player as Player).Skills[i].GetComponent<Skill>().OnReady -= Skill_OnReady;
+            (player as Player).Skills[i].GetComponent<Skill>().OnUse -= Skill_OnUse;
+            (player as Player).Skills[i].GetComponent<Skill>().OnCooldown -= Skill_OnCooldown;
         }
     }
 
@@ -116,128 +116,20 @@ public class UIManager : MonoBehaviour {
     {
         Sprite old = slots[index].GetComponentInChildren<Image>().sprite;
         slots[index].GetComponentInChildren<Image>().sprite = Sprite.Create(image, old.rect, old.pivot);
-        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f);
+        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 1f);
     }
 
     private void Skill_OnUse(int index, Texture2D image)
     {
         Sprite old = slots[index].GetComponentInChildren<Image>().sprite;
         slots[index].GetComponentInChildren<Image>().sprite = Sprite.Create(image, old.rect, old.pivot);
-        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 0.75f);
     }
 
     private void Skill_OnCooldown(int index, Texture2D image)
     {
         Sprite old = slots[index].GetComponentInChildren<Image>().sprite;
         slots[index].GetComponentInChildren<Image>().sprite = Sprite.Create(image, old.rect, old.pivot);
-        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 0f);
-    }
-
-    private void Update()
-    {
-        /*if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            slot1.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, .4f);
-            playerStats.CurrentHealth = playerStats.MaxHealth;
-            firstTimer = 100f * (1 / playerStats.CooldownReduction);
-        } else if (firstTimer > 0)
-        {
-            slot1.GetComponentInChildren<Image>().color = Color.Lerp(new Color(.9f, .9f, 1f, 1f), new Color(.9f, .9f, 1f, .4f), firstTimer/.3f);
-            firstTimer -= Time.deltaTime;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (secondTimer <= 0)
-            {
-                slot2.GetComponentInChildren<Image>().color = new Color(1f, .9f, 1f, .4f);
-                playerStats.DamageModifier *= 2;
-                secondTimer = 20f * (1 / playerStats.CooldownReduction);
-            }
-        } else if (secondTimer > -1)
-        {
-            if (secondTimer <= 0)
-            {
-                slot2.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, 1f);
-            }
-
-            if (secondTimer < 15f)
-            {
-                playerStats.DamageModifier = 1;
-            }
-
-            secondTimer -= Time.deltaTime;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (thirdTimer <= 0)
-            {
-                slot3.GetComponentInChildren<Image>().color = new Color(1f, .9f, 1f, .4f);
-
-                var playerColor = playerSR.color;
-                playerColor.a = 0.3f;
-                playerSR.color = playerColor;
-
-                playerStats.IsInvisible = true;
-                thirdTimer = 60f * (1 / playerStats.CooldownReduction);
-            }
-        }
-        else if (thirdTimer > -1)
-        {
-            if (thirdTimer <= 0)
-            {
-                slot3.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, 1f);
-            }
-
-            if (thirdTimer < 40f)
-            {
-                playerStats.IsInvisible = false;
-
-                var playerColor = playerSR.color;
-                playerColor.a = 1;
-                playerSR.color = playerColor;
-            }
-
-            thirdTimer -= Time.deltaTime;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            if (fourthTimer <= 0)
-            {
-                slot4.GetComponentInChildren<Image>().color = new Color(1f, .9f, 1f, .4f);
-
-                if (!speedChanged)
-                {
-                    playerStats.Movespeed *= 2;
-                    (player as Player).ModifyWeaponSpeed(0.2f);
-
-                    speedChanged = true;
-                }
-
-                fourthTimer = 30f;
-            }
-        }
-        else if (fourthTimer > -1)
-        {
-            if (fourthTimer <= 0)
-            {
-                slot4.GetComponentInChildren<Image>().color = new Color(.9f, .9f, 1f, 1f);
-            }
-
-            if (fourthTimer < 20f)
-            {
-                if (speedChanged)
-                {
-                    playerStats.Movespeed /= 2;
-                    (player as Player).ModifyWeaponSpeed(5f);
-
-                    speedChanged = false;
-                }
-            }
-
-            fourthTimer -= Time.deltaTime;
-        }*/
+        slots[index].GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 0.25f);
     }
 }

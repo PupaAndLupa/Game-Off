@@ -7,8 +7,7 @@ public class Player : Actor
     public GameObject[] Weapons;
     public int currentWeaponIndex { get; set; }
 
-    [SerializeField]
-    public Skill[] Skills;
+    public GameObject[] Skills;
     
     protected override void Start()
     {
@@ -31,6 +30,20 @@ public class Player : Actor
         }
 
         startingColor = GetComponent<SpriteRenderer>().color;
+
+        for (int i = 0; i < 4; i++)
+        {
+            Skills[i].GetComponent<Skill>().Set(i);
+        }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        for (int i = 0; i < 4; i++)
+        {
+            Skills[i].GetComponent<Skill>().Update();
+        }
     }
 
     public void ChangeWeapon()
@@ -87,12 +100,12 @@ public class Player : Actor
     {
         for (int i = 0; i < Weapons.Length; i++)
         {
-            Weapons[i].GetComponent<Weapon>().Stats.Cooldown *= modifier;
+            Weapons[i].GetComponent<Weapon>().Stats.Cooldown *= (1 / modifier);
         }
     }
 
     public void UseSkill(int index)
     {
-        Skills[index].Use(Stats.CooldownReduction);
+        Skills[index].GetComponent<Skill>().Use(gameObject);
     }
 }
