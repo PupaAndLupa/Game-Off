@@ -126,7 +126,7 @@ public class Actor : MonoBehaviour
     {
         GetComponent<Collider2D>().enabled = false;
         GetComponent<Animator>().enabled = false;
-
+		Movement.Disable();
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, 90));
         //GetComponent<SpriteRenderer>().color = new Color(30, 30, 30);
         IsTotallyDead = true;

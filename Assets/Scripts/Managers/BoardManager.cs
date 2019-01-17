@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Random = UnityEngine.Random;
 using UnityEngine;
+using System.Collections;
 
 public class BoardManager : MonoBehaviour
 {
@@ -45,7 +46,12 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public int Cols = 64;
+	private bool exitPlaced;
+
+	public Vector2 ExitPos { get; set; }
+	public GameObject ExitObj { get; set; }
+	public GameObject ExitOpenedObj { get; set; }
+	public int Cols = 64;
     public int Rows = 64;
     public int ChanceRoom = 100;
     public Amount WallsAmount = new Amount(30, 70);
@@ -56,6 +62,10 @@ public class BoardManager : MonoBehaviour
 
     public SpritePool Floor;
     public SpritePool Walls;
+	public SpritePool Exit;
+	public SpritePool OpenedExit;
+
+	private List<GameObject> instanced = new List<GameObject>();
 
     public int Corridors
     {
@@ -81,11 +91,11 @@ public class BoardManager : MonoBehaviour
     }
 
     private enum Direction { North, East, South, West };
-    private enum Tile { Unused, Wall, Floor, Corridor };
+    private enum Tile { Unused, Wall, Floor, Corridor, Exit };
 
     private int objects;
     private Tile[] dungeonMap = { };
-    private Transform boardHolder;
+    private Transform boardHolder = null;
 
     private int availableHorizontalSpace;
     private int availableVerticalSpace;
@@ -298,7 +308,20 @@ public class BoardManager : MonoBehaviour
 
         foreach (var p in points)
         {
-            SetCell(p.X, p.Y, IsWall(x, y, xlen, ylen, p.X, p.Y, direction) ? Wall : Floor);
+			var tile = Wall;
+			if (!IsWall(x, y, xlen, ylen, p.X, p.Y, direction))
+			{
+				if (!exitPlaced && Random.Range(0, 100) < 10)
+				{
+					tile = Tile.Exit;
+					ExitPos = new Vector2(p.X, p.Y);
+					exitPlaced = true;
+				} else
+				{
+					tile = Floor;
+				}
+			}
+            SetCell(p.X, p.Y, tile);
         }
 
         return true;
@@ -321,6 +344,9 @@ public class BoardManager : MonoBehaviour
                 return Floor.GetRandomSprite();
             case Tile.Corridor:
                 return Floor.GetRandomSprite();
+			case Tile.Exit:
+				ExitObj = Exit.GetRandomSprite();
+				return ExitObj;
             default:
                 return Walls.GetRandomSprite();
         }
@@ -336,11 +362,29 @@ public class BoardManager : MonoBehaviour
             {
                 GameObject instance = Instantiate(GetCellTile(x, y), new Vector3(x, y, 0.0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
+				instanced.Add(instance);
             }
         }
-
+		StartCoroutine(OpenExitCountdown());
         AstarPath.active.Scan();
     }
+
+	public IEnumerator OpenExitCountdown()
+	{
+		var timer = Time.time;
+		while (true)
+		{
+			var elapsedTime = (int)(Time.time - timer);
+			if (elapsedTime >= 10)
+			{
+				ExitOpenedObj = Instantiate(OpenedExit.GetRandomSprite(), ExitPos, Quaternion.identity);
+				instanced.Add(ExitOpenedObj);
+				break;
+			}
+			yield return null;
+		}
+		yield return null;
+	}
 
     private Direction RandomDirection()
     {
@@ -484,6 +528,7 @@ public class BoardManager : MonoBehaviour
 
     void Initialize()
     {
+		exitPlaced = false;
         for (int y = 0; y < availableVerticalSpace; y++)
         {
             for (int x = 0; x < availableHorizontalSpace; x++)
@@ -538,4 +583,13 @@ public class BoardManager : MonoBehaviour
             Item3 = tile;
         }
     }
+
+	public void Rebuild()
+	{
+		for (var i = 0; i < instanced.Count; ++i)
+		{
+			DestroyImmediate(instanced[i]);
+		}
+		SetupScene();
+	}
 }

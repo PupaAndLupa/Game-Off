@@ -215,6 +215,12 @@ MonoBehaviour:
   Walls:
     sprites:
     - {fileID: 1028359847062970, guid: 7fc0c09c207e7514c8da529693d324d7, type: 3}
+  Exit:
+    sprites:
+    - {fileID: 7781603687194445109, guid: f5a3471b785de324d99c27287924c5c5, type: 3}
+  OpenedExit:
+    sprites:
+    - {fileID: 2427429222545966966, guid: 687e281e2aebca34b9dc17b2a6f2e0e3, type: 3}
 --- !u!1 &1329838520
 GameObject:
   m_ObjectHideFlags: 0
