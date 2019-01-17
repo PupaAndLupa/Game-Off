@@ -12,7 +12,7 @@ public class FireballSkill : Skill
         if (base.Use())
         {
             Vector3 rotation = player.transform.rotation.eulerAngles;
-            Vector3 position = player.transform.Find("Weapon").position + player.transform.Find("Weapon").right * 0.3f;
+            Vector3 position = player.transform.Find("Weapon").Find("Weapon").position + player.transform.Find("Weapon").right * 0.3f;
 
             GameObject projectile = Instantiate(
             fireball,
@@ -21,7 +21,7 @@ public class FireballSkill : Skill
             null
             );
             Projectile projectileClass = projectile.GetComponent<Projectile>();
-            projectileClass.Movement.SetDirection(player.transform.Find("Weapon").right);
+            projectileClass.Movement.SetDirection(player.transform.Find("Weapon").Find("Weapon").right);
             projectileClass.SetDamage(damage * player.GetComponentInChildren<Weapon>().Stats.Modifier);
             projectileClass.SetRange(player.GetComponentInChildren<Weapon>().Stats.Range);
             projectileClass.SetParentTag(player.GetComponentInChildren<Weapon>().parentTag);

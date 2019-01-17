@@ -86,6 +86,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6177914192918994429, guid: 56afcce3fd14f8542b3a4e2ef014486a,
         type: 3}
+    - target: {fileID: 2862082414532431285, guid: c5913f623d135ab47ba37058a5f74da0,
+        type: 3}
+      propertyPath: Skills.Array.data[3]
+      value: 
+      objectReference: {fileID: 1746221658590597424, guid: e7b125430bd262042be5ec1c2e4ba00f,
+        type: 3}
     - target: {fileID: 212558738259942580, guid: c5913f623d135ab47ba37058a5f74da0,
         type: 3}
       propertyPath: m_Color.r
