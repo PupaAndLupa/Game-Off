@@ -192,11 +192,15 @@ MonoBehaviour:
     movespeed: 600
     damageModifier: 1
     damageReduction: 1
-    cooldownReduction: 1
+    cooldownReduction: 5
   Weapons:
   - {fileID: 8378482614397995311}
   - {fileID: 2130278606443426254}
-  currentWeaponIndex: 0
+  Skills:
+  - {fileID: 2220922840643103718, guid: 72f3c8b5c87e0fa40a4d5ad44e4fe50d, type: 3}
+  - {fileID: 1819385459671644396, guid: c1bc60469ad9f5149b3f6beb81170b3b, type: 3}
+  - {fileID: 8063463822207693462, guid: 4a59ba97fdf6a644cb868b46574a80cf, type: 3}
+  - {fileID: 1685877219698250419, guid: a27b8d59641553e4b9bcbaef4c7d4baa, type: 3}
 --- !u!95 &95809433372388944
 Animator:
   serializedVersion: 3
@@ -271,6 +275,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4805559047340186}
     m_Modifications:
+    - target: {fileID: 3857514915964808649, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Name
+      value: Melee weapon
+      objectReference: {fileID: 0}
     - target: {fileID: 3863479920443883051, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -326,11 +335,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3857514915964808649, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: m_Name
-      value: Melee weapon
-      objectReference: {fileID: 0}
     - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: Stats.Cooldown
@@ -367,21 +371,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4805559047340186}
     m_Modifications:
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: Stats.Cooldown
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: Stats.Range
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1602310634964066, guid: 2790532169c018640abd95cc3d7599da, type: 3}
       propertyPath: m_Name
       value: Weapon
@@ -430,6 +419,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1068776828266126672, guid: 2790532169c018640abd95cc3d7599da,
+        type: 3}
+      propertyPath: Stats.Cooldown
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7168008432280513414, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -441,6 +435,21 @@ PrefabInstance:
       value: -0.037
       objectReference: {fileID: 0}
     - target: {fileID: 3366912020006856953, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Cooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
+        type: 3}
+      propertyPath: Stats.Range
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4276197494701257979, guid: 42d80f0c5a04bb24291b4887312f5d96,
         type: 3}
       propertyPath: m_Enabled
       value: 0

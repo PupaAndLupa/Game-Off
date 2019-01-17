@@ -37,6 +37,12 @@ PrefabInstance:
       propertyPath: Stats.currentHealth
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 4868833137310045210, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
+        type: 3}
+      propertyPath: ProjectilePrefab
+      value: 
+      objectReference: {fileID: 8006595317683017115, guid: 05f00b12e85031f4a874def72d8972e6,
+        type: 3}
     - target: {fileID: 8328093729078039148, guid: d218e1f4f4f5ac044b1de66b556fb4ff,
         type: 3}
       propertyPath: m_LocalPosition.x

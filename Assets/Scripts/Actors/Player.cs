@@ -5,7 +5,9 @@ using UnityEngine;
 public class Player : Actor
 {
     public GameObject[] Weapons;
-    public int currentWeaponIndex;
+    public int currentWeaponIndex { get; set; }
+
+    public GameObject[] Skills;
     
     protected override void Start()
     {
@@ -28,6 +30,20 @@ public class Player : Actor
         }
 
         startingColor = GetComponent<SpriteRenderer>().color;
+
+        for (int i = 0; i < 4; i++)
+        {
+            Skills[i].GetComponent<Skill>().Set(i);
+        }
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        for (int i = 0; i < 4; i++)
+        {
+            Skills[i].GetComponent<Skill>().Update();
+        }
     }
 
     public void ChangeWeapon()
@@ -78,5 +94,18 @@ public class Player : Actor
         Weapons[index].GetComponent<Animator>().enabled = true;
         Weapons[index].GetComponent<Weapon>().enabled = true;
         Weapons[index].GetComponentInChildren<SpriteRenderer>().enabled = true;
+    }
+
+    public void ModifyWeaponSpeed(float modifier)
+    {
+        for (int i = 0; i < Weapons.Length; i++)
+        {
+            Weapons[i].GetComponent<Weapon>().Stats.Cooldown *= (1 / modifier);
+        }
+    }
+
+    public void UseSkill(int index)
+    {
+        Skills[index].GetComponent<Skill>().Use(gameObject);
     }
 }
